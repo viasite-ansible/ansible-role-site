@@ -1,0 +1,16 @@
+- name: Cron scripts directory
+  file: path="{{ homedir }}/cron" state=directory
+
+- name: Cron jobs
+  cron:
+    user="{{ site_user }}"
+    name="{{ item.name }}"
+
+    weekday="{{ item.weekday|default ('*') }}"
+    day="{{ item.day|default ('*') }}"
+    hour="{{ item.hour|default ('*') }}"
+    minute="{{ item.minute|default ('*') }}"
+
+    job="{{ item.job }}"
+    state=present
+  with_items: "{{ site_cronjobs }}"

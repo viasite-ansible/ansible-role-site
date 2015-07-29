@@ -1,0 +1,8 @@
+---
+# TODO: должен быть выбор версии php
+- name: site - apache config
+  template: src=apache.conf.j2 dest={{ apache_file }}
+
+- name: site - apache enable
+  file: path={{ apache_file_en }} src={{ apache_file }} state=link
+  notify: Reload apache

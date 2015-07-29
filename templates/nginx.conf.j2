@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+server {
+	# Redirect from www
+	listen 80;
+	server_name www.{{ domain }};
+	return 301 $scheme://{{ domain }}$request_uri;
+}
+
+server {
+	listen 80;
+	server_name {{ domain }} {{ domain_test }};
+
+	root {{ sitedir }};
+	include /etc/nginx/conf.server.d/*;
+	include {{ nginx_custom_dir }}/{{ domain }}/*;
+}

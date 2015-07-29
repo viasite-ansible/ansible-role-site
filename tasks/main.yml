@@ -1,0 +1,13 @@
+---
+- name: Load site variables
+  include_vars: "{{ vars_file }}"
+
+- include: user.yml
+- include: apache.yml
+- include: nginx.yml
+- include: dns.yml
+- include: mysql.yml
+- include: cron.yml
+
+- name: test vars
+  debug: msg={{ domain }}

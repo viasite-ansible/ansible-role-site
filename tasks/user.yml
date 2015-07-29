@@ -1,0 +1,42 @@
+---
+
+# user-setup
+- name: site - user directory
+  file: path="/home/{{ site_user }}" state=directory
+
+- name: site - user config directory
+  file: path="/home/{{ site_user }}/etc" state=directory
+
+- name: site - user add
+  user:
+    name={{ site_user }}
+    home={{ homedir }}
+    shell=/bin/zsh
+
+- name: site - user directory access
+  file: path="/home/{{ site_user }}" mode=550 owner={{ site_user }} group={{ nginx_user }}
+
+# ssh access
+- name: site - Add ssh public keys to user
+  authorized_key:
+    user={{ site_user }}
+    key="{{ lookup('file', item) }}"
+  with_fileglob:
+    #- /files/public-keys/*
+    - ../../../files/public-keys/*
+
+#- name: Remove old ssh public keys from {{ site_user }}
+#  authorized_key:
+#    user={{ site_user }}
+#    key="{{ lookup('file', item) }}"
+#    state=absent
+#  with_fileglob:
+#    - removed-keys/*
+
+# wwwdir
+- name: site - user wwwdir
+  file: path={{ wwwdir }} state=directory owner={{ site_user }} group={{ site_user }}
+
+# sitedir
+- name: site - user sitedir
+  file: path={{ sitedir }} state=directory owner={{ site_user }} group={{ site_user }}

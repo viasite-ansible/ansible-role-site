@@ -1,0 +1,33 @@
+---
+#domain: example.com
+#domain_test: test.example.com
+#site_user: example
+
+mysql_host: localhost
+#mysql_db: "{{ user }}"
+#mysql_user: "{{ user }}"
+#mysql_password: ASLDklkvhlfkdgjm
+
+#dns_ns1: ns1.example.com
+#dns_ns2: ns2.example.com
+#dns_whois_email: admin.example.com
+dns_a: "{{ ansible_default_ipv4.adress }}"
+dns_yandex_mail: yes
+dns_zone_file: /var/lib/bind/{{ domain }}.hosts
+
+#mailto:
+#- admin@example.com
+
+uid: "{{ site_user }}"
+gid: "{{ site_user }}"
+
+homedir: "/home/{{ site_user }}/data"
+wwwdir: "{{ homedir }}/www"
+sitedir: "{{ wwwdir }}/{{ domain }}"
+
+nginx_file: /etc/nginx/sites-available/{{ domain }}
+nginx_file_en: /etc/nginx/sites-enabled/{{ domain }}
+nginx_custom_dir: "{{ homedir }}/etc/nginx"
+apache_file: /etc/apache2/sites-available/{{ domain }}.conf
+apache_file_en: /etc/apache2/sites-enabled/{{ domain }}.conf
+skeldir: "{{ sitedir }}/sites/default/files/skel"

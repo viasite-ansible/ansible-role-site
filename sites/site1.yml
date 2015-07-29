@@ -1,0 +1,18 @@
+---
+domain: site1.example.com
+domain_test: test.site1.example.com
+site_user: site1
+
+mysql_host: localhost
+mysql_db: "{{ site_user }}"
+mysql_user: "{{ site_user }}"
+mysql_password: Vj5Kde9Nd4Hs2
+
+site_cronjobs:
+  - { name: "scripts", minute: 10, hour: "*", job: "env >/dev/null 2>&1" }
+
+
+site_nginx_custom_config: |
+  location /images/ {
+    proxy_pass http://example.com/images/;
+  }
