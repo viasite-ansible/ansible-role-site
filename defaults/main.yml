@@ -25,6 +25,7 @@ homedir: "/home/{{ site_user }}/data"
 wwwdir: "{{ homedir }}/www"
 sitedir: "{{ wwwdir }}/{{ domain }}"
 
+nginx_user: www-data
 nginx_file: /etc/nginx/sites-available/{{ domain }}
 nginx_file_en: /etc/nginx/sites-enabled/{{ domain }}
 nginx_custom_dir: "{{ homedir }}/etc/nginx"

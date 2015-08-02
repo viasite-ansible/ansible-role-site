@@ -1,8 +1,11 @@
 ---
 - name: site - mysql user
   mysql_user:
-    name={{ mysql_user }} password={{ mysql_password }}
-    host={{ mysql_host }} state=present
+    name={{ mysql_user }}
+    password={{ mysql_password }}
+    host={{ mysql_host }}
+    state=present
     priv={{ mysql_db }}.*:ALL
     append_privs=true
     # update_password=on_create # will work from ansible 2.0
+  tags: [ site, mysql ]

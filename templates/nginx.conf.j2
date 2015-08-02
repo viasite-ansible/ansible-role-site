@@ -8,7 +8,7 @@ server {
 
 server {
 	listen 80;
-	server_name {{ domain }} {{ domain_test }};
+	server_name {{ domain }} {{ domain_test | default('') }};
 
 	root {{ sitedir }};
 	include /etc/nginx/conf.server.d/*;

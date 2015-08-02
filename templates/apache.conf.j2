@@ -2,6 +2,6 @@
 <VirtualHost *>
 	DocumentRoot {{ sitedir }}
 	ServerName {{ domain }}
-	ServerAlias www.{{ domain }} {{domain_test}}
+	ServerAlias www.{{ domain }} {{ domain_test | default('') }}
 	AssignUserID {{ uid }} {{ gid }}
 </VirtualHost>

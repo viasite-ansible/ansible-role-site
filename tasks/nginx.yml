@@ -5,17 +5,22 @@
 
 - name: site - nginx config
   template: src=nginx.conf.j2 dest={{ nginx_file }}
+  tags: [ site, nginx ]
 
 - name: site - nginx custom config directory
   file: path="{{ nginx_custom_dir }}" state=directory
+  tags: [ site, nginx ]
 
 - name: site - nginx custom config directory for domain
   file: path="{{ nginx_custom_dir }}/{{ domain }}" state=directory
+  tags: [ site, nginx ]
 
 # TODO: не понятно, что nginx_custom.conf.j2 уникальный, вынес его прямо в site.yml, но выглядит страшно
 - name: site - nginx custom config
   template: src=nginx_custom.conf.j2 dest="{{ nginx_custom_dir }}/{{ domain }}/nginx_custom.conf"
+  tags: [ site, nginx ]
 
 - name: site - nginx enable
   file: path={{ nginx_file_en }} src={{ nginx_file }} state=link
   notify: Reload nginx
+  tags: [ site, nginx ]
