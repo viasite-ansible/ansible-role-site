@@ -1,16 +1,21 @@
 # {{ ansible_managed }}
 server {
-	# Redirect from www
-	listen 80;
-	server_name www.{{ domain }};
-	return 301 $scheme://{{ domain }}$request_uri;
+    # Redirect from www
+    listen 80;
+    server_name www.{{ site_domain }};
+    return 301 $scheme://{{ site_domain }}$request_uri;
 }
 
 server {
-	listen 80;
-	server_name {{ domain }} {{ domain_test | default('') }};
+    listen 80;
+    server_name {{ site_domain }} {{ domain_test | default('') }};
 
-	root {{ sitedir }};
-	include /etc/nginx/conf.server.d/*;
-	include {{ nginx_custom_dir }}/{{ domain }}/*;
+    root {{ site_root }};
+
+    {{ nginx_snippet_upstream_mod_php }}
+
+    {{ nginx_snippet_viasite_default }}
+
+    include /etc/nginx/conf.server.d/*;
+    include {{ nginx_custom_dir }}/{{ site_domain }}/*;
 }

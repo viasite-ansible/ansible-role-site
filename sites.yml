@@ -1,6 +1,7 @@
 ---
-- hosts: localhost
+- hosts: all
+  sudo: yes
 
   roles:
     - { role: ".", vars_file: sites/site1.yml }
-    - { role: ".", vars_file: sites/site2.yml }
+    #- { role: ".", vars_file: sites/site2.yml }

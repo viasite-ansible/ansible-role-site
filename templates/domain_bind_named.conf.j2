@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-zone "{{ domain }}" {
+zone "{{ site_domain }}" {
 	type master;
 	file "{{ dns_zone_file }}";
 	};

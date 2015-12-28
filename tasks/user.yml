@@ -1,49 +1,58 @@
 ---
 
-# user-setup
-- name: site - user directory
-  file: path="/home/{{ site_user }}" state=directory
+# http://serverfault.com/questions/416787/nginx-403-forbidden-error-hosting-in-user-home-directory
+- name: Ensure user directory parent exists
+  file: path="/home/{{ site_user }}"
+        state=directory
+        mode=701
   tags: [ site, user ]
 
-- name: site - user config directory
-  file: path="/home/{{ site_user }}/etc" state=directory
-  tags: [ site, user ]
-
-- name: site - user add
+- name: User add
   user:
     name={{ site_user }}
-    home={{ homedir }}
+    home={{ site_homedir }}
     shell=/bin/zsh
   tags: [ site, user ]
 
-- name: site - user directory access
-  file: path="/home/{{ site_user }}" mode=550 owner={{ site_user }} group={{ nginx_user }}
+- name: User directory parent access
+  file: path="/home/{{ site_user }}"
+        owner={{ site_user }}
+        group={{ site_user }}
+  tags: [ site, user ]
+
+- name: User directory access
+  file: path="{{ site_homedir }}"
+        state=directory
+        mode=751
+        owner={{ site_user }}
+        group={{ site_user }}
   tags: [ site, user ]
 
 # ssh access
-- name: site - Add ssh public keys to user
+- name: Add ssh public keys to user
   authorized_key:
     user={{ site_user }}
     key="{{ lookup('file', item) }}"
   with_fileglob:
-    #- /files/public-keys/*
-    - ../../../files/public-keys/*
-  tags: [ site, user ]
+    - "../../../vars/{{ ssh_public_keys_dir }}/*" # TODO: ../../../vars is hack
+  tags: [ site, user, ssh ]
 
-#- name: Remove old ssh public keys from {{ site_user }}
-#  authorized_key:
-#    user={{ site_user }}
-#    key="{{ lookup('file', item) }}"
-#    state=absent
-#  with_fileglob:
-#    - removed-keys/*
+- name: Remove old ssh public keys from user
+  authorized_key:
+    user={{ site_user }}
+    key="{{ lookup('file', item) }}"
+    state=absent
+  with_fileglob:
+    - "../../../vars/{{ ssh_public_keys_removed_dir }}/*"
+  tags: [ site, user, ssh ]
 
-# wwwdir
-- name: site - user wwwdir
-  file: path={{ wwwdir }} state=directory owner={{ site_user }} group={{ site_user }}
-  tags: [ site, user ]
-
-# sitedir
-- name: site - user sitedir
-  file: path={{ sitedir }} state=directory owner={{ site_user }} group={{ site_user }}
+- name: User directories
+  file: path={{ item }}
+        state=directory
+        owner={{ site_user }}
+        group={{ site_user }}
+  with_items:
+    - "{{ site_homedir }}/etc"
+    - "{{ site_wwwdir }}"
+    - "{{ site_root }}"
   tags: [ site, user ]

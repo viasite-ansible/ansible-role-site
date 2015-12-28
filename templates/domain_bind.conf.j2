@@ -1,15 +1,15 @@
 # {{ ansible_managed }}
 $ttl 38400
-{{ domain }}.	IN	SOA	{{ dns_ns1 }}. {{ dns_whois_email }} (
+{{ site_domain }}.	IN	SOA	{{ dns_ns1 }}. {{ dns_whois_email }} (
 			{timestamp}
 			10800
 			3600
 			604800
 			38400 )
-{{ domain }}. IN NS {{ dns_ns1 }}.
-{{ domain }}. IN NS {{ dns_ns2 }}.
-{{ domain }}. IN A {{ dns_a }}
-www.{{ domain }}. IN A {{ dns_a }}
+{{ site_domain }}. IN NS {{ dns_ns1 }}.
+{{ site_domain }}. IN NS {{ dns_ns2 }}.
+{{ site_domain }}. IN A {{ dns_a }}
+www.{{ site_domain }}. IN A {{ dns_a }}
 {% if dns_yandex_mail %}
 mail IN CNAME domain.mail.yandex.net.
 @ IN MX 10 mx.yandex.ru.

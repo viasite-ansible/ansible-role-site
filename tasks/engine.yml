@@ -1,0 +1,10 @@
+---
+- name: Check site_root
+  stat: path={{ site_root }}
+  register: st
+  tags: [ site, engine ]
+
+- name: Setup engine
+  command: site-setup-engine --user "{{site_user}}" --db "{{mysql_db}}" --db_pass "{{mysql_password}}" --engine "{{site_engine}}" --domain "{{domain}}" {{ "--rewrite" if site_rewtire else "" }}
+  when: site_engine is defined and site_engine != '' and (not st.stat.exists or site_rewrite)
+  tags: [ site, engine ]

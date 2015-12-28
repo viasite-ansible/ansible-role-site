@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 <VirtualHost *>
-	DocumentRoot {{ sitedir }}
-	ServerName {{ domain }}
-	ServerAlias www.{{ domain }} {{ domain_test | default('') }}
-	AssignUserID {{ uid }} {{ gid }}
+    DocumentRoot {{ site_root }}
+    ServerName {{ site_domain }}
+    ServerAlias www.{{ site_domain }} {{ domain_test | default('') }}
+    AssignUserID {{ uid }} {{ gid }}
 </VirtualHost>

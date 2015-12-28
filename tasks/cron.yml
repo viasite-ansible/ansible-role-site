@@ -1,5 +1,8 @@
 - name: Cron scripts directory
-  file: path="{{ homedir }}/cron" state=directory
+  file: path="{{ site_homedir }}/cron"
+        state=directory
+        owner={{ site_user }}
+        group={{ site_user }}
   tags: [ site, cron ]
 
 - name: Cron jobs

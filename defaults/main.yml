@@ -13,7 +13,7 @@ mysql_host: localhost
 #dns_whois_email: admin.example.com
 dns_a: "{{ ansible_default_ipv4.adress }}"
 dns_yandex_mail: yes
-dns_zone_file: /var/lib/bind/{{ domain }}.hosts
+dns_zone_file: /var/lib/bind/{{ site_domain }}.hosts
 
 #mailto:
 #- admin@example.com
@@ -21,14 +21,19 @@ dns_zone_file: /var/lib/bind/{{ domain }}.hosts
 uid: "{{ site_user }}"
 gid: "{{ site_user }}"
 
-homedir: "/home/{{ site_user }}/data"
-wwwdir: "{{ homedir }}/www"
-sitedir: "{{ wwwdir }}/{{ domain }}"
+site_homedir: "/home/{{ site_user }}/data"
+site_wwwdir: "{{ site_homedir }}/www"
+site_root: "{{ site_wwwdir }}/{{ site_domain }}"
 
 nginx_user: www-data
-nginx_file: /etc/nginx/sites-available/{{ domain }}
-nginx_file_en: /etc/nginx/sites-enabled/{{ domain }}
-nginx_custom_dir: "{{ homedir }}/etc/nginx"
-apache_file: /etc/apache2/sites-available/{{ domain }}.conf
-apache_file_en: /etc/apache2/sites-enabled/{{ domain }}.conf
-skeldir: "{{ sitedir }}/sites/default/files/skel"
+nginx_file: /etc/nginx/sites-available/{{ site_domain }}.conf
+nginx_file_en: /etc/nginx/sites-enabled/{{ site_domain }}.conf
+nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
+apache_file: /etc/apache2/sites-available/{{ site_domain }}.conf
+apache_file_en: /etc/apache2/sites-enabled/{{ site_domain }}.conf
+skeldir: "{{ site_root }}/sites/default/files/skel"
+
+nginx_mod_php: |
+
+
+mysql_host: localhost
