@@ -31,6 +31,7 @@ nginx_file_en: /etc/nginx/sites-enabled/{{ site_domain }}.conf
 nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
 apache_file: /etc/apache2/sites-available/{{ site_domain }}.conf
 apache_file_en: /etc/apache2/sites-enabled/{{ site_domain }}.conf
+apache_mpm_itk_max_clients_per_host: 30
 skeldir: "{{ site_root }}/sites/default/files/skel"
 
 nginx_mod_php: |

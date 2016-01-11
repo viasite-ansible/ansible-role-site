@@ -4,4 +4,5 @@
     ServerName {{ site_domain }}
     ServerAlias www.{{ site_domain }} {{ domain_test | default('') }}
     AssignUserID {{ uid }} {{ gid }}
+    MaxClientsVHost {{ apache_mpm_itk_max_clients_per_host }}
 </VirtualHost>
