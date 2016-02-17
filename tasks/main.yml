@@ -9,4 +9,11 @@
 - include: dns.yml
 - include: mysql.yml
 - include: cron.yml
+
+- include: sync.yml
+  when: site_sync_files
+
+- include: sync_mysql.yml
+  when: site_sync_mysql
+
 - include: engine.yml

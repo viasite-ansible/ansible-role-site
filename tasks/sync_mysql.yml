@@ -1,0 +1,17 @@
+- name: Ensure database exists
+  mysql_db: name={{ site_mysql_db }} state=present
+  tags: [ site, sync, sync_mysql ]
+
+- name: Sync sql dump
+  command: |
+    rsync -L \
+    "{{ site_src_sql_dump_user }}@{{ site_src_sql_dump_host }}:{{ site_src_sql_dump_path }}" \
+    "{{ site_homedir }}/mysql_dump.tar.gz"
+  tags: [ site, sync, sync_mysql ]
+
+- name: Import sql dump
+  mysql_db: name={{ site_mysql_db }} state=import target="{{ site_homedir }}/mysql_dump.tar.gz"
+  tags: [ site, sync, sync_mysql ]
+
+- name: Remove sql dump
+  file: path="{{ site_homedir }}/mysql_dump.tar.gz" state=absent

@@ -10,6 +10,7 @@ Ansible role for setup php site. NOT WORKS!
 3. Exec playbook: ```ansible-playbook sites.yml -v```
 
 # TODO
+- [ ] Nginx not reloaded after config changed
 - [ ] Disable, rename and delete site
 - [ ] DNS
 - [ ] PHP select

@@ -1,0 +1,7 @@
+---
+- name: Sync main files
+  command: |
+    rsync --archive --delete \
+    "{{ site_src_user }}@{{ site_src_host }}:{{ site_src_path }}/" "{{ site_root }}"
+  when: site_src_user and site_src_host and site_src_path
+  tags: [ site, sync, files ]

@@ -8,7 +8,7 @@ server {
 
 server {
     listen 80;
-    server_name {{ site_domain }} {{ domain_test | default('') }};
+    server_name {{ site_domain }} {{ site_domain_test | default('') }};
 
     root {{ site_root }};
 
