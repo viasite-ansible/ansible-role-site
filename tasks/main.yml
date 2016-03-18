@@ -7,7 +7,10 @@
 - include: apache2.yml
 - include: nginx.yml
 - include: dns.yml
+
 - include: mysql.yml
+  when: site_mysql_host is defined and site_mysql_db is defined and site_mysql_user is defined and site_mysql_password is defined
+
 - include: cron.yml
 
 - include: sync.yml
