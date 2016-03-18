@@ -54,10 +54,10 @@
             return 404;
         }
 
-        location ~* ^.+\.php$ {
-            proxy_pass $php_upstream;
-            {{ nginx_snippet_proxy_params | indent(12) }}
-        }
+        #location ~* ^.+\.php$ {
+        #    proxy_pass $php_upstream;
+        #    {{ nginx_snippet_proxy_params | indent(12) }}
+        #}
 
         try_files $uri @rewrite;
     }
