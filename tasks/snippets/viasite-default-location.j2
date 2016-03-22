@@ -1,4 +1,6 @@
 
+    error_page 404 /404.html;
+
     # Drupal include, adapted from https://raw.github.com/perusio/drupal-with-nginx
     index index.php;
 
@@ -36,7 +38,7 @@
             open_file_cache_valid 45s;
             open_file_cache_min_uses 2;
             open_file_cache_errors off;
-            try_files $uri /404.html @fallback;
+            #try_files $uri /404.html @fallback;
         }
 
         ## PDFs and powerpoint files handling.
@@ -144,6 +146,10 @@
     location = /favicon.ico {
         access_log off;
         try_files /favicon.ico =204;
+    }
+
+    location = /404.html {
+        internal;
     }
 
     ## Any other attempt to access PHP files returns a 404.
