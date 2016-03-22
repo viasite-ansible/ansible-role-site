@@ -3,7 +3,7 @@
 #domain_test: test.example.com
 #site_user: example
 
-mysql_host: localhost
+site_mysql_host: localhost
 #mysql_db: "{{ user }}"
 #mysql_user: "{{ user }}"
 #mysql_password: ASLDklkvhlfkdgjm
@@ -36,5 +36,3 @@ skeldir: "{{ site_root }}/sites/default/files/skel"
 
 nginx_mod_php: |
 
-
-mysql_host: localhost
