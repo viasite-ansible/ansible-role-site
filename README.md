@@ -1,5 +1,5 @@
 # ansible-role-site
-Ansible role for setup php site. NOT WORKS!
+Ansible role for setup php site.
 
 - sites/*.yml - each yml = site
 

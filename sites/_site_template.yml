@@ -1,6 +1,7 @@
 ---
 site_domain:
 site_domain_test:
+site_domain_redirect:
 site_user:
 
 site_mysql_host: localhost
@@ -20,6 +21,8 @@ site_src_sql_dump_path: "/var/backups/sql/last/{{ site_mysql_db }}.gz"
 
 site_engine: ""
 site_rewtire: no
+
+site_dkim_public_key:
 
 site_cronjobs: []
 

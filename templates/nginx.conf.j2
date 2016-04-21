@@ -2,7 +2,7 @@
 server {
     # Redirect from www
     listen 80;
-    server_name www.{{ site_domain }};
+    server_name www.{{ site_domain }} {{ site_domain_redirect | default('') }};
     return 301 $scheme://{{ site_domain }}$request_uri;
 }
 
