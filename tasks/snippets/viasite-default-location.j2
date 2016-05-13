@@ -72,6 +72,11 @@
             {{ nginx_snippet_proxy_params | indent(12) }}
         }
 
+        location = /clientstat {
+            return 204;
+            access_log /var/log/nginx/clientstat.access.log combined_host;
+        }
+
         try_files $uri @rewrite;
     }
 
