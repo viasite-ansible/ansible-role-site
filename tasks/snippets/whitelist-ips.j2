@@ -1,6 +1,0 @@
-{%- if nginx_whitelist_ips is defined -%}
-    {% for ip in nginx_whitelist_ips %}
-    allow {{ ip }};
-    {% endfor %}
-    deny all;
-{% endif %}
