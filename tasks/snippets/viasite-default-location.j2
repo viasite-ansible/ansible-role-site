@@ -79,6 +79,11 @@
         proxy_pass $php_upstream;
         {{ nginx_snippet_proxy_params | indent(8) }}
 
+        {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
+        access_log /var/log/nginx/access.log combined_host;
+        access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
+        {% endif %}
+
         #fastcgi_pass $php_upstream;
         ## FastCGI Cache.
         #include fastcgi_cache;
