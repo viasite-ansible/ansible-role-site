@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Stanislav Popov
+  company: Viasite
+  description: Install site to server, in place of https://github.com/popstas/site-setup
+  license: MIT
+  min_ansible_version: 1.8
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+  categories:
+    - deployment
+    - web
+dependencies: []
