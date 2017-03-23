@@ -4,6 +4,11 @@ site_domain_test:
 site_domain_redirect:
 site_user:
 
+#site_setup_git: no
+#site_setup_ssh_keys: yes
+#site_setup_vim: no
+#site_setup_zsh: no
+
 site_mysql_host: localhost
 site_mysql_db: "{{ site_user }}"
 site_mysql_user: "{{ site_user }}"

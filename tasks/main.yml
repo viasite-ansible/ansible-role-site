@@ -1,22 +1,24 @@
 ---
 - name: Load site variables
-  include_vars: "{{ vars_file }}"
+  include_vars: "{{ site_vars_file }}"
   tags: [ site, always ]
 
 - include: user.yml
-- include: apache2.yml
-- include: nginx.yml
-- include: dns.yml
+  tags: [ site, user ]
 
-- include: mysql.yml
-  when: site_mysql_host is defined and site_mysql_db is defined and site_mysql_user is defined and site_mysql_password is defined
+#- include: apache.yml
+#- include: nginx.yml
+#- include: dns.yml
 
-- include: cron.yml
+#- include: mysql.yml
+#  when: site_mysql_host is defined and site_mysql_db is defined and site_mysql_user is defined and site_mysql_password is defined
 
-- include: sync.yml
-  when: site_sync_files
+#- include: cron.yml
 
-- include: sync_mysql.yml
-  when: site_sync_mysql
+#- include: sync.yml
+#  when: site_sync_files
 
-- include: engine.yml
+#- include: sync_mysql.yml
+#  when: site_sync_mysql
+
+#- include: engine.yml

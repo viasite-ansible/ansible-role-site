@@ -1,0 +1,22 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: requirements.yml
+
+driver:
+  name: docker
+docker:
+  containers:
+    - name: ansible-role-site-1604
+      image: ubuntu
+      image_version: 16.04
+      volume_mounts:
+        - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
+
+ansible:
+  playbook: tests/playbook.yml
+  group_vars:
+    all:
+      site_vars_file: sites/site1.yml
+      ssh_keys_public_keys:
+        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCigF4GNLC78z1zg2HKf5X6dE+nob4T0/EfmvUX3yPEui6pqynYwYxCbGArT7iTlY01eaVArBZrcj9vLiO1+YqptzqddqL039t9i2jvg+lqLk3mnh3qb2jra+hymBlFslMgWAMffNcWN9v8zv0V8AjrPG8YEYNWmZOcBAKJ+fMexxX04rThZyv1sP4gwby9X8taFCkkAMANqPcYshe+wJbEUjLfQA8hLPecAR8WojptxMv5AfI5pjQbr+k9iTcY+FTVPIDNLMlgpXoLHW+W3dYoX3oBCehdalbEq7XR5VpFAr+WfJn54vDYsSgau/RPcAqfBDpA7bC6/kmTpH2cgW8B test2@example.com"

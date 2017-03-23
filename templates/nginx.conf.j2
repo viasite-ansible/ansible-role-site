@@ -12,7 +12,7 @@ server {
 
     root {{ site_root }};
 
-    {{ nginx_snippet_upstream_mod_php }}
+    set $php_upstream http://{{ apache_host }}:{{ apache_port }};
 
     {{ nginx_snippet_viasite_default }}
 

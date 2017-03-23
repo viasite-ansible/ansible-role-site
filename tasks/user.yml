@@ -2,57 +2,73 @@
 
 # http://serverfault.com/questions/416787/nginx-403-forbidden-error-hosting-in-user-home-directory
 - name: Ensure user directory parent exists
-  file: path="/home/{{ site_user }}"
-        state=directory
-        mode=701
-  tags: [ site, user ]
+  file:
+    path: "/home/{{ site_user }}"
+    state: directory
+    mode: "0701" # without quotes ansible-lint throws warning
+  tags: permissions
 
 - name: User add
   user:
-    name={{ site_user }}
-    home={{ site_homedir }}
-    shell=/bin/zsh
-  tags: [ site, user ]
+    name: "{{ site_user }}"
+    home: "{{ site_homedir }}"
 
 - name: User directory parent access
-  file: path="/home/{{ site_user }}"
-        owner={{ site_user }}
-        group={{ site_user }}
-  tags: [ site, user ]
+  file:
+    path: "/home/{{ site_user }}"
+    owner: "{{ site_user }}"
+    group: "{{ site_user }}"
+  tags: permissions
 
 - name: User directory access
-  file: path="{{ site_homedir }}"
-        state=directory
-        mode=751
-        owner={{ site_user }}
-        group={{ site_user }}
-  tags: [ site, user ]
-
-# ssh access
-- name: Add ssh public keys to user
-  authorized_key:
-    user={{ site_user }}
-    key="{{ lookup('file', item) }}"
-  with_fileglob:
-    - "../../../vars/{{ ssh_public_keys_dir }}/*" # TODO: ../../../vars is hack
-  tags: [ site, user, ssh ]
-
-- name: Remove old ssh public keys from user
-  authorized_key:
-    user={{ site_user }}
-    key="{{ lookup('file', item) }}"
-    state=absent
-  with_fileglob:
-    - "../../../vars/{{ ssh_public_keys_removed_dir }}/*"
-  tags: [ site, user, ssh ]
+  file:
+    path: "{{ site_homedir }}"
+    state: directory
+    mode: 0750
+    owner: "{{ site_user }}"
+    group: "{{ site_user }}"
+  tags: permissions
 
 - name: User directories
-  file: path={{ item }}
-        state=directory
-        owner={{ site_user }}
-        group={{ site_user }}
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ site_user }}"
+    group: "{{ site_user }}"
   with_items:
     - "{{ site_homedir }}/etc"
     - "{{ site_wwwdir }}"
     - "{{ site_root }}"
-  tags: [ site, user ]
+  tags: permissions
+
+- name: setup git
+  include_role:
+    name: git
+  vars:
+    git_user: "{{ site_user }}"
+  tags: git
+  when: site_setup_git
+
+- name: setup ssh-keys
+  include_role:
+    name: ssh-keys
+  vars:
+    ssh_keys_user: "{{ site_user }}"
+  tags: ssh-keys
+  when: site_setup_ssh_keys
+
+- name: setup vim
+  include_role:
+    name: vim
+  vars:
+    vim_user: "{{ site_user }}"
+  tags: vim
+  when: site_setup_vim
+
+- name: setup zsh
+  include_role:
+    name: zsh
+  vars:
+    zsh_user: "{{ site_user }}"
+  tags: zsh
+  when: site_setup_zsh
