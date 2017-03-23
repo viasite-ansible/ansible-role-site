@@ -40,4 +40,3 @@ apache_mpm_itk_max_clients_per_host: 30
 skeldir: "{{ site_root }}/sites/default/files/skel"
 
 nginx_mod_php: |
-
