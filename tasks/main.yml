@@ -6,19 +6,29 @@
 - include: user.yml
   tags: [ site, user ]
 
-#- include: apache.yml
+- include: apache.yml
+  tags: [ site, apache ]
+
 #- include: nginx.yml
+#  tags: [ site, nginx ]
+
 #- include: dns.yml
+#  tags: [ site, dns ]
 
 #- include: mysql.yml
 #  when: site_mysql_host is defined and site_mysql_db is defined and site_mysql_user is defined and site_mysql_password is defined
+#  tags: [ site, mysql ]
 
 #- include: cron.yml
+#  tags: [ site, cron ]
 
 #- include: sync.yml
 #  when: site_sync_files
+#  tags: [ site, sync ]
 
 #- include: sync_mysql.yml
 #  when: site_sync_mysql
+#  tags: [ site, sync_mysql ]
 
 #- include: engine.yml
+#  tags: [ site, engine ]

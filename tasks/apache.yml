@@ -1,10 +1,10 @@
 ---
 # TODO: должен быть выбор версии php
-- name: site - apache config
-  template: src=apache.conf.j2 dest={{ apache_file }}
-  tags: [ site, apache2 ]
-
-- name: site - apache enable
-  file: path={{ apache_file_en }} src={{ apache_file }} state=link
-  notify: Reload apache
-  tags: [ site, apache2 ]
+- name: setup apache vhost
+  include_role:
+    name: apache
+  vars:
+    apache_vhosts:
+      - servername: "{{ site_domain }}"
+        serveralias: "www.{{ site_domain }} {{ site_domain_test }}"
+        documentroot: "{{ site_root }}"
