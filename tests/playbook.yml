@@ -1,4 +1,24 @@
 ---
 - hosts: all
+
+  pre_tasks:
+    - name: start LAMP services
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - apache2
+        - mysql
+        - nginx
+        - php7.0-fpm
+      ignore_errors: yes
+
   roles:
-    - ansible-role-site
+    - { name: ansible-role-site, site_vars_file: sites/site1.yml }
+    - { name: ansible-role-site, site_vars_file: sites/site2.yml }
+
+  post_tasks:
+    - name: Copy test site
+      copy:
+        src: site1.example.com
+        dest: /home/site1/www

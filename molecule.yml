@@ -8,15 +8,44 @@ driver:
 docker:
   containers:
     - name: ansible-role-site-1604
-      image: ubuntu
-      image_version: 16.04
+      image: popstas/ansible-server-base
+      image_version: latest
       volume_mounts:
         - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
+      hostname: site1.example.com
+
+#driver:
+#  name: vagrant
+#vagrant:
+#  platforms:
+#    - name: ansible-server-base
+#      box: ansible-server-base
+#  providers:
+#    - name: virtualbox
+#      type: virtualbox
+#      options:
+#        memory: 2048
+#        cpus: 2
+#  instances:
+#    - name: vagrant-01
+#      #interfaces:
+#      #  - network_name: private_network
+#      #    type: dhcp
+#      #    auto_config: true
+#      raw_config_args:
+#        - "vm.synced_folder '${MOLECULE_APT_CONF_D_PATH}', '/etc/apt/apt.conf.d'"
+
+verifier:
+  name: testinfra
 
 ansible:
   playbook: tests/playbook.yml
   group_vars:
     all:
-      site_vars_file: sites/site1.yml
+      apache_listen_port: 81
+      nginx_configs:
+        upstream:
+          - upstream apache { server 127.0.0.1:81; }
+      php_enable_webserver: false
       ssh_keys_public_keys:
         - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCigF4GNLC78z1zg2HKf5X6dE+nob4T0/EfmvUX3yPEui6pqynYwYxCbGArT7iTlY01eaVArBZrcj9vLiO1+YqptzqddqL039t9i2jvg+lqLk3mnh3qb2jra+hymBlFslMgWAMffNcWN9v8zv0V8AjrPG8YEYNWmZOcBAKJ+fMexxX04rThZyv1sP4gwby9X8taFCkkAMANqPcYshe+wJbEUjLfQA8hLPecAR8WojptxMv5AfI5pjQbr+k9iTcY+FTVPIDNLMlgpXoLHW+W3dYoX3oBCehdalbEq7XR5VpFAr+WfJn54vDYsSgau/RPcAqfBDpA7bC6/kmTpH2cgW8B test2@example.com"

@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^redirect-test/$ / [R=301,L]
