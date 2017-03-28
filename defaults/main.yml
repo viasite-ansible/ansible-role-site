@@ -30,13 +30,131 @@ site_homedir: "/home/{{ site_user }}/data"
 site_wwwdir: "{{ site_homedir }}/www"
 site_root: "{{ site_wwwdir }}/{{ site_domain }}"
 
-nginx_user: www-data
-nginx_file: /etc/nginx/sites-available/{{ site_domain }}.conf
-nginx_file_en: /etc/nginx/sites-enabled/{{ site_domain }}.conf
-nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
-apache_file: /etc/apache2/sites-available/{{ site_domain }}.conf
-apache_file_en: /etc/apache2/sites-enabled/{{ site_domain }}.conf
-apache_mpm_itk_max_clients_per_host: 30
-skeldir: "{{ site_root }}/sites/default/files/skel"
+site_nginx_user: www-data
+site_nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
+site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
+#nginx_file: /etc/nginx/sites-available/{{ site_domain }}.conf
+#nginx_file_en: /etc/nginx/sites-enabled/{{ site_domain }}.conf
+#apache_file: /etc/apache2/sites-available/{{ site_domain }}.conf
+#apache_file_en: /etc/apache2/sites-enabled/{{ site_domain }}.conf
+#apache_mpm_itk_max_clients_per_host: 30
+#skeldir: "{{ site_root }}/sites/default/files/skel"
 
-nginx_mod_php: |
+site_nginx_proxy_params: |
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+site_nginx_location_default: |
+    location /.git {
+        deny all;
+    }
+    location /backup {
+        deny all;
+    }
+    location /build {
+        deny all;
+    }
+    location /logs {
+        deny all;
+    }
+    location /patches {
+        deny all;
+    }
+    location /tmp/ {
+        deny all;
+    }
+    location /modified.txt {
+        deny all;
+    }
+    location /sites/default/files/patches {
+        deny all;
+    }
+
+    location ~ /site_tests.json {
+        return 404;
+    }
+
+    ## Disable access logs for robots.txt.
+    location = /robots.txt {
+        access_log off;
+    }
+
+    ## RSS feed support.
+    location = /rss.xml {
+        try_files $uri @rewrite;
+    }
+
+    ## XML Sitemap support.
+    location = /sitemap.xml {
+        try_files $uri @rewrite;
+    }
+
+    ## xmlrpc support.
+    location = /xmlrpc.php {
+        proxy_pass http://apache;
+        {{ site_nginx_proxy_params | default('') | indent(8) }}
+    }
+
+    ## Support for favicon. Return a 204 (No Content) if the favicon
+    ## doesn't exist.
+    location = /favicon.ico {
+        access_log off;
+        try_files /favicon.ico =204;
+    }
+
+    location = /404.html {
+        internal;
+    }
+
+# for insert in location /
+site_nginx_location_static_files: |
+    # Static files location
+    location ~* ^.+\.(?:jpg|jpeg|gif|png|ico|css|less|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|ppt|ppts|pptsx|exe|txt|tar|mid|midi|wav|bmp|rtf|js|swf|flv|woff|woff2|eot|ttf|cur)$
+    {
+        access_log off;
+        log_not_found off;
+        expires 30d;
+        ## No need to bleed constant updates. Send the all shebang in one
+        ## fell swoop.
+        tcp_nodelay off;
+        ## Set the OS file cache.
+        open_file_cache max=3000 inactive=120s;
+        open_file_cache_valid 45s;
+        open_file_cache_min_uses 2;
+        open_file_cache_errors off;
+        #try_files $uri /404.html @fallback;
+    }
+  
+    ## PDFs and powerpoint files handling.
+    location ~* ^.+\.(?:pdf|pptx?)$ {
+        expires 30d;
+        ## No need to bleed constant updates. Send the all shebang in one
+        ## fell swoop.
+        tcp_nodelay off;
+    }
+  
+    ## Replicate the Apache <FilesMatch> directive of Drupal standard
+    ## .htaccess. Disable access to any code files. Return a 404 to curtail
+    ## information disclosure. Hide also the text files.
+    location ~* ^(?:.+\.(?:htaccess|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
+        return 404;
+    }
+
+site_nginx_location_php: |
+    # need for urls such /index.php
+    location ~* ^.+\.php$ {
+        proxy_pass http://apache;
+        {{ site_nginx_proxy_params | indent(12) }}
+    }
+
+site_nginx_location_rewrite: |
+    location @rewrite {
+        proxy_pass http://apache;
+        {{ site_nginx_proxy_params | indent(8) }}
+
+        {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
+        access_log /var/log/nginx/access.log combined_host;
+        access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
+        {% endif %}
+    }

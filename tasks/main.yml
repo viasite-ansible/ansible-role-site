@@ -6,11 +6,11 @@
 - include: user.yml
   tags: [ site, user ]
 
-- include: apache.yml
-  tags: [ site, apache ]
+- include: nginx.yml
+  tags: [ site, nginx ]
 
-#- include: nginx.yml
-#  tags: [ site, nginx ]
+#- include: apache.yml
+#  tags: [ site, apache ]
 
 #- include: dns.yml
 #  tags: [ site, dns ]

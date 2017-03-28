@@ -1,0 +1,29 @@
+# {{ ansible_managed }}
+server {
+    # Redirect from www
+    listen 80;
+    server_name www.{{ item.value.server_name }};
+    return 301 $scheme://{{ site_domain }}$request_uri;
+}
+
+server {
+    listen 80;
+    server_name {{ item.value.server_name }} {{ item.value.server_aliases | default('') }};
+    root {{ site_root }};
+    index index.php;
+
+    location / {
+        {{ site_nginx_location_static_files | indent(8) }}
+
+        {{ site_nginx_location_php | indent(8) }}
+
+        try_files $uri @rewrite;
+    }
+
+    {{ site_nginx_location_rewrite | indent(4) }}
+
+    {{ site_nginx_location_default | indent(4) }}
+
+    include {{ site_nginx_custom_dir }}/{{ site_domain }}/*;
+    #todo: include {{ site_nginx_custom_dir }}/{{ site_domain }}/root_location/*;
+}

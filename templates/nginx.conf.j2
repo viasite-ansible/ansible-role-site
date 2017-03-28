@@ -17,5 +17,5 @@ server {
     {{ nginx_snippet_viasite_default }}
 
     include /etc/nginx/conf.server.d/*;
-    include {{ nginx_custom_dir }}/{{ site_domain }}/*;
+    include {{ site_nginx_custom_dir }}/{{ site_domain }}/*;
 }

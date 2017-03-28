@@ -1,39 +1,35 @@
 ---
-# TODO: при текущей конфигурации в шаблоне хоста нет мест, куда можэно прописать уникальные настройки хоста
-# Нужно либо запретить повторное применение шаблона к хосту, чтобы не сбрасывался, либо придумать, где хранить такие настройки
-# Лучше придумать, как хранить такое, например, в $document_root/etc/nginx/*
+# TODO: должен быть выбор версии php
+- name: setup nginx vhost
+  include_role:
+    name: nginx
+  vars:
+    nginx_sites:
+      "{{ site_domain }}":
+        template: "nginx/{{ site_nginx_template }}.conf.j2"
+        server_name: "{{ site_domain }}"
+        server_aliases: "{{ site_domain_test | default('') }}"
 
-# TODO: flag to disable manage config from ansible
-- name: site - nginx config
-  template: src=nginx.conf.j2 dest={{ nginx_file }}
-  notify: Reload nginx
-  tags: [ site, nginx ]
-
-- name: nginx custom config directory
-  file: path="{{ nginx_custom_dir }}" state=directory
-  tags: [ site, nginx ]
-
-- name: nginx custom config directory for domain
-  file: path="{{ nginx_custom_dir }}/{{ site_domain }}" state=directory
-  tags: [ site, nginx ]
-
-# TODO: не понятно, что nginx_custom.conf.j2 уникальный, вынес его прямо в site.yml, но выглядит страшно
-# TODO: ansible перезапишет кастомный конфиг, при следующем запуске, нужно явно запретить его править руками
-- name: nginx custom config
-  template: src=nginx_custom.conf.j2 dest="{{ nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
-  notify: Reload nginx
-  when: site_nginx_custom_config is defined
-  tags: [ site, nginx ]
-
-- name: nginx custom config access
-  file: path="{{ nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
-        owner={{ nginx_user }}
-        group={{ nginx_user }}
-        mode=444
-  when: site_nginx_custom_config is defined
-  tags: [ site, nginx ]
-
-- name: nginx enable
-  file: path={{ nginx_file_en }} src={{ nginx_file }} state=link
-  notify: Reload nginx
-  tags: [ site, nginx ]
+#- name: nginx custom config directory
+#  file: path="{{ site_nginx_custom_dir }}" state=directory
+#  tags: [ site, nginx ]
+#
+#- name: nginx custom config directory for domain
+#  file: path="{{ site_nginx_custom_dir }}/{{ site_domain }}" state=directory
+#  tags: [ site, nginx ]
+#
+## TODO: не понятно, что nginx_custom.conf.j2 уникальный, вынес его прямо в site.yml, но выглядит страшно
+## TODO: ansible перезапишет кастомный конфиг, при следующем запуске, нужно явно запретить его править руками
+#- name: nginx custom config
+#  template: src=nginx_custom.conf.j2 dest="{{ site_nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
+#  notify: Reload nginx
+#  when: site_nginx_custom_config is defined
+#  tags: [ site, nginx ]
+#
+#- name: nginx custom config access
+#  file: path="{{ site_nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
+#        owner={{ nginx_user }}
+#        group={{ nginx_user }}
+#        mode=444
+#  when: site_nginx_custom_config is defined
+#  tags: [ site, nginx ]
