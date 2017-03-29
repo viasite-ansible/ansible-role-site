@@ -7,23 +7,26 @@ server {
 }
 
 server {
-    listen 80;
-    server_name {{ item.value.server_name }} {{ item.value.server_aliases | default('') }};
-    root {{ site_root }};
-    index index.php;
+  listen 80;
+  server_name {{ item.value.server_name }} {{ item.value.server_aliases | default('') }};
+  root {{ site_root }};
+  index index.php;
 
-    location / {
-        {{ site_nginx_location_static_files | indent(8) }}
+  location / {
+    {{ site_nginx_location_static_files | indent(4) }}
 
-        {{ site_nginx_location_php | indent(8) }}
+    {{ site_nginx_location_php | indent(4) }}
 
-        try_files $uri @rewrite;
-    }
+    try_files $uri @rewrite;
 
-    {{ site_nginx_location_rewrite | indent(4) }}
+    {{ item.value.root_location_extra_parameters | default('') | indent(2) }}
+  }
 
-    {{ site_nginx_location_default | indent(4) }}
+  {{ site_nginx_location_rewrite | indent(2) }}
 
-    include {{ site_nginx_custom_dir }}/{{ site_domain }}/*;
-    #todo: include {{ site_nginx_custom_dir }}/{{ site_domain }}/root_location/*;
+  {{ site_nginx_location_default | indent(2) }}
+
+  include {{ site_nginx_custom_dir }}/{{ site_domain }}/*;
+
+  {{ item.value.server_extra_parameters | default('') | indent(2) }}
 }

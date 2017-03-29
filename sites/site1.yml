@@ -11,12 +11,17 @@ site_mysql_password: Vj5Kde9Nd4Hs2
 site_cronjobs:
   - { name: "site: scripts", minute: 10, hour: "*", job: "env >/dev/null 2>&1" }
 
-site_nginx_custom_config: |
+site_nginx_custom_server: |
   location /images/ {
     proxy_pass http://example.com/images/;
   }
 
-site_setup_git: yes
-site_setup_ssh_keys: yes
-site_setup_vim: yes
-site_setup_zsh: yes
+site_nginx_custom_root_location: |
+  location /images/ {
+    proxy_pass http://example.com/images/;
+  }
+
+site_setup_git: no
+site_setup_ssh_keys: no
+site_setup_vim: no
+site_setup_zsh: no

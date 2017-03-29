@@ -9,27 +9,5 @@
         template: "nginx/{{ site_nginx_template }}.conf.j2"
         server_name: "{{ site_domain }}"
         server_aliases: "{{ site_domain_test | default('') }}"
-
-#- name: nginx custom config directory
-#  file: path="{{ site_nginx_custom_dir }}" state=directory
-#  tags: [ site, nginx ]
-#
-#- name: nginx custom config directory for domain
-#  file: path="{{ site_nginx_custom_dir }}/{{ site_domain }}" state=directory
-#  tags: [ site, nginx ]
-#
-## TODO: не понятно, что nginx_custom.conf.j2 уникальный, вынес его прямо в site.yml, но выглядит страшно
-## TODO: ansible перезапишет кастомный конфиг, при следующем запуске, нужно явно запретить его править руками
-#- name: nginx custom config
-#  template: src=nginx_custom.conf.j2 dest="{{ site_nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
-#  notify: Reload nginx
-#  when: site_nginx_custom_config is defined
-#  tags: [ site, nginx ]
-#
-#- name: nginx custom config access
-#  file: path="{{ site_nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
-#        owner={{ nginx_user }}
-#        group={{ nginx_user }}
-#        mode=444
-#  when: site_nginx_custom_config is defined
-#  tags: [ site, nginx ]
+        root_location_extra_parameters: "{{ site_nginx_custom_root_location }}"
+        server_extra_parameters: "{{ site_nginx_custom_server }}"
