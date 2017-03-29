@@ -8,3 +8,5 @@
       - servername: "{{ site_domain }}"
         serveralias: "www.{{ site_domain }} {{ site_domain_test }}"
         documentroot: "{{ site_root }}"
+        extra_parameters: |
+          ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"

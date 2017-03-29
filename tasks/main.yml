@@ -9,8 +9,11 @@
 - include: nginx.yml
   tags: [ site, nginx ]
 
-#- include: apache.yml
-#  tags: [ site, apache ]
+- include: php.yml
+  tags: [ site, php ]
+
+- include: apache.yml
+  tags: [ site, apache ]
 
 #- include: dns.yml
 #  tags: [ site, dns ]

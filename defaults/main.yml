@@ -23,13 +23,23 @@ site_mysql_host: localhost
 #mailto:
 #- admin@example.com
 
-uid: "{{ site_user }}"
-gid: "{{ site_user }}"
-
 site_homedir: "/home/{{ site_user }}"
 site_wwwdir: "{{ site_homedir }}/www"
 site_root: "{{ site_wwwdir }}/{{ site_domain }}"
 
+site_php_user: "{{ site_user }}"
+site_php_group: "{{ site_user }}"
+site_php_socket: "{{ site_homedir }}/run/php-fpm.sock"
+site_php_fpm_pool_d: /etc/php/7.0/fpm/pool.d
+site_php_fpm_service_name: php7.0-fpm
+site_php_fpm_defaults:
+  pm: ondemand
+  pm.max_children: 10
+  pm.start_servers: 1
+  pm.min_spare_servers: 1
+  pm.max_spare_servers: 3
+
+site_apache_user: www-data
 site_nginx_user: www-data
 site_nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
 site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}

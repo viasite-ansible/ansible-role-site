@@ -37,6 +37,7 @@
     group: "{{ site_user }}"
   with_items:
     - "{{ site_homedir }}/etc"
+    - "{{ site_homedir }}/run"
     - "{{ site_wwwdir }}"
     - "{{ site_root }}"
   tags: permissions

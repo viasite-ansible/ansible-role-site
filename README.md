@@ -15,15 +15,13 @@ Ansible role for setup php site.
 - viasite-ansible.zsh
 
 # TODO:
+- site with main www domain
+- SSL, letsencrypt
 - add site to hosts_sites
-- letsencrypt
-- https://www.digitalocean.com/community/tutorials/how-to-host-multiple-websites-securely-with-nginx-and-php-fpm-on-ubuntu-14-04
-- https://www.google.com/search?q=php-fpm+shared+hosting&oq=php-fpm+on+shared+hosting
-- [ ] Nginx not reloaded after config changed
-- [ ] Disable, rename and delete site
-- [ ] DNS
-- [ ] PHP select
-- [ ] DKIM
+- disable, rename and delete site
+- DNS
+- apache: PHP select
+- DKIM
 
 
 
