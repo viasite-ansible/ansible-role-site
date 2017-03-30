@@ -2,10 +2,11 @@
 # TODO: должен быть выбор версии php
 - name: setup apache vhost
   include_role:
-    name: apache
+    name: apache-vhosts
   vars:
-    apache_vhosts:
-      - servername: "{{ site_domain }}"
+    apache_vhosts_sites:
+      "{{ site_domain }}":
+        servername: "{{ site_domain }}"
         serveralias: "www.{{ site_domain }} {{ site_domain_test }}"
         documentroot: "{{ site_root }}"
         extra_parameters: |
