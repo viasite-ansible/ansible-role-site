@@ -29,6 +29,6 @@ site_rewtire: no
 
 site_dkim_public_key:
 
-site_cronjobs: []
+site_cron_tasks: []
 
 site_nginx_custom_config: ""

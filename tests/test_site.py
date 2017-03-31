@@ -53,3 +53,10 @@ def test_users(Command):
     cmd = c("su site1 -c 'touch /home/site1/testfile'")
     assert cmd.rc == 0
     c("su site1 -c 'rm /home/site1/testfile'")
+
+
+def test_cron(Command):
+    c = Command('crontab -l -u site1').stdout
+    assert 'MAIL=mail@site1.example.com' in c
+    assert '#Ansible: site1: scripts' in c
+    assert '10 * * * * env >/dev/null 2>&1' in c

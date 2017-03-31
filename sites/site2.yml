@@ -6,5 +6,3 @@ site_mysql_host: localhost
 site_mysql_db: "{{ site_user }}"
 site_mysql_user: "{{ site_user }}"
 site_mysql_password: J3Vdj6IdNaP03
-
-site_cronjobs: []

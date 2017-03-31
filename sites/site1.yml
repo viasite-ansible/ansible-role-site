@@ -8,8 +8,14 @@ site_mysql_db: "{{ site_user }}"
 site_mysql_user: "{{ site_user }}"
 site_mysql_password: Vj5Kde9Nd4Hs2
 
-site_cronjobs:
-  - { name: "site: scripts", minute: 10, hour: "*", job: "env >/dev/null 2>&1" }
+site_cron_tasks:
+  - name: "site1: scripts"
+    minute: 10
+    job: "env >/dev/null 2>&1"
+
+site_cron_vars:
+  - name: MAIL
+    value: mail@site1.example.com
 
 site_nginx_custom_server: |
   location /images/ {

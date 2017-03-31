@@ -19,11 +19,11 @@
   when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
   tags: [ site, mysql ]
 
+- include: cron.yml
+  tags: [ site, cron ]
+
 #- include: dns.yml
 #  tags: [ site, dns ]
-
-#- include: cron.yml
-#  tags: [ site, cron ]
 
 #- include: sync.yml
 #  when: site_sync_files

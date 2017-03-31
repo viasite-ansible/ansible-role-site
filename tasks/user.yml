@@ -1,13 +1,4 @@
 ---
-
-# http://serverfault.com/questions/416787/nginx-403-forbidden-error-hosting-in-user-home-directory
-#- name: Ensure user directory parent exists
-#  file:
-#    path: "/home/{{ site_user }}"
-#    state: directory
-#    mode: "0701" # without quotes ansible-lint throws warning
-#  tags: permissions
-
 - name: User add
   user:
     name: "{{ site_user }}"
