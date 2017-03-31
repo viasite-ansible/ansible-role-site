@@ -1,6 +1,5 @@
 ---
-
-- src: viasite-ansible.apache
+- src: viasite-ansible.apache-vhosts
   name: apache
 - src: viasite-ansible.cron
   name: cron
