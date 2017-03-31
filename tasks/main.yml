@@ -15,12 +15,12 @@
 - include: apache.yml
   tags: [ site, apache ]
 
+- include: mysql.yml
+  when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
+  tags: [ site, mysql ]
+
 #- include: dns.yml
 #  tags: [ site, dns ]
-
-#- include: mysql.yml
-#  when: site_mysql_host is defined and site_mysql_db is defined and site_mysql_user is defined and site_mysql_password is defined
-#  tags: [ site, mysql ]
 
 #- include: cron.yml
 #  tags: [ site, cron ]

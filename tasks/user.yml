@@ -12,13 +12,7 @@
   user:
     name: "{{ site_user }}"
     home: "{{ site_homedir }}"
-
-#- name: User directory parent access
-#  file:
-#    path: "/home/{{ site_user }}"
-#    owner: "{{ site_user }}"
-#    group: "{{ site_user }}"
-#  tags: permissions
+  tags: user_create
 
 - name: User directory access
   file:
@@ -27,7 +21,7 @@
     mode: 0750
     owner: "{{ site_user }}"
     group: "{{ site_nginx_user }}"
-  tags: permissions
+  tags: [ user_create, permissions ]
 
 - name: User directories
   file:
@@ -40,7 +34,7 @@
     - "{{ site_homedir }}/run"
     - "{{ site_wwwdir }}"
     - "{{ site_root }}"
-  tags: permissions
+  tags: [ user_create, permissions ]
 
 - name: setup git
   include_role:
