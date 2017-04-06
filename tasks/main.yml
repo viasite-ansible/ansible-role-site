@@ -33,5 +33,8 @@
   when: site_sync_mysql
   tags: [ site, sync, sync_mysql ]
 
+- include: site_config.yml
+  tags: [ site, sync_mysql, drupal, config ]
+
 #- include: engine.yml
 #  tags: [ site, engine ]
