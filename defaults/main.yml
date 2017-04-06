@@ -9,9 +9,9 @@ site_setup_vim: no
 site_setup_zsh: no
 
 site_mysql_host: localhost
-#mysql_db: "{{ user }}"
-#mysql_user: "{{ user }}"
-#mysql_password: ASLDklkvhlfkdgjm
+#site_mysql_db: "{{ user }}"
+#site_mysql_user: "{{ user }}"
+#site_mysql_password: ASLDklkvhlfkdgjm
 
 #dns_ns1: ns1.example.com
 #dns_ns2: ns2.example.com
@@ -34,6 +34,7 @@ site_sync_files: no
 site_sync_files_force: no # sync when site_root exists
 #site_ssh_key: ~/.ssh/id_rsa
 site_sync_mysql: no
+site_sync_mysql_force: no
 
 site_php_user: "{{ site_user }}"
 site_php_group: "{{ site_user }}"

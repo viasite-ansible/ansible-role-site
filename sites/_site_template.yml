@@ -15,14 +15,18 @@ site_mysql_user: "{{ site_user }}"
 site_mysql_password:
 
 site_sync_files: yes
-site_src_host: viasite.ru
-site_src_user: "{{ site_user }}"
-site_src_path: /home/dommodelika/www/dommodelika.ru
+#site_sync_files_force: yes
+site_src:
+  host: viasite.ru
+  user: "{{ site_user }}"
+  path: /home/example/www/example.com
 
 site_sync_mysql: yes
-site_src_sql_dump_host: viasite.ru
-site_src_sql_dump_user: backup
-site_src_sql_dump_path: "/var/backups/sql/last/{{ site_mysql_db }}.gz"
+#site_sync_mysql_force: yes
+site_src_mysql_dump_file:
+  host: viasite.ru
+  user: backup
+  path: "/var/backups/sql/last/{{ site_mysql_db }}.gz"
 
 site_engine: ""
 site_rewtire: no

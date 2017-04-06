@@ -1,17 +1,53 @@
+---
+# almost always exists, it create in mysql.yml
 - name: Ensure database exists
-  mysql_db: name={{ site_mysql_db }} state=present
-  tags: [ site, sync, sync_mysql ]
+  mysql_db:
+    name: "{{ site_mysql_db }}"
+    state: present
 
-- name: Sync sql dump
+- name: Check if database empty
+  shell: "mysql {{ site_mysql_db }} -Brse 'SHOW TABLES' | wc -l"
+  changed_when: false
+  register: site_mysql_database_tables
+
+- name: Define site_mysql_database_empty
+  set_fact:
+    site_mysql_database_empty: "{{ site_mysql_database_tables.stdout == '0' }}"
+
+- name: Ensure ~/.ssh exists (rsync remote)
+  file:
+    name: "~{{ ansible_user_id }}/.ssh"
+    state: directory
+  when: site_src_mysql_dump_file.host is defined
+
+- name: "Get public key of remote server {{ site_src_mysql_dump_file.host }} (rsync remote)"
+  command: ssh-keyscan -H "{{ site_src_mysql_dump_file.host }}"
+  register: site_src_mysql_host_key
+  when: site_src_mysql_dump_file.host is defined and (site_mysql_database_empty or site_sync_mysql_force)
+  changed_when: no
+
+- name: "Ensure host {{ site_src_mysql_dump_file.host }} known (rsync remote)"
+  known_hosts:
+    name: "{{ site_src_mysql_dump_file.host }}"
+    key: "{{ site_src_mysql_host_key.stdout }}"
+    state: present
+  when: site_src_mysql_dump_file.host is defined and (site_mysql_database_empty or site_sync_mysql_force)
+
+- name: Sync sql dump from {{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}:{{ site_src_mysql_dump_file.path }}
   command: |
     rsync -L \
-    "{{ site_src_sql_dump_user }}@{{ site_src_sql_dump_host }}:{{ site_src_sql_dump_path }}" \
-    "{{ site_homedir }}/mysql_dump.tar.gz"
-  tags: [ site, sync, sync_mysql ]
+    "{{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}:{{ site_src_mysql_dump_file.path }}" \
+    "{{ site_homedir }}/mysql_dump.gz"
+  when: site_src_mysql_dump_file.host is defined and (site_mysql_database_empty or site_sync_mysql_force)
 
 - name: Import sql dump
-  mysql_db: name={{ site_mysql_db }} state=import target="{{ site_homedir }}/mysql_dump.tar.gz"
-  tags: [ site, sync, sync_mysql ]
+  mysql_db:
+    name: "{{ site_mysql_db }}"
+    state: import
+    target: "{{ site_homedir }}/mysql_dump.gz"
+  when: site_mysql_database_empty or site_sync_mysql_force
 
 - name: Remove sql dump
-  file: path="{{ site_homedir }}/mysql_dump.tar.gz" state=absent
+  file:
+    path: "{{ site_homedir }}/mysql_dump.gz"
+    state: absent
