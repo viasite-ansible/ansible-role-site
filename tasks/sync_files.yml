@@ -14,36 +14,26 @@
     state: directory
   when: site_src.host is defined
 
-#- name: copy id_rsa to remote root user (rsync remote)
-#  copy:
-#    src: "{{ site_ssh_key }}"
-#    dest: "{{ site_remote_ssh_path }}"
-#  when: site_src.host is defined
-
-- name: Get public key of remote server (rsync remote)
+- name: "Get public key of remote server {{ site_src.host }} (rsync remote)"
   command: ssh-keyscan -H "{{ site_src.host }}"
   register: site_src_host_key
   when: site_src.host is defined
   changed_when: no
 
-- name: Ensure host known (rsync remote)
+- name: "Ensure host {{ site_src.host }} known (rsync remote)"
   known_hosts:
     name: "{{ site_src.host }}"
     key: "{{ site_src_host_key.stdout }}"
     state: present
-  become: yes
-  become_user: "{{ site_user }}"
   when: site_src.host is defined
 
-- name: Sync files with rsync (remote)
+- name: "Sync files from {{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }} with rsync (remote)"
   command: |
     rsync --archive --delete \
     "{{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }}/" \
     "{{ site_root }}"
-  become: yes
-  become_user: "{{ site_user }}"
   #changed_when: false
-  when: site_src.user is defined and site_src.host is defined and site_src.path is defined and not site_root_exists
+  when: site_src.user is defined and site_src.host is defined and site_src.path is defined and (not site_root_exists or site_sync_files_force | default(false))
 
 - name: Sync files with rsync (local)
   command: rsync --archive --delete "{{ site_src.path }}/" "{{ site_root }}"
@@ -56,4 +46,4 @@
     owner: "{{ site_user }}"
     group: "{{ site_user }}"
     recurse: yes
-  when: not site_root_exists
+  #changed_when: false

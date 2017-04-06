@@ -31,6 +31,7 @@ site_wwwdir: "{{ site_homedir }}/www"
 site_root: "{{ site_wwwdir }}/{{ site_domain }}"
 
 site_sync_files: no
+site_sync_files_force: no # sync when site_root exists
 #site_ssh_key: ~/.ssh/id_rsa
 site_sync_mysql: no
 
