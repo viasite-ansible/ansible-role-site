@@ -25,7 +25,6 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - DNS
 - apache: PHP select
 - DKIM
-- users isolation (access to /home)
 - tests
 
 

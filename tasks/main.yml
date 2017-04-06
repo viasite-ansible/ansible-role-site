@@ -22,12 +22,12 @@
 - include: cron.yml
   tags: [ site, cron ]
 
-#- include: dns.yml
-#  tags: [ site, dns ]
+- include: dns.yml
+  tags: [ site, dns ]
 
-#- include: sync.yml
-#  when: site_sync_files
-#  tags: [ site, sync ]
+- include: sync_files.yml
+  when: site_sync_files
+  tags: [ site, sync, sync_files ]
 
 #- include: sync_mysql.yml
 #  when: site_sync_mysql

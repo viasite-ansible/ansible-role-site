@@ -1,6 +1,6 @@
 ---
 #site_domain: example.com
-#site_domain_test: test.example.com
+site_domain_test: ''
 #site_user: example
 
 site_setup_git: no
@@ -29,6 +29,10 @@ site_cron_vars: []
 site_homedir: "/home/{{ site_user }}"
 site_wwwdir: "{{ site_homedir }}/www"
 site_root: "{{ site_wwwdir }}/{{ site_domain }}"
+
+site_sync_files: no
+#site_ssh_key: ~/.ssh/id_rsa
+site_sync_mysql: no
 
 site_php_user: "{{ site_user }}"
 site_php_group: "{{ site_user }}"
