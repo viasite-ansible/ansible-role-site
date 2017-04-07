@@ -8,16 +8,30 @@
   set_fact:
     site_root_exists: "{{ site_register_site_root.stat.exists|default(false) }}"
 
+- name: Check if {{ site_root }} empty
+  find: "paths={{ site_root }}"
+  register: site_register_site_root_files
+  when: site_root_exists
+
+- name: Define site_root_empty
+  set_fact:
+    site_root_empty: "{{ site_register_site_root_files.matched | int == 0 }}"
+  when: site_root_exists
+
+- name: Define site_sync_files
+  set_fact:
+    site_sync_files: not site_root_exists or site_root_empty or site_sync_files_force | default(false)
+
 - name: Ensure ~/.ssh exists (rsync remote)
   file:
     name: "~{{ ansible_user_id }}/.ssh"
     state: directory
-  when: site_src.host is defined
+  when: site_src.host is defined and site_sync_files
 
 - name: "Get public key of remote server {{ site_src.host }} (rsync remote)"
   command: ssh-keyscan -H "{{ site_src.host }}"
   register: site_src_host_key
-  when: site_src.host is defined
+  when: site_src.host is defined and site_sync_files
   changed_when: no
 
 - name: "Ensure host {{ site_src.host }} known (rsync remote)"
@@ -25,7 +39,7 @@
     name: "{{ site_src.host }}"
     key: "{{ site_src_host_key.stdout }}"
     state: present
-  when: site_src.host is defined
+  when: site_src.host is defined and site_sync_files
 
 - name: "Sync files from {{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }} with rsync (remote)"
   command: |
@@ -33,12 +47,12 @@
     "{{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }}/" \
     "{{ site_root }}"
   #changed_when: false
-  when: site_src.user is defined and site_src.host is defined and site_src.path is defined and (not site_root_exists or site_sync_files_force | default(false))
+  when: site_src.user is defined and site_src.host is defined and site_src.path is defined and site_sync_files
 
 - name: Sync files with rsync (local)
   command: rsync --archive --delete "{{ site_src.path }}/" "{{ site_root }}"
   #changed_when: false
-  when: site_src.path is defined and site_src.host is not defined and not site_root_exists
+  when: site_src.path is defined and site_src.host is not defined and site_sync_files
 
 - name: Set owner
   file:
