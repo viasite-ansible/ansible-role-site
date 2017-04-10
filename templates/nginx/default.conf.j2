@@ -26,7 +26,5 @@ server {
 
   {{ site_nginx_location_default | indent(2) }}
 
-  include {{ site_nginx_custom_dir }}/{{ site_domain }}/*;
-
   {{ item.value.server_extra_parameters | default('') | indent(2) }}
 }

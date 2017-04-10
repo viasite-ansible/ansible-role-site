@@ -50,7 +50,6 @@ site_php_fpm_defaults:
 
 site_apache_user: www-data
 site_nginx_user: www-data
-site_nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
 site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
 site_nginx_custom_server: "" # add to server in template
 site_nginx_custom_root_location: "" # add to location / in template
