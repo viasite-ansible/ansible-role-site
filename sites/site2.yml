@@ -14,3 +14,8 @@ site_src:
   #user: visitkaplus
   #path: /home/visitkaplus/www/visitkaplus.viasite.ru
   path: /home/site1/www/site1.example.com
+
+site_sync_mysql: yes
+site_sync_mysql_force: no
+site_src_mysql_dump_file:
+  path: "tests/mysqldump.gz"
