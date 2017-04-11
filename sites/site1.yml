@@ -1,6 +1,6 @@
 ---
 site_domain: site1.example.com
-site_domain_test: test.site1.example.com
+site_domains_secondary: [ test.site1.example.com ]
 site_user: site1
 
 site_mysql_host: localhost

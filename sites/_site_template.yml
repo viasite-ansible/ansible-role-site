@@ -1,7 +1,7 @@
 ---
 site_domain:
-site_domain_test:
-site_domain_redirect:
+site_domains_secondary: []
+site_domains_redirect: []
 site_user:
 
 #site_setup_git: no

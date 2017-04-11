@@ -1,5 +1,4 @@
 ---
-# TODO: должен быть выбор версии php
 - name: setup nginx vhost
   include_role:
     name: nginx
@@ -7,7 +6,3 @@
     nginx_sites:
       "{{ site_domain }}":
         template: "nginx/{{ site_nginx_template }}.conf.j2"
-        server_name: "{{ site_domain }}"
-        server_aliases: "{{ site_domain_test | default('') }}"
-        root_location_extra_parameters: "{{ site_nginx_custom_root_location }}"
-        server_extra_parameters: "{{ site_nginx_custom_server }}"

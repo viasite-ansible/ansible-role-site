@@ -1,6 +1,8 @@
 ---
 #site_domain: example.com
-site_domain_test: ''
+site_domains_secondary: []
+# www site_domain will be added automatically
+site_domains_redirected: []
 #site_user: example
 
 site_setup_git: no
