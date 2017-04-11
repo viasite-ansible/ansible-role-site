@@ -24,6 +24,24 @@ server {
 
   {{ site_nginx_location_rewrite | indent(2) }}
 
+  location ~* /administrator/.*?\.php {
+    limit_req zone=oneminute burst=5;
+    proxy_pass $php_upstream;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+  
+  location ~ /images/(.+)\.php$ {
+    deny all;
+  }
+
+  location ~* /getimg/ {
+    access_log off;
+    expires 30d;
+    try_files $uri @rewrite;
+  }
+
   {{ site_nginx_location_default | indent(2) }}
 
   {{ item.value.server_extra_parameters | default('') | indent(2) }}

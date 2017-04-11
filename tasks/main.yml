@@ -13,7 +13,7 @@
   tags: [ site, php ]
 
 - include: apache.yml
-  tags: [ site, apache ]
+  tags: [ site, apache, apache_vhosts ]
 
 - include: mysql.yml
   when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
