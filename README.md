@@ -12,7 +12,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - viasite-ansible.cron
 - viasite-ansible.git
 - viasite-ansible.mysql
-- viasite-ansible.nginx
+- viasite-ansible.nginx-vhosts (that depends to viasite-ansible.nginx)
 - viasite-ansible.ssh-keys
 - viasite-ansible.vim
 - viasite-ansible.zsh

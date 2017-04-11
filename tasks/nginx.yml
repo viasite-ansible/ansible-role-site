@@ -1,7 +1,7 @@
 ---
 - name: setup nginx vhost
   include_role:
-    name: nginx
+    name: nginx-vhosts
   vars:
     nginx_sites:
       "{{ site_domain }}":

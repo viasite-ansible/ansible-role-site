@@ -7,7 +7,7 @@
   tags: [ site, user ]
 
 - include: nginx.yml
-  tags: [ site, nginx ]
+  tags: [ site, nginx, nginx-vhosts ]
 
 - include: php.yml
   tags: [ site, php ]

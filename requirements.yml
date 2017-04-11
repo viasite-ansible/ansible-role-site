@@ -5,8 +5,8 @@
   name: cron
 - src: viasite-ansible.git
   name: git
-- src: viasite-ansible.nginx
-  name: nginx
+- src: viasite-ansible.nginx-vhosts
+  name: nginx-vhosts
 - src: viasite-ansible.ssh-keys
   name: ssh-keys
 - src: viasite-ansible.vim
