@@ -26,21 +26,12 @@ site_mysql_host: localhost
 site_cron_tasks: []
 site_cron_vars: []
 
-site_homedir: "/home/{{ site_user }}"
-site_wwwdir: "{{ site_homedir }}/www"
-site_root: "{{ site_wwwdir }}/{{ site_domain }}"
-
 site_sync_files: no
 site_sync_files_force: no # sync when site_root exists
 #site_ssh_key: ~/.ssh/id_rsa
 site_sync_mysql: no
 site_sync_mysql_force: no
 
-site_php_user: "{{ site_user }}"
-site_php_group: "{{ site_user }}"
-site_php_socket: "{{ site_homedir }}/run/php-fpm.sock"
-site_php_fpm_pool_d: /etc/php/7.0/fpm/pool.d
-site_php_fpm_service_name: php7.0-fpm
 site_php_fpm_defaults:
   pm: ondemand
   pm.max_children: 10
@@ -48,17 +39,10 @@ site_php_fpm_defaults:
   pm.min_spare_servers: 1
   pm.max_spare_servers: 3
 
-site_apache_user: www-data
-site_nginx_user: www-data
 site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
 site_nginx_custom_server: "" # add to server in template
 site_nginx_custom_root_location: "" # add to location / in template
 #apache_mpm_itk_max_clients_per_host: 30
-
-site_nginx_proxy_params: |
-  proxy_set_header Host $host;
-  proxy_set_header X-Real-IP $remote_addr;
-  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
 site_nginx_location_default: |
   location /.git {

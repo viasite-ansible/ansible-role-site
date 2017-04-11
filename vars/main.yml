@@ -1,0 +1,19 @@
+---
+site_homedir: "/home/{{ site_user }}"
+site_wwwdir: "{{ site_homedir }}/www"
+site_root: "{{ site_wwwdir }}/{{ site_domain }}"
+
+site_apache_user: www-data
+site_nginx_user: www-data
+
+site_php_user: "{{ site_user }}"
+site_php_group: "{{ site_user }}"
+site_php_socket: "{{ site_homedir }}/run/php-fpm.sock"
+site_php_fpm_pool_d: /etc/php/7.0/fpm/pool.d
+site_php_fpm_service_name: php7.0-fpm
+
+site_nginx_proxy_params: |
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
