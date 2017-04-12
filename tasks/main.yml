@@ -22,8 +22,8 @@
 - include: cron.yml
   tags: [ site, cron ]
 
-- include: dns.yml
-  tags: [ site, dns ]
+#- include: dns.yml
+#  tags: [ site, dns ]
 
 - include: sync_files.yml
   when: site_sync_files
@@ -38,3 +38,16 @@
 
 #- include: engine.yml
 #  tags: [ site, engine ]
+
+- name: Site information
+  debug:
+    msg:
+      - "************************************"
+      - "          Site information          "
+      - "************************************"
+      - " domain:     http://{{ site_domain }}"
+      - " sftp user:  {{ site_user }}"
+      - " mysql db:   {{ site_mysql_db }}"
+      - " mysql pass: {{ site_mysql_password }}"
+      - "************************************"
+  tags: always, skip_ansible_lint
