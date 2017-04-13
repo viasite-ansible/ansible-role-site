@@ -14,7 +14,6 @@ server {
 
   ssl_certificate {{ site_ssl_certificate | default('/etc/letsencrypt/live/{{ site_domain }}/fullchain.pem') }};
   ssl_certificate_key {{ site_ssl_certificate_key | default('/etc/letsencrypt/live/{{ site_domain }}/privkey.pem') }};
-  ssl_dhparam {{ item.value.ssl_dhparam | default('/etc/ssl/certs/dhparam.pem') }};
   add_header Strict-Transport-Security "max-age=15768000"; # HSTS
 
   location / {

@@ -37,6 +37,7 @@ site_sync_mysql_force: no
 site_php_fpm_defaults:
   pm: ondemand
   pm.max_children: 10
+  pm.process_idle_timeout: 30 # worked keepalive, seconds
   pm.start_servers: 1
   pm.min_spare_servers: 1
   pm.max_spare_servers: 3
