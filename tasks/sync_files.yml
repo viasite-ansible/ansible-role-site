@@ -18,7 +18,7 @@
     site_root_empty: "{{ site_register_site_root_files.matched | int == 0 }}"
   when: site_root_exists
 
-- name: Define site_sync_files
+- name: Redefine site_sync_files
   set_fact:
     site_sync_files: not site_root_exists or site_root_empty or site_sync_files_force | default(false)
 

@@ -7,7 +7,19 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 
 - sites/*.yml - each yml = site
 
-# Dependencies
+
+
+## Features
+- setup user for site
+- nginx -> apache -> PHP-FPM (with .htaccess support)
+- import site from remote host
+- setup mysql with import from remote sql dump
+- setup cron tasks
+- optimized for Drupal sites
+
+
+
+## Dependencies
 - viasite-ansible.apache-vhosts (that depends to viasite-ansible.apache)
 - viasite-ansible.cron
 - viasite-ansible.git
@@ -17,8 +29,9 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - viasite-ansible.vim
 - viasite-ansible.zsh
 
-# TODO:
-- site with main www domain
+
+
+## TODO:
 - SSL, letsencrypt
 - add site to hosts_sites
 - disable, rename and delete site
@@ -34,10 +47,69 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - `drupal` - based on https://github.com/perusio/drupal-with-nginx
 - `joomla`
 
-# Setup new site
+
+
+## Setup new site
 1. Copy sites/_site_template.yml to sites/`site_user`.yml
 2. Add role to sites.yml: ```- { role: site, site_vars_file: sites/site_user.yml }```
 3. Exec playbook: ```ansible-playbook sites.yml -v```
+
+
+
+## Syncronization
+
+### Import files
+Role support import site files from local path or remote sftp server using `rsync`.
+
+Examples:
+#### Sync once from remote:
+``` yaml
+site_sync_files: yes
+site_src:
+  host: old.site.location
+  user: old_user
+  path: /old/remote/site/path
+```
+
+#### Sync once from local:
+``` yaml
+site_sync_files: yes
+site_src:
+  path: /old/local/site/path
+```
+
+#### Sync always from local:
+``` yaml
+site_sync_files: yes
+site_sync_files_force: yes
+site_src:
+  path: /old/local/site/path
+```
+
+
+### Import MySQL database
+You can import database from sql dump local path or remote sftp server using `rsync`.
+Supported formats: `.sql`, `.bz`, `.gz`, `.xz`.
+
+Examples:
+#### Sync once from remote:
+``` yaml
+site_sync_mysql: yes
+site_src_mysql_dump_file:
+  host: old.site.location
+  user: old_backup_user
+  path: /path/to/remote/dump
+```
+
+#### Sync always from remote:
+``` yaml
+site_sync_mysql: yes
+site_sync_mysql_force: yes
+site_src_mysql_dump_file:
+  host: old.site.location
+  user: old_backup_user
+  path: /path/to/remote/dump
+```
 
 
 ## Example playbook
