@@ -14,6 +14,15 @@
   set_fact:
     site_mysql_database_empty: "{{ site_mysql_database_tables.stdout == '0' }}"
 
+- name: Redefine site_sync_mysql
+  set_fact:
+    site_sync_mysql: site_mysql_database_empty or site_sync_mysql_force | default(false)
+
+- name: Define site_mysql_dump_temp_path
+  set_fact:
+    site_mysql_dump_temp_path: "{{ site_homedir }}/dump_{{ site_src_mysql_dump_file.path | basename }}"
+  when: site_sync_mysql and site_src_mysql_dump_file.path is defined
+
 - name: Ensure ~/.ssh exists (rsync remote)
   file:
     name: "~{{ ansible_user_id }}/.ssh"
@@ -23,7 +32,7 @@
 - name: "Get public key of remote server {{ site_src_mysql_dump_file.host }} (rsync remote)"
   command: ssh-keyscan -H "{{ site_src_mysql_dump_file.host }}"
   register: site_src_mysql_host_key
-  when: site_src_mysql_dump_file.host is defined and (site_mysql_database_empty or site_sync_mysql_force)
+  when: site_src_mysql_dump_file.host is defined and site_sync_mysql
   changed_when: no
 
 - name: "Ensure host {{ site_src_mysql_dump_file.host }} known (rsync remote)"
@@ -31,23 +40,29 @@
     name: "{{ site_src_mysql_dump_file.host }}"
     key: "{{ site_src_mysql_host_key.stdout }}"
     state: present
-  when: site_src_mysql_dump_file.host is defined and (site_mysql_database_empty or site_sync_mysql_force)
+  when: site_src_mysql_dump_file.host is defined and site_sync_mysql
 
-- name: Sync sql dump from {{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}:{{ site_src_mysql_dump_file.path }}
+- name: Sync sql dump from {{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}:{{ site_src_mysql_dump_file.path }} (rsync remote)
   command: |
     rsync -L \
     "{{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}:{{ site_src_mysql_dump_file.path }}" \
-    "{{ site_homedir }}/mysql_dump.gz"
-  when: site_src_mysql_dump_file.host is defined and (site_mysql_database_empty or site_sync_mysql_force)
+    "{{ site_mysql_dump_temp_path }}"
+  when: site_src_mysql_dump_file.host is defined and site_sync_mysql
+
+- name: Sync files with rsync (local)
+  command: rsync -L "{{ site_src_mysql_dump_file.path }}" "{{ site_mysql_dump_temp_path }}"
+  #changed_when: false
+  when: site_src_mysql_dump_file.path is defined and site_src_mysql_dump_file.host is not defined and site_sync_mysql
 
 - name: Import sql dump
   mysql_db:
     name: "{{ site_mysql_db }}"
     state: import
-    target: "{{ site_homedir }}/mysql_dump.gz"
-  when: site_mysql_database_empty or site_sync_mysql_force
+    target: "{{ site_mysql_dump_temp_path }}"
+  when: site_sync_mysql
 
 - name: Remove sql dump
   file:
-    path: "{{ site_homedir }}/mysql_dump.gz"
+    path: "{{ site_mysql_dump_temp_path }}"
     state: absent
+  when: site_sync_mysql
