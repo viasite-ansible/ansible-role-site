@@ -49,6 +49,15 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 
 
 
+## PHP-FPM settings
+Use `site_php_fpm_extras` variable:
+``` yaml
+site_php_fpm_extras:
+  "php_admin_value[memory_limit]": 512M
+```
+
+
+
 ## Setup new site
 1. Copy sites/_site_template.yml to sites/`site_user`.yml
 2. Add role to sites.yml: ```- { role: site, site_vars_file: sites/site_user.yml }```

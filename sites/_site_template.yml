@@ -28,6 +28,11 @@ site_src_mysql_dump_file:
   user: backup
   path: "/var/backups/sql/last/{{ site_mysql_db }}.gz"
 
+#site_php_fpm_extras:
+#  "php_admin_value[error_log]": /var/log/php/error.$pool.log
+#  "php_admin_value[memory_limit]": 512M
+#  access.log: ~/log/php.access.log
+#  access.format: "%R - %u %t \"%m %r\" %s"
 site_engine: ""
 site_rewtire: no
 
