@@ -1,4 +1,40 @@
 ---
+- name: Define site_nginx_proxy_to_backend
+  set_fact:
+    site_nginx_proxy_to_backend: |
+      {% if site_nginx_backend == 'apache' %}
+      proxy_pass http://apache;
+      {{ site_nginx_proxy_params }}
+      {% endif %}
+
+      {% if site_nginx_backend == 'php-fpm' %}
+      include {% if site_nginx_template == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
+      fastcgi_pass unix:{{ site_php_socket }};
+      {% endif %}
+
+- name: Define site_nginx_location_php
+  set_fact:
+    site_nginx_location_php: |
+      # need for urls such /index.php
+      location ~* ^.+\.php$ {
+        {{ site_nginx_proxy_to_backend | indent(2) }}
+      }
+
+- name: Define site_nginx_location_rewrite
+  set_fact:
+    site_nginx_location_rewrite: |
+      location @rewrite {
+        access_log /var/log/nginx/access.log combined_host;
+        access_log /var/log/nginx/drupal_cache_hit.log drupal_cache_hit;
+    
+        {{ site_nginx_proxy_to_backend | indent(2) }}
+    
+        {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
+        access_log /var/log/nginx/access.log combined_host;
+        access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
+        {% endif -%}
+      }
+
 - name: setup nginx vhost
   include_role:
     name: nginx-vhosts

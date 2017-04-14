@@ -43,6 +43,8 @@ site_php_fpm_defaults:
   pm.max_spare_servers: 3
 
 site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
+site_nginx_backend: apache
+
 site_nginx_custom_server: "" # add to server in template
 site_nginx_custom_root_location: "" # add to location / in template
 #apache_mpm_itk_max_clients_per_host: 30
@@ -140,25 +142,4 @@ site_nginx_location_static_files: |
   ## information disclosure. Hide also the text files.
   location ~* ^(?:.+\.(?:htaccess|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
     return 404;
-  }
-
-site_nginx_location_php: |
-  # need for urls such /index.php
-  location ~* ^.+\.php$ {
-    proxy_pass http://apache;
-    {{ site_nginx_proxy_params | indent(2) }}
-  }
-
-site_nginx_location_rewrite: |
-  location @rewrite {
-    access_log /var/log/nginx/access.log combined_host;
-    access_log /var/log/nginx/drupal_cache_hit.log drupal_cache_hit;
-
-    proxy_pass http://apache;
-    {{ site_nginx_proxy_params | indent(2) }}
-
-    {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
-    access_log /var/log/nginx/access.log combined_host;
-    access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
-    {% endif -%}
   }

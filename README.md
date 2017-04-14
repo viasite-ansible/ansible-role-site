@@ -12,6 +12,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 ## Features
 - setup user for site
 - nginx -> apache -> PHP-FPM (with .htaccess support)
+- nginx -> PHP-FPM (without .htaccess support, experimental)
 - import site from remote host
 - setup mysql with import from remote sql dump
 - setup cron tasks
@@ -47,7 +48,8 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - `drupal` - based on https://github.com/perusio/drupal-with-nginx
 - `joomla`
 
-
+If you want to enable nginx -> PHP-FPM without apache, set `site_nginx_backend: php-fpm`. It tested lightly only with drupal 7,
+/index.php don't work. 
 
 ## PHP-FPM settings
 Use `site_php_fpm_extras` variable:

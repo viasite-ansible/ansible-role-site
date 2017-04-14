@@ -1,4 +1,5 @@
 # {{ ansible_managed }}
+
 server {
   # Redirect to main domain
   listen 80;
@@ -28,13 +29,10 @@ server {
   # site_nginx_location_rewrite
   {{ site_nginx_location_rewrite | indent(2) }}
 
-  location ~* /administrator/.*?\.php {
-    limit_req zone=oneminute burst=5;
-    proxy_pass $php_upstream;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-  }
+  #location ~* /administrator/.*?\.php {
+  #  limit_req zone=oneminute burst=5;
+  #  { site_nginx_proxy_to_backend | indent(4) }
+  #}
   
   location ~ /images/(.+)\.php$ {
     deny all;
