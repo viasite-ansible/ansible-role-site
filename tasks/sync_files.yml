@@ -9,7 +9,9 @@
     site_root_exists: "{{ site_register_site_root.stat.exists|default(false) }}"
 
 - name: Check if {{ site_root }} empty
-  find: "paths={{ site_root }}"
+  find:
+    paths: "{{ site_root }}"
+    recurse: yes
   register: site_register_site_root_files
   when: site_root_exists
 

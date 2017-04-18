@@ -35,7 +35,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 ## TODO:
 - SSL, letsencrypt
 - add site to hosts_sites
-- disable, rename and delete site
+- disable and delete site
 - DNS
 - apache: PHP select
 - DKIM
@@ -90,6 +90,20 @@ site_php_fpm_extras:
 1. Copy sites/_site_template.yml to sites/`site_user`.yml
 2. Add role to sites.yml: ```- { role: site, site_vars_file: sites/site_user.yml }```
 3. Exec playbook: ```ansible-playbook sites.yml -v```
+
+
+
+## Setup multiple sites
+You should not do this:
+``` yaml
+- hosts: all
+  roles:
+    - { name: ansible-role-site, site_vars_file: sites/site1.yml }
+    - { name: ansible-role-site, site_vars_file: sites/site2.yml }
+    - { name: ansible-role-site, site_vars_file: sites/site2_2.yml }
+```
+If sites/site1.yml defines `site_sync_files_force` and site2.yml have not defined `site_sync_files_force`,
+then variable from site1.yml will affect site2! Be careful, run each site separately! Use ansible-site script.
 
 
 

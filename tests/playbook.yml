@@ -19,13 +19,12 @@
         src: mysqldump.gz
         dest: /tmp/mysqldump.gz
       tags: sync_mysql
+
+    - name: Copy test site (for site1.yml)
+      copy:
+        src: site1.example.com
+        dest: /tmp/site1_src
   roles:
     - { name: ansible-role-site, site_vars_file: sites/site1.yml }
     - { name: ansible-role-site, site_vars_file: sites/site2.yml }
     - { name: ansible-role-site, site_vars_file: sites/site2_2.yml }
-
-  post_tasks:
-    - name: Copy test site (for site1.yml)
-      copy:
-        src: site1.example.com
-        dest: /home/site1/www

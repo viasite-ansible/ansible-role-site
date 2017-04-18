@@ -1,12 +1,17 @@
 ---
 site_domain: site1.example.com
 site_domains_secondary: [ test.site1.example.com ]
+site_domains_redirected: [ site1.example.net ]
 site_user: site1
 
 site_mysql_host: localhost
 site_mysql_db: "{{ site_user }}"
 site_mysql_user: "{{ site_user }}"
 site_mysql_password: Vj5Kde9Nd4Hs2
+
+site_sync_files: yes
+site_src:
+  path: /tmp/site1_src/site1.example.com
 
 site_cron_tasks:
   - name: "site1: scripts"
