@@ -1,0 +1,155 @@
+# {{ ansible_managed }}
+
+server {
+  # Redirect to main domain
+  listen 80;
+  server_name {{ site_domains_redirected_compiled | join(' ') }};
+  return 301 $scheme://{{ site_domain }}$request_uri;
+}
+
+server {
+  listen 80;
+  server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
+  root {{ site_root }};
+  index index.php;
+
+  # see https://github.com/perusio/drupal-with-nginx
+  location / {
+    ## Regular private file serving (i.e. handled by Drupal).
+    location ^~ /system/files/ {
+      ## For not signaling a 404 in the error log whenever the
+      ## system/files directory is accessed add the line below.
+      ## Note that the 404 is the intended behavior.
+      log_not_found off;
+      access_log off;
+      expires 30d;
+      try_files $uri @rewrite;
+    }
+
+    ## Trying to access private files directly returns a 404.
+    location ^~ /sites/default/files/private/ {
+      internal;
+    }
+
+    ## Support for the file_force module
+    ## http://drupal.org/project/file_force.
+    location ^~ /system/files_force/ {
+      ## Include the specific FastCGI configuration. This is for a
+      ## FCGI backend like php-cgi or php-fpm.
+      #include apps/drupal/fastcgi_drupal.conf;
+      #fastcgi_pass phpcgi;
+
+      ## If proxying to apache comment the two lines above and
+      ## uncomment the line below.
+      {{ site_nginx_proxy_to_backend | indent(6) }}
+
+      log_not_found off;
+    }
+
+    location ~* /files/styles/ {
+      access_log off;
+      expires 30d;
+      try_files $uri @rewrite;
+    }
+
+    ## Advanced Aggregation module CSS
+    ## support. http://drupal.org/project/advagg.
+    location ^~ /sites/default/files/advagg_css/ {
+      expires max;
+      add_header ETag '';
+      add_header Last-Modified 'Wed, 20 Jan 1988 04:20:42 GMT';
+      add_header Accept-Ranges '';
+
+      location ~* /sites/default/files/advagg_css/css[_[:alnum:]]+\.css$ {
+        access_log off;
+        try_files $uri @drupal;
+      }
+    }
+
+    ## Advanced Aggregation module JS
+    ## support. http://drupal.org/project/advagg.
+    location ^~ /sites/default/files/advagg_js/ {
+      add_header Pragma '';
+      add_header Cache-Control 'public, max-age=946080000';
+      add_header Accept-Ranges '';
+
+      location ~* /sites/default/files/advagg_js/js[_[:alnum:]]+\.js$ {
+        access_log off;
+        try_files $uri @drupal;
+      }
+    }
+
+    # site_nginx_location_static_files
+    {{ site_nginx_location_static_files | indent(4) }}
+
+    # root_location_extra_parameters
+    {{ site_nginx_custom_root_location | default('') | indent(2) }}
+
+    # файлы перенаправляются через @boost location
+    try_files $uri @boost;
+  }
+
+  # site_nginx_location_php
+  {{ site_nginx_location_php | indent(2) }}
+
+  # правила для Boost, https://github.com/perusio/drupal-with-nginx/blame/D7/apps/drupal/drupal_boost.conf
+  location @boost {
+    # gzip_static on;
+    error_page 418 = @rewrite;
+
+    ## If $no_cache is 1 then it means that either we have a session
+    ## cookie or that the request method is POST. So serve the dynamic
+    ## page.
+    ## see https://github.com/perusio/drupal-with-nginx/blob/D7/apps/drupal/map_cache.conf
+    if ($no_cache) {
+      return 418;
+    }
+
+    ## No caching for POST requests.
+    if ($request_method = POST) {
+      return 418;
+    }
+
+    # Now for some header tweaking. We use a date that differs
+    # from stock Drupal. Everyone seems to be using their
+    # birthdate. Why go against the grain?
+    add_header Expires "Tue, 13 Jun 1977 03:45:00 GMT";
+
+    # We bypass all delays in the post-check and pre-check
+    # parameters of Cache-Control. Both set to 0.
+    add_header Cache-Control "must-revalidate, post-check=0, pre-check=0";
+
+    add_header X-Cached-By "Boost Nginx";
+    ## Boost doesn't set a charset.
+    charset utf-8;
+
+    # We try each boost URI in succession, if every one of them
+    # fails then relay to Drupal.
+    try_files /cache/normal/$host${uri}_${args}.html /cache/perm/$host${uri}_.css /cache/perm/$host${uri}_.js /cache/$host/0$uri.html /cache/$host/0${uri}/index.html @rewrite;
+  }
+
+  # site_nginx_location_default
+  {{ site_nginx_location_default | indent(2) }}
+
+  # site_nginx_location_rewrite
+  {{ site_nginx_location_rewrite | indent(2) }}
+
+  location /sites/default/files/patches {
+    deny all;
+  }
+
+  location ~ /misc/(.+)\.php$ {
+    deny all;
+  }
+
+  # prevent recursive redirect /sites/default/files <-> /sites/default/files/
+  location = /sites/default/files {
+    return 404;
+  }
+
+  # site_nginx_custom_server
+  {{ site_nginx_custom_server | default('') | indent(2) }}
+}
+
+# site_nginx_custom_http
+{{ site_nginx_custom_http }}

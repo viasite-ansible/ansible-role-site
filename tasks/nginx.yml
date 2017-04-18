@@ -1,39 +1,45 @@
 ---
-# TODO: при текущей конфигурации в шаблоне хоста нет мест, куда можэно прописать уникальные настройки хоста
-# Нужно либо запретить повторное применение шаблона к хосту, чтобы не сбрасывался, либо придумать, где хранить такие настройки
-# Лучше придумать, как хранить такое, например, в $document_root/etc/nginx/*
+- name: Define site_nginx_proxy_to_backend
+  set_fact:
+    site_nginx_proxy_to_backend: |
+      {% if site_nginx_backend == 'apache' %}
+      proxy_pass http://apache;
+      {{ site_nginx_proxy_params }}
+      {% endif %}
 
-# TODO: flag to disable manage config from ansible
-- name: site - nginx config
-  template: src=nginx.conf.j2 dest={{ nginx_file }}
-  notify: Reload nginx
-  tags: [ site, nginx ]
+      {% if site_nginx_backend == 'php-fpm' %}
+      include {% if site_nginx_template == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
+      fastcgi_pass unix:{{ site_php_socket }};
+      {% endif %}
 
-- name: nginx custom config directory
-  file: path="{{ nginx_custom_dir }}" state=directory
-  tags: [ site, nginx ]
+- name: Define site_nginx_location_php
+  set_fact:
+    site_nginx_location_php: |
+      # need for urls such /index.php
+      location ~* ^.+\.php$ {
+        {{ site_nginx_proxy_to_backend | indent(2) }}
+      }
 
-- name: nginx custom config directory for domain
-  file: path="{{ nginx_custom_dir }}/{{ site_domain }}" state=directory
-  tags: [ site, nginx ]
+- name: Define site_nginx_location_rewrite
+  set_fact:
+    site_nginx_location_rewrite: |
+      location @rewrite {
+        access_log /var/log/nginx/access.log combined_host;
+        access_log /var/log/nginx/drupal_cache_hit.log drupal_cache_hit;
 
-# TODO: не понятно, что nginx_custom.conf.j2 уникальный, вынес его прямо в site.yml, но выглядит страшно
-# TODO: ansible перезапишет кастомный конфиг, при следующем запуске, нужно явно запретить его править руками
-- name: nginx custom config
-  template: src=nginx_custom.conf.j2 dest="{{ nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
-  notify: Reload nginx
-  when: site_nginx_custom_config is defined
-  tags: [ site, nginx ]
+        {{ site_nginx_proxy_to_backend | indent(2) }}
 
-- name: nginx custom config access
-  file: path="{{ nginx_custom_dir }}/{{ site_domain }}/nginx_custom.conf"
-        owner={{ nginx_user }}
-        group={{ nginx_user }}
-        mode=444
-  when: site_nginx_custom_config is defined
-  tags: [ site, nginx ]
+        {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
+        access_log /var/log/nginx/access.log combined_host;
+        access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
+        {% endif -%}
+      }
 
-- name: nginx enable
-  file: path={{ nginx_file_en }} src={{ nginx_file }} state=link
-  notify: Reload nginx
-  tags: [ site, nginx ]
+- name: setup nginx vhost
+  include_role:
+    name: nginx-vhosts
+  vars:
+    nginx_sites:
+      "{{ site_domain }}":
+        template: "nginx/{{ site_nginx_template }}.conf.j2"
+    nginx_remove_sites: "{{ site_domains_remove }}"

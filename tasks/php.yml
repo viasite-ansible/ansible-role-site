@@ -1,0 +1,16 @@
+---
+# from https://github.com/NBZ4live/ansible-php-fpm
+- name: Add pool.d configuration
+  template:
+    src: php/pool.conf.j2
+    dest : "{{ site_php_fpm_pool_d }}/{{ site_user }}.conf"
+  with_items:
+    - name: "{{ site_user }}"
+      user: "{{ site_php_user }}"
+      group: "{{ site_php_group }}"
+      listen: "{{ site_php_socket }}"
+      listen.owner: "{{ site_apache_user }}"
+      listen.group: "{{ site_apache_user }}"
+      chdir: /
+  notify:
+   - restart php-fpm

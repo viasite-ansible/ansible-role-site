@@ -1,0 +1,42 @@
+---
+# config override for Drupal
+# add to settings.php:
+#if(function_exists('conf_path')){
+#  $conf_path = conf_path();
+#    if (file_exists(DRUPAL_ROOT . '/' . $conf_path . '/settings.local.php')) {
+#    include DRUPAL_ROOT . '/' . $conf_path . '/settings.local.php';
+#  }
+#}
+
+- name: Check if site is Drupal
+  stat: "path={{ site_root }}/sites/default/settings.php"
+  register: site_register_settings_php
+  ignore_errors: true
+
+- name: Define site_is_drupal
+  set_fact:
+    site_is_drupal: "{{ site_register_settings_php.stat.exists|default(false) }}"
+
+#- name: Check settings.local.php in settings.php
+#  command: "grep -c settings.local.php {{ site_root }}/sites/default/settings.php"
+#  register: site_settings_local_php_count
+#  when: site_is_drupal
+
+- name: Add settings.local.php include to settings.php
+  blockinfile:
+    dest: "{{ site_root }}/sites/default/settings.php"
+    marker: "# {mark} include settings.local.php"
+    block: |
+      if(function_exists('conf_path')){
+        $conf_path = conf_path();
+          if (file_exists(DRUPAL_ROOT . '/' . $conf_path . '/settings.local.php')) {
+          include DRUPAL_ROOT . '/' . $conf_path . '/settings.local.php';
+        }
+      }
+  when: site_is_drupal
+
+- name: Override database settings.local.php for Drupal
+  template:
+    src: drupal_settings.local.php.j2
+    dest: "{{ site_root }}/sites/default/settings.local.php"
+  when: site_is_drupal

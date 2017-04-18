@@ -1,0 +1,20 @@
+---
+site_domain: site2_2.example.com
+site_user: site2
+
+site_mysql_host: localhost
+site_mysql_db: "{{ site_user }}"
+site_mysql_user: "{{ site_user }}"
+site_mysql_password: J3Vdj6IdNaP03
+
+site_sync_files: no
+site_sync_mysql: no
+
+site_setup_git: yes
+site_setup_ssh_keys: yes
+site_setup_vim: yes
+site_setup_zsh: yes
+# site_setup_git: no
+# site_setup_ssh_keys: no
+# site_setup_vim: no
+# site_setup_zsh: no

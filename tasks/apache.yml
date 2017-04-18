@@ -1,0 +1,14 @@
+---
+# TODO: должен быть выбор версии php
+- name: setup apache vhost
+  include_role:
+    name: apache-vhosts
+  vars:
+    apache_vhosts_sites:
+      "{{ site_domain }}":
+        servername: "{{ site_domain }}"
+        serveralias: "{{ site_domains_redirected | join(' ') }} {{ site_domains_secondary | join(' ') }}"
+        documentroot: "{{ site_root }}"
+        extra_parameters: |
+          ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
+    apache_vhosts_remove_sites: "{{ site_domains_remove }}"

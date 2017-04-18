@@ -1,18 +1,38 @@
 ---
-domain: site1.example.com
-domain_test: test.site1.example.com
+site_domain: site1.example.com
+site_domains_secondary: [ test.site1.example.com ]
+site_domains_redirected: [ site1.example.net ]
 site_user: site1
 
-mysql_host: localhost
-mysql_db: "{{ site_user }}"
-mysql_user: "{{ site_user }}"
-mysql_password: Vj5Kde9Nd4Hs2
+site_mysql_host: localhost
+site_mysql_db: "{{ site_user }}"
+site_mysql_user: "{{ site_user }}"
+site_mysql_password: Vj5Kde9Nd4Hs2
 
-site_cronjobs:
-  - { name: "scripts", minute: 10, hour: "*", job: "env >/dev/null 2>&1" }
+site_sync_files: yes
+site_src:
+  path: /tmp/site1_src/site1.example.com
 
+site_cron_tasks:
+  - name: "site1: scripts"
+    minute: 10
+    job: "env >/dev/null 2>&1"
 
-site_nginx_custom_config: |
+site_cron_vars:
+  - name: MAIL
+    value: mail@site1.example.com
+
+site_nginx_custom_server: |
   location /images/ {
     proxy_pass http://example.com/images/;
   }
+
+site_nginx_custom_root_location: |
+  location /images/ {
+    proxy_pass http://example.com/images/;
+  }
+
+site_setup_git: no
+site_setup_ssh_keys: no
+site_setup_vim: no
+site_setup_zsh: no

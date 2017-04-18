@@ -1,0 +1,30 @@
+---
+- hosts: all
+
+  pre_tasks:
+    - name: start LAMP services
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - apache2
+        - mysql
+        - nginx
+        - php7.0-fpm
+      ignore_errors: yes
+      tags: always
+
+    - name: copy test mysql dump to /tmp/mysqldump.gz (for site2.yml)
+      copy:
+        src: mysqldump.gz
+        dest: /tmp/mysqldump.gz
+      tags: sync_mysql
+
+    - name: Copy test site (for site1.yml)
+      copy:
+        src: site1.example.com
+        dest: /tmp/site1_src
+  roles:
+    - { name: ansible-role-site, site_vars_file: sites/site1.yml }
+    - { name: ansible-role-site, site_vars_file: sites/site2.yml }
+    - { name: ansible-role-site, site_vars_file: sites/site2_2.yml }

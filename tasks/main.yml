@@ -1,22 +1,50 @@
 ---
 - name: Load site variables
-  include_vars: "{{ vars_file }}"
+  include_vars: "{{ site_vars_file }}"
   tags: [ site, always ]
 
 - include: user.yml
-- include: apache2.yml
+  tags: [ site, user ]
+
 - include: nginx.yml
-- include: dns.yml
+  tags: [ site, nginx, nginx-vhosts ]
+
+- include: php.yml
+  tags: [ site, php ]
+
+- include: apache.yml
+  tags: [ site, apache, apache_vhosts ]
 
 - include: mysql.yml
-  when: site_mysql_host is defined and site_mysql_db is defined and site_mysql_user is defined and site_mysql_password is defined
+  when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
+  tags: [ site, mysql ]
 
 - include: cron.yml
+  tags: [ site, cron ]
 
-- include: sync.yml
+#- include: dns.yml
+#  tags: [ site, dns ]
+
+- include: sync_files.yml
   when: site_sync_files
+  tags: [ site, sync, sync_files ]
 
 - include: sync_mysql.yml
   when: site_sync_mysql
+  tags: [ site, sync, sync_mysql ]
 
-- include: engine.yml
+- include: site_config.yml
+  tags: [ site, sync_mysql, drupal, config ]
+
+- name: Site information
+  debug:
+    msg:
+      - "************************************"
+      - "          Site information          "
+      - "************************************"
+      - " domain:     http://{{ site_domain }}"
+      - " sftp user:  {{ site_user }}"
+      - " mysql db:   {{ site_mysql_db }}"
+      - " mysql pass: {{ site_mysql_password }}"
+      - "************************************"
+  tags: always, skip_ansible_lint

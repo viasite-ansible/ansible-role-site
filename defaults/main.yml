@@ -1,38 +1,147 @@
 ---
-#domain: example.com
-#domain_test: test.example.com
+#site_domain: example.com
+site_domains_secondary: []
+# www site_domain will be added automatically
+site_domains_redirected: []
+site_domains_remove: []
 #site_user: example
 
+site_setup_git: no
+site_setup_ssh_keys: yes
+site_setup_vim: no
+site_setup_zsh: no
+
 site_mysql_host: localhost
-#mysql_db: "{{ user }}"
-#mysql_user: "{{ user }}"
-#mysql_password: ASLDklkvhlfkdgjm
+#site_mysql_db: "{{ user }}"
+#site_mysql_user: "{{ user }}"
+#site_mysql_password: ASLDklkvhlfkdgjm
 
 #dns_ns1: ns1.example.com
 #dns_ns2: ns2.example.com
 #dns_whois_email: admin.example.com
-dns_a: "{{ ansible_default_ipv4.adress }}"
-dns_yandex_mail: yes
-dns_zone_file: /var/lib/bind/{{ site_domain }}.hosts
+#dns_a: "{{ ansible_default_ipv4.adress }}"
+#dns_yandex_mail: yes
+#dns_zone_file: /var/lib/bind/{{ site_domain }}.hosts
 
 #mailto:
 #- admin@example.com
 
-uid: "{{ site_user }}"
-gid: "{{ site_user }}"
+site_cron_tasks: []
+site_cron_vars: []
 
-site_homedir: "/home/{{ site_user }}/data"
-site_wwwdir: "{{ site_homedir }}/www"
-site_root: "{{ site_wwwdir }}/{{ site_domain }}"
+site_sync_files: no
+site_sync_files_force: no # sync when site_root exists
+#site_ssh_key: ~/.ssh/id_rsa
+site_sync_mysql: no
+site_sync_mysql_force: no
 
-nginx_user: www-data
-nginx_file: /etc/nginx/sites-available/{{ site_domain }}.conf
-nginx_file_en: /etc/nginx/sites-enabled/{{ site_domain }}.conf
-nginx_custom_dir: "{{ site_homedir }}/etc/nginx"
-apache_file: /etc/apache2/sites-available/{{ site_domain }}.conf
-apache_file_en: /etc/apache2/sites-enabled/{{ site_domain }}.conf
-apache_mpm_itk_max_clients_per_host: 30
-skeldir: "{{ site_root }}/sites/default/files/skel"
+site_php_fpm_defaults:
+  pm: ondemand
+  pm.max_children: 10
+  pm.process_idle_timeout: 30 # worked keepalive, seconds
+  pm.start_servers: 1
+  pm.min_spare_servers: 1
+  pm.max_spare_servers: 3
 
-nginx_mod_php: |
+site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
+site_nginx_backend: apache
 
+site_nginx_custom_http: "" # add after server in template
+site_nginx_custom_server: "" # add to server in template
+site_nginx_custom_root_location: "" # add to location / in template
+#apache_mpm_itk_max_clients_per_host: 30
+
+site_nginx_location_default: |
+  location /.git {
+    deny all;
+  }
+  location /backup {
+    deny all;
+  }
+  location /build {
+    deny all;
+  }
+  location /logs {
+    deny all;
+  }
+  location /patches {
+    deny all;
+  }
+  location /tmp {
+    deny all;
+  }
+  location /modified.txt {
+    deny all;
+  }
+
+  location ~ /site_tests.json {
+    return 404;
+  }
+
+  ## Disable access logs for robots.txt.
+  location = /robots.txt {
+    access_log off;
+  }
+
+  ## RSS feed support.
+  location = /rss.xml {
+    try_files $uri @rewrite;
+  }
+
+  ## XML Sitemap support.
+  location = /sitemap.xml {
+    try_files $uri @rewrite;
+  }
+
+  ## xmlrpc support.
+  location = /xmlrpc.php {
+    proxy_pass http://apache;
+    {{ site_nginx_proxy_params | default('') | indent(2) }}
+  }
+
+  ## Support for favicon. Return a 204 (No Content) if the favicon
+  ## doesn't exist.
+  location = /favicon.ico {
+    access_log off;
+    try_files /favicon.ico =204;
+  }
+
+  location = /404.html {
+    internal;
+  }
+
+# for insert in location /
+site_nginx_location_static_files: |
+  # Static files location
+  location ~* ^.+\.(?:jpg|jpeg|gif|png|ico|css|less|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|ppt|ppts|pptsx|exe|txt|tar|mid|midi|wav|bmp|rtf|js|swf|flv|woff|woff2|eot|ttf|cur|svg)$
+  {
+    access_log off;
+    log_not_found off;
+    expires 30d;
+    ## No need to bleed constant updates. Send the all shebang in one
+    ## fell swoop.
+    tcp_nodelay off;
+    ## Set the OS file cache.
+    open_file_cache max=3000 inactive=120s;
+    open_file_cache_valid 45s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors off;
+    #try_files $uri /404.html @fallback;
+  }
+
+  ## PDFs and powerpoint files handling.
+  location ~* ^.+\.(?:pdf|pptx?)$ {
+    expires 30d;
+    ## No need to bleed constant updates. Send the all shebang in one
+    ## fell swoop.
+    tcp_nodelay off;
+  }
+
+  ## see more settings for mp3, ogg, mp4, flv at https://github.com/perusio/drupal-with-nginx
+
+  ## Replicate the Apache <FilesMatch> directive of Drupal standard
+  ## .htaccess. Disable access to any code files. Return a 404 to curtail
+  ## information disclosure. Hide also the text files.
+  location ~* ^(?:.+\.(?:htaccess|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
+    return 404;
+  }

@@ -1,8 +1,13 @@
 ---
 site_domain:
-site_domain_test:
-site_domain_redirect:
+site_domains_secondary: []
+site_domains_redirect: []
 site_user:
+
+#site_setup_git: no
+#site_setup_ssh_keys: yes
+#site_setup_vim: no
+#site_setup_zsh: no
 
 site_mysql_host: localhost
 site_mysql_db: "{{ site_user }}"
@@ -10,20 +15,29 @@ site_mysql_user: "{{ site_user }}"
 site_mysql_password:
 
 site_sync_files: yes
-site_src_host: viasite.ru
-site_src_user: "{{ site_user }}"
-site_src_path: /home/dommodelika/www/dommodelika.ru
+#site_sync_files_force: yes
+site_src:
+  host: viasite.ru
+  user: "{{ site_user }}"
+  path: /home/example/www/example.com
 
 site_sync_mysql: yes
-site_src_sql_dump_host: viasite.ru
-site_src_sql_dump_user: backup
-site_src_sql_dump_path: "/var/backups/sql/last/{{ site_mysql_db }}.gz"
+#site_sync_mysql_force: yes
+site_src_mysql_dump_file:
+  host: viasite.ru
+  user: backup
+  path: "/var/backups/sql/last/{{ site_mysql_db }}.gz"
 
+#site_php_fpm_extras:
+#  "php_admin_value[error_log]": /var/log/php/error.$pool.log
+#  "php_admin_value[memory_limit]": 512M
+#  access.log: ~/log/php.access.log
+#  access.format: "%R - %u %t \"%m %r\" %s"
 site_engine: ""
 site_rewtire: no
 
 site_dkim_public_key:
 
-site_cronjobs: []
+site_cron_tasks: []
 
 site_nginx_custom_config: ""

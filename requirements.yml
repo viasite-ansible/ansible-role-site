@@ -1,0 +1,15 @@
+---
+- src: viasite-ansible.apache-vhosts
+  name: apache-vhosts
+- src: viasite-ansible.cron
+  name: cron
+- src: viasite-ansible.git
+  name: git
+- src: viasite-ansible.nginx-vhosts
+  name: nginx-vhosts
+- src: viasite-ansible.ssh-keys
+  name: ssh-keys
+- src: viasite-ansible.vim
+  name: vim
+- src: viasite-ansible.zsh
+  name: zsh
