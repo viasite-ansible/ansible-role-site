@@ -36,9 +36,6 @@
 - include: site_config.yml
   tags: [ site, sync_mysql, drupal, config ]
 
-#- include: engine.yml
-#  tags: [ site, engine ]
-
 - name: Site information
   debug:
     msg:
