@@ -3,6 +3,7 @@
 site_domains_secondary: []
 # www site_domain will be added automatically
 site_domains_redirected: []
+site_domains_remove: []
 #site_user: example
 
 site_setup_git: no

@@ -67,6 +67,14 @@ site_php_fpm_extras:
 
 
 
+## Change main site domain
+1. Change domain in `site_domain`
+2. Define old domain at `site_domains_remove`
+3. Move site directory to new place (you can also leave site at old path, define `site_root` for that)
+4. Exec playbook
+
+
+
 ## Syncronization
 
 ### Import files

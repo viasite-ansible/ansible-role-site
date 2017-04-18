@@ -11,3 +11,4 @@
         documentroot: "{{ site_root }}"
         extra_parameters: |
           ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
+    apache_vhosts_remove_sites: "{{ site_domains_remove }}"
