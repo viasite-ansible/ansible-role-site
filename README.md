@@ -51,6 +51,32 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 If you want to enable nginx -> PHP-FPM without apache, set `site_nginx_backend: php-fpm`. It tested lightly only with drupal 7,
 /index.php don't work. 
 
+#### Template overrides
+All templates support custom code:
+
+- `site_nginx_custom_http` - at `http` context
+- `site_nginx_custom_server` - at `server` context
+- `site_nginx_custom_location` - at `location /` context
+
+Example:
+```
+server example.com {
+  location / {
+    # template directives
+
+    {{ site_nginx_custom_location }}
+  }
+
+  # template directives
+
+  {{ site_nginx_custom_server }}
+}
+
+{{ site_nginx_custom_http }}
+```
+
+
+
 ## PHP-FPM settings
 Use `site_php_fpm_extras` variable:
 ``` yaml

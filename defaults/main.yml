@@ -46,6 +46,7 @@ site_php_fpm_defaults:
 site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
 site_nginx_backend: apache
 
+site_nginx_custom_http: "" # add after server in template
 site_nginx_custom_server: "" # add to server in template
 site_nginx_custom_root_location: "" # add to location / in template
 #apache_mpm_itk_max_clients_per_host: 30
