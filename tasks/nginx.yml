@@ -26,9 +26,9 @@
       location @rewrite {
         access_log /var/log/nginx/access.log combined_host;
         access_log /var/log/nginx/drupal_cache_hit.log drupal_cache_hit;
-    
+
         {{ site_nginx_proxy_to_backend | indent(2) }}
-    
+
         {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
         access_log /var/log/nginx/access.log combined_host;
         access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
@@ -42,3 +42,4 @@
     nginx_sites:
       "{{ site_domain }}":
         template: "nginx/{{ site_nginx_template }}.conf.j2"
+    nginx_remove_sites: "{{ site_domains_remove }}"

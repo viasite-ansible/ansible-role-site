@@ -8,7 +8,6 @@ site_mysql_user: "{{ site_user }}"
 site_mysql_password: J3Vdj6IdNaP03
 
 site_sync_files: yes
-site_sync_files_force: yes
 site_src:
   #host: visitkaplus.viasite.ru
   #user: visitkaplus
@@ -16,6 +15,5 @@ site_src:
   path: /home/site1/www/site1.example.com
 
 site_sync_mysql: yes
-site_sync_mysql_force: no
 site_src_mysql_dump_file:
-  path: "tests/mysqldump.gz"
+  path: /tmp/mysqldump.gz
