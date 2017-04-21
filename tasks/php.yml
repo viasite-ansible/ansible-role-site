@@ -13,4 +13,4 @@
       listen.group: "{{ site_apache_user }}"
       chdir: /
   notify:
-   - restart php-fpm
+   - reload php-fpm
