@@ -9,7 +9,7 @@ site_nginx_user: www-data
 
 site_php_user: "{{ site_user }}"
 site_php_group: "{{ site_user }}"
-site_php_socket: "{{ site_homedir }}/run/php-fpm.sock"
+site_php_socket: "/var/run/php/{{ site_user }}-php7.0.sock"
 site_php_fpm_pool_d: /etc/php/7.0/fpm/pool.d
 site_php_fpm_service_name: php7.0-fpm
 
