@@ -3,6 +3,7 @@
   user:
     name: "{{ site_user }}"
     home: "{{ site_homedir }}"
+    shell: /bin/zsh
   tags: user_create
 
 - name: User directory access
@@ -26,6 +27,19 @@
     - "{{ site_wwwdir }}"
     - "{{ site_root }}"
   tags: [ user_create, permissions ]
+
+- name: check ~/.zshrc exists
+  stat: path="{{ site_homedir }}/.zshrc"
+  changed_when: false
+  register: site_register_zshrc
+  tags: [ user_create ]
+
+- name: setup simple ~/.zshrc if empty
+  template:
+    src: user/zshrc.j2
+    dest: "{{ site_homedir }}/.zshrc"
+  when: not site_setup_zsh and not site_register_zshrc.stat.exists
+  tags: [ user_create ]
 
 - name: setup git
   include_role:

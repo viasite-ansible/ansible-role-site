@@ -1,0 +1,10 @@
+# Colors
+autoload -U colors
+colors
+setopt prompt_subst
+
+PROMPT='%F{blue}%n%f@%F{blue}%m%f %F{yellow}%3~%f$ '
+RPROMPT=''
+
+autoload compinit
+compinit
