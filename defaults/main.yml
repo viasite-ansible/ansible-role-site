@@ -29,6 +29,9 @@ site_mysql_host: localhost
 site_cron_tasks: []
 site_cron_vars: []
 
+site_exim4_dkim_private:
+site_exim4_dkim_domain: "{{ site_domain | replace('www.', '') }}"
+
 site_sync_files: no
 site_sync_files_force: no # sync when site_root exists
 #site_ssh_key: ~/.ssh/id_rsa

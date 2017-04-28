@@ -22,6 +22,16 @@
 - include: cron.yml
   tags: [ site, cron ]
 
+- name: Check if user Debian-exim exists
+  shell: getent passwd Debian-exim | wc -l
+  register: site_register_exim4_exists
+  changed_when: false
+  tags: [ site, exim4 ]
+
+- include: exim4.yml
+  when: site_register_exim4_exists.stdout == '1' and site_exim4_dkim_private
+  tags: [ site, exim4 ]
+
 #- include: dns.yml
 #  tags: [ site, dns ]
 

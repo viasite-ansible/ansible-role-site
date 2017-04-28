@@ -7,6 +7,7 @@ site_domains_redirected_compiled: "{{ site_domains_redirected + [ site_domain_re
 site_apache_user: www-data
 site_nginx_user: www-data
 
+site_exim4_dkim_keys_path: "{{ exim4_dkim_keys_path | default('/etc/exim4/dkim') }}"
 site_php_user: "{{ site_user }}"
 site_php_group: "{{ site_user }}"
 site_php_socket: "/var/run/php/{{ site_user }}-php7.0.sock"

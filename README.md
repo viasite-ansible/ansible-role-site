@@ -17,12 +17,13 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - setup mysql with import from remote sql dump
 - setup cron tasks
 - optimized for Drupal sites
-
+- setup DKIM keys for domain email (depends of viasite-ansible.exim4)
 
 
 ## Dependencies
 - viasite-ansible.apache-vhosts (that depends to viasite-ansible.apache)
 - viasite-ansible.cron
+- viasite-ansible.exim4 (for DKIM keys)
 - viasite-ansible.git
 - viasite-ansible.mysql
 - viasite-ansible.nginx-vhosts (that depends to viasite-ansible.nginx)
@@ -38,8 +39,6 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - disable and delete site
 - DNS
 - apache: PHP select
-- DKIM
-- tests
 
 
 
