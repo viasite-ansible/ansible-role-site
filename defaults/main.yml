@@ -140,6 +140,11 @@ site_nginx_location_static_files: |
     tcp_nodelay off;
   }
 
+  location = /clientstat {
+    return 200;
+    access_log /var/log/nginx/clientstat.access.log combined_host;
+  }
+
   ## see more settings for mp3, ogg, mp4, flv at https://github.com/perusio/drupal-with-nginx
 
   ## Replicate the Apache <FilesMatch> directive of Drupal standard
