@@ -63,7 +63,7 @@
   when: site_src.path is defined and site_src.host is not defined and site_sync_files
   tags: skip_ansible_lint
 
-- name: Set owner
+- name: Set owner in site_root directory
   file:
     path: "{{ site_root }}"
     owner: "{{ site_user }}"
