@@ -32,14 +32,16 @@
   stat: path="{{ site_homedir }}/.zshrc"
   changed_when: false
   register: site_register_zshrc
-  tags: [ user_create ]
+  tags: [ user_create, zsh ]
 
 - name: setup simple ~/.zshrc if empty
   template:
     src: user/zshrc.j2
     dest: "{{ site_homedir }}/.zshrc"
-  when: not site_setup_zsh and not site_register_zshrc.stat.exists
-  tags: [ user_create ]
+    owner: "{{ site_user }}"
+    group: "{{ site_user }}"
+  when: not site_setup_zsh and (not site_register_zshrc.stat.exists or site_force_zshrc)
+  tags: [ user_create, zsh ]
 
 - name: setup git
   include_role:
