@@ -55,7 +55,7 @@ All templates support custom code:
 
 - `site_nginx_custom_http` - at `http` context
 - `site_nginx_custom_server` - at `server` context
-- `site_nginx_custom_location` - at `location /` context
+- `site_nginx_custom_root_location` - at `location /` context
 
 Example:
 ```
@@ -63,7 +63,7 @@ server example.com {
   location / {
     # template directives
 
-    {{ site_nginx_custom_location }}
+    {{ site_nginx_custom_root_location }}
   }
 
   # template directives
