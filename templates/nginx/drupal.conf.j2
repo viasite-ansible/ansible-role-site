@@ -120,6 +120,8 @@ server {
     add_header Cache-Control "must-revalidate, post-check=0, pre-check=0";
 
     add_header X-Cached-By "Boost Nginx";
+    add_header X-Drupal-Cache "HIT";
+    access_log /var/log/nginx/drupal_cache_hit.log drupal_cache_hit;
     ## Boost doesn't set a charset.
     charset utf-8;
 
