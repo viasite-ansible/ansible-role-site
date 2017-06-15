@@ -20,6 +20,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - setup DKIM keys for domain email (depends of viasite-ansible.exim4)
 
 
+
 ## Dependencies
 - viasite-ansible.apache-vhosts (that depends to viasite-ansible.apache)
 - viasite-ansible.cron
@@ -34,7 +35,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 
 
 ## TODO:
-- SSL, letsencrypt
+- letsencrypt
 - add site to hosts_sites
 - disable and delete site
 - DNS
@@ -44,6 +45,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 
 ## Nginx templates:
 - `default`
+- `default_https`
 - `drupal` - based on https://github.com/perusio/drupal-with-nginx
 - `joomla`
 
