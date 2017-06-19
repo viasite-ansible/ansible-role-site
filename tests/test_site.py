@@ -9,6 +9,13 @@ def assert_cmd_text(Command, cmd, assert_text, error_text=''):
     assert assert_text in html, error_text
 
 
+def test_sync_files(File):
+    c = File('/home/site1/www/site1.example.com/excluded_dir/file.php')
+    assert not c.exists
+    c = File('/home/site1/www/site1.example.com/excluded_file.php')
+    assert not c.exists
+
+
 def test_apache_nginx_php(Command):
     c = Command
 

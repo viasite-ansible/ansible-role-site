@@ -35,6 +35,24 @@ site_exim4_dkim_domain: "{{ site_domain | replace('www.', '') }}"
 
 site_sync_files: no
 site_sync_files_force: no # sync when site_root exists
+site_sync_files_excluded: # rsync excluded patterns
+  - bitrix/backups/*
+  - bitrix/cache/*
+  - cache/normal/*
+  - cachefs/*
+  - default/files/styles/*
+  - managed_cache/*
+  - mnt/*
+  - mod-tmp/*
+  - sites/default/files/css/*
+  - sites/default/files/js/*
+  - sites/default/files/languages/*
+  - sites/default/files/less/*
+  - smarty/compile/*
+  - stack_cache/*
+  - tmp/*
+  - upload/resize_cache/*
+
 #site_ssh_key: ~/.ssh/id_rsa
 site_sync_mysql: no
 site_sync_mysql_force: no

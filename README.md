@@ -120,11 +120,33 @@ then variable from site1.yml will affect site2! Be careful, run each site separa
 
 ### Import files
 Role support import site files from local path or remote sftp server using `rsync`.
+You must have access to remote server with ssh key.
+
+#### Variables:
+- `site_sync_files` - sync files if directory empty (sync once)
+- `site_sync_files_force` - sync files if directory not empty (sync always)
+- `site_sync_files_excluded` - exclude patterns (rsync format)
+- `site_src` - object that describes files source
+- `site_src.path` - remote (or local) path, required
+- `site_src.host` - remote host, for remote sync
+- `site_src.user` - remote user, for remote sync
 
 Examples:
 #### Sync once from remote:
 ``` yaml
 site_sync_files: yes
+site_src:
+  host: old.site.location
+  user: old_user
+  path: /old/remote/site/path
+```
+
+#### Sync once from remote with some excluded (rsync excluded patterns):
+``` yaml
+site_sync_files: yes
+site_sync_files_excluded:
+  - cache/*
+  - *.log
 site_src:
   host: old.site.location
   user: old_user

@@ -8,7 +8,7 @@
   set_fact:
     site_root_exists: "{{ site_register_site_root.stat.exists|default(false) }}"
 
-- name: Check if {{ site_root }} empty
+- name: "Check if {{ site_root }} empty"
   find:
     paths: "{{ site_root }}"
     recurse: yes
@@ -48,9 +48,15 @@
   changed_when: false
   when: site_src.host is defined and site_sync_files
 
+- name: rsync-exclude.txt for rsync
+  template:
+    src: sync/rsync-exclude.txt.j2
+    dest: /tmp/ansible-role-site-rsync-exclude.txt
+  when: site_sync_files
+
 - name: "Sync files from {{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }} with rsync (remote)"
   command: |
-    rsync --archive --delete \
+    rsync --archive --delete --exclude-from /tmp/ansible-role-site-rsync-exclude.txt \
     "{{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }}/" \
     "{{ site_root }}"
   #changed_when: false
@@ -58,7 +64,7 @@
   tags: skip_ansible_lint
 
 - name: Sync files with rsync (local)
-  command: rsync --archive --delete "{{ site_src.path }}/" "{{ site_root }}"
+  command: rsync --archive --delete --exclude-from /tmp/ansible-role-site-rsync-exclude.txt "{{ site_src.path }}/" "{{ site_root }}"
   #changed_when: false
   when: site_src.path is defined and site_src.host is not defined and site_sync_files
   tags: skip_ansible_lint
