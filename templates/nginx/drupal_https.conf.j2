@@ -13,8 +13,8 @@ server {
   root {{ site_root }};
   index index.php;
 
-  ssl_certificate {{ site_ssl_certificate | default('/etc/letsencrypt/live/{{ site_domain }}/fullchain.pem') }};
-  ssl_certificate_key {{ site_ssl_certificate_key | default('/etc/letsencrypt/live/{{ site_domain }}/privkey.pem') }};
+  ssl_certificate {{ site_ssl_certificate | default('/etc/letsencrypt/live/'+site_domain+'/fullchain.pem') }};
+  ssl_certificate_key {{ site_ssl_certificate_key | default('/etc/letsencrypt/live/'+site_domain+'/privkey.pem') }};
   add_header Strict-Transport-Security "max-age=15768000"; # HSTS
 
   # see https://github.com/perusio/drupal-with-nginx
