@@ -21,7 +21,7 @@ server {
     {{ site_nginx_location_php | indent(4) }}
 
     # site_nginx_custom_root_location
-    {{ site_nginx_custom_root_location | default('') | indent(2) }}
+    {{ site_nginx_custom_root_location | default('') | indent(4) }}
 
     try_files $uri @rewrite;
   }

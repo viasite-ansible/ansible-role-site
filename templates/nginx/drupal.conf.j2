@@ -83,7 +83,7 @@ server {
     {{ site_nginx_location_static_files | indent(4) }}
 
     # root_location_extra_parameters
-    {{ site_nginx_custom_root_location | default('') | indent(2) }}
+    {{ site_nginx_custom_root_location | default('') | indent(4) }}
 
     # файлы перенаправляются через @boost location
     try_files $uri @boost;
