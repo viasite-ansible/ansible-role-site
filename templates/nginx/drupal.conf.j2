@@ -11,7 +11,7 @@ server {
   listen 80;
   server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
   root {{ site_root }};
-  index index.php;
+  index index.php index.html;
 
   # see https://github.com/perusio/drupal-with-nginx
   location / {

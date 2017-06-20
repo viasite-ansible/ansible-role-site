@@ -82,6 +82,7 @@ server example.com {
 Use `site_php_fpm_extras` variable:
 ``` yaml
 site_php_fpm_extras:
+  "php_flag[display_startup_errors]": "on"
   "php_admin_value[memory_limit]": 512M
 ```
 
