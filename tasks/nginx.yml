@@ -35,7 +35,7 @@
         {% endif -%}
       }
 
-- name: setup nginx vhost
+- name: Setup nginx vhost
   include_role:
     name: nginx-vhosts
   vars:
@@ -43,3 +43,9 @@
       "{{ site_domain }}":
         template: "nginx/{{ site_nginx_template }}.conf.j2"
     nginx_remove_sites: "{{ site_domains_remove }}"
+
+- name: Ensure Diffie-Helmann parameters dhparam.pem exists when ssl site provisioned
+  command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+  args:
+    creates: /etc/ssl/certs/dhparam.pem
+  when: "'ssl' in site_nginx_template or 'https' in site_nginx_template"
