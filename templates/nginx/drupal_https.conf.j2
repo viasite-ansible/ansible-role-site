@@ -4,7 +4,7 @@ server {
   # Redirect to main domain
   listen 80;
   server_name {{ site_domain }} {{ site_domains_redirected_compiled | join(' ') }} {{ site_domains_secondary | join(' ') }};
-  return 301 $scheme://{{ site_domain }}$request_uri;
+  return 301 https://{{ site_domain }}$request_uri;
 }
 
 server {
