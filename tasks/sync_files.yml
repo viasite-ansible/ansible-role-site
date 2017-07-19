@@ -10,6 +10,7 @@
 
 - name: "Check if {{ site_root }} empty"
   command: "find {{ site_root }} -type f -print -quit"
+  changed_when: no
   register: site_register_site_root_files
   when: site_root_exists
 
