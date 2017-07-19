@@ -1,6 +1,6 @@
 ---
 # almost always exists, it create in mysql.yml
-- name: Ensure database exists
+- name: "Ensure database {{ site_mysql_db }} exists"
   mysql_db:
     name: "{{ site_mysql_db }}"
     state: present

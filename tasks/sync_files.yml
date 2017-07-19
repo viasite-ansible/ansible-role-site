@@ -69,10 +69,15 @@
   when: site_src.path is defined and site_src.host is not defined and site_sync_files
   tags: skip_ansible_lint
 
-- name: Set owner in site_root directory
-  file:
-    path: "{{ site_root }}"
-    owner: "{{ site_user }}"
-    group: "{{ site_user }}"
-    recurse: yes
-  #changed_when: false
+#- name: "chown {{ site_user }}:{{ site_user }} {{ site_root }} directory"
+#  file:
+#    path: "{{ site_root }}"
+#    owner: "{{ site_user }}"
+#    group: "{{ site_user }}"
+#    recurse: yes
+#  #changed_when: false
+
+# file: owner module breaks on nikomreklama.ru, viasite.ru sync
+- name: "chown {{ site_user }}:{{ site_user }} {{ site_root }} directory"
+  command: 'chown -R "{{ site_user }}":"{{ site_user }}" "{{ site_root }}"'
+  changed_when: false
