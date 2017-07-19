@@ -80,3 +80,4 @@
 - name: "chown {{ site_user }}:{{ site_user }} {{ site_root }} directory"
   command: 'chown -R "{{ site_user }}":"{{ site_user }}" "{{ site_root }}"'
   changed_when: false
+  tags: skip_ansible_lint
