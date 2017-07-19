@@ -53,6 +53,7 @@
       - "          Site information          "
       - "************************************"
       - " domain:     http://{{ site_domain }}"
+      - "{% if site_domains_secondary %} secondary:  http://{{ site_domains_secondary | join(', http://') }}{% endif %}"
       - " sftp user:  {{ site_user }}"
       - " mysql db:   {{ site_mysql_db }}"
       - " mysql pass: {{ site_mysql_password }}"
