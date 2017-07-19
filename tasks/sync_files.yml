@@ -9,15 +9,13 @@
     site_root_exists: "{{ site_register_site_root.stat.exists|default(false) }}"
 
 - name: "Check if {{ site_root }} empty"
-  find:
-    paths: "{{ site_root }}"
-    recurse: yes
+  command: "find {{ site_root }} -type f -print -quit"
   register: site_register_site_root_files
   when: site_root_exists
 
 - name: Define site_root_empty
   set_fact:
-    site_root_empty: "{{ site_register_site_root_files.matched | int == 0 }}"
+    site_root_empty: "{{ site_register_site_root_files.stdout == '' }}"
   when: site_root_exists
 
 - name: Redefine site_sync_files
