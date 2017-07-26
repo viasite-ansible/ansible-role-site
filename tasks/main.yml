@@ -25,7 +25,7 @@
 - name: Check if user Debian-exim exists
   shell: getent passwd Debian-exim | wc -l
   register: site_register_exim4_exists
-  changed_when: false
+  changed_when: False
   tags: [ site, exim4 ]
 
 - include: exim4.yml

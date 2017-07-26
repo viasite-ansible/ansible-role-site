@@ -30,7 +30,7 @@
 
 - name: check ~/.zshrc exists
   stat: path="{{ site_homedir }}/.zshrc"
-  changed_when: false
+  changed_when: False
   register: site_register_zshrc
   tags: [ user_create, zsh ]
 
