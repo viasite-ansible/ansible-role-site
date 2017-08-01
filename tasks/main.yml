@@ -57,5 +57,6 @@
       - " sftp user:  {{ site_user }}"
       - " mysql db:   {{ site_mysql_db }}"
       - " mysql pass: {{ site_mysql_password }}"
+      - " site root:  {{ site_root }}"
       - "************************************"
   tags: always, skip_ansible_lint
