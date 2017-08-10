@@ -19,3 +19,5 @@ site_nginx_proxy_params: |
   proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header X-Forwarded-Proto $scheme;
+
+site_dns_nameservers: [ ns1.selectel.org, ns2.selectel.org, ns3.selectel.org, ns4.selectel.org ]

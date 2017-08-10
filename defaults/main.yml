@@ -6,6 +6,13 @@ site_domains_redirected: []
 site_domains_remove: []
 #site_user: example
 
+site_dns_selectel: no
+site_dns_domain: "{{ site_domain }}"
+site_dns_admin: support.selectel.ru
+site_dns_ip: "{{ ansible_default_ipv4.address }}"
+site_dns_yandex_mail: yes
+site_dns_ttl: 10800
+
 site_setup_git: no
 site_setup_ssh_keys: yes
 site_setup_vim: no

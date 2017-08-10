@@ -1,0 +1,17 @@
+$ttl {{ site_dns_ttl }}
+{{ site_dns_domain }}.       IN      SOA     {{ site_dns_nameservers[0] }}. {{ site_dns_admin }} (
+                        1501499627
+                        10800
+                        3600
+                        604800
+                        {{ site_dns_ttl }} )
+{% for ns in site_dns_nameservers %}
+{{ site_dns_domain }}. IN NS {{ ns }}.
+{% endfor %}
+{{ site_dns_domain }}. IN A {{ site_dns_ip }}
+www.{{ site_dns_domain }}. IN A {{ site_dns_ip }}
+{% if site_dns_yandex_mail %}
+{{ site_dns_domain }}. IN TXT "v=spf1 a mx include:_spf.yandex.net ~all"
+mail IN CNAME domain.mail.yandex.net.
+@ IN MX 10 mx.yandex.ru.
+{% endif %}

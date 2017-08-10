@@ -1,1 +1,18 @@
 ---
+
+- name: Check domain exists in Selectel
+  local_action: "shell selectel-dns getDomainByName domain_name={{ site_domain }} | grep -c 'create_date'"
+  register: site_dns_selectel_exists
+  failed_when: false
+  changed_when: false
+
+- name: Create zone.hosts file
+  local_action:
+    module: template
+    src: templates/bind/default.hosts.j2
+    dest: /tmp/site-bind-zone.hosts
+  when: site_dns_selectel_exists.stdout == '0'
+
+- name: Add domain to Selectel
+  local_action: "command selectel-dns addDomain name=={{ site_domain }} bind_zone==/tmp/site-bind-zone.hosts"
+  when: site_dns_selectel_exists.stdout == '0'

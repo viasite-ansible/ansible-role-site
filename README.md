@@ -18,6 +18,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - setup cron tasks
 - optimized for Drupal sites
 - setup DKIM keys for domain email (depends of viasite-ansible.exim4)
+- add domain to Selectel DNS with viasite/selectel-dns-cli
 
 
 
@@ -31,6 +32,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - viasite-ansible.ssh-keys
 - viasite-ansible.vim
 - viasite-ansible.zsh
+- viasite/selectel-dns-cli for Selectel DNS
 
 
 
@@ -38,7 +40,6 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - letsencrypt
 - add site to hosts_sites
 - disable and delete site
-- DNS
 - apache: PHP select
 
 
@@ -47,6 +48,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - `default`
 - `default_https`
 - `drupal` - based on https://github.com/perusio/drupal-with-nginx
+- `drupal_https`
 - `joomla`
 
 If you want to enable nginx -> PHP-FPM without apache, set `site_nginx_backend: php-fpm`. It tested lightly only with drupal 7,
@@ -168,6 +170,22 @@ site_sync_files_force: yes
 site_src:
   path: /old/local/site/path
 ```
+
+
+### Add domain to Selectel DNS
+You must install viasite/selectel-dns-cli for use this feature.
+
+Enable selectel_dns:
+```
+site_selectel_dns: yes
+```
+
+Check default variables `site_dns_*` in `defaults/main.yml`.
+Common variable: `site_dns_domain` - domain for adding. Default: `site_domain`
+In common case, you can only define `site_selectel_dns`.
+
+If domain exists in Selectel, it will not modified, only creation supported.
+
 
 
 ### Import MySQL database
