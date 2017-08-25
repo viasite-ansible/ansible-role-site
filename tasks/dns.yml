@@ -1,5 +1,10 @@
 ---
 
+- name: Register site_dns_domain if not defined
+  set_fact:
+    site_dns_domain: "{{ site_domain }}"
+  when: site_dns_domain is not defined
+
 - name: Check domain exists in Selectel
   local_action: "shell selectel-dns getDomainByName domain_name={{ site_domain }} | grep -c 'create_date'"
   register: site_dns_selectel_exists
