@@ -80,7 +80,7 @@ site_nginx_custom_root_location: "" # add to location / in template
 #apache_mpm_itk_max_clients_per_host: 30
 
 site_nginx_location_default: |
-  location /.git {
+  location /\.git {
     deny all;
   }
   location /backup {
