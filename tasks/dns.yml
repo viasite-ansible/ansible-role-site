@@ -6,7 +6,7 @@
   when: site_dns_domain is not defined
 
 - name: Check domain exists in Selectel
-  local_action: "shell selectel-dns getDomainByName domain_name={{ site_domain }} | grep -c 'create_date'"
+  local_action: "shell selectel-dns getDomainByName domain_name={{ site_dns_domain }} | grep -c 'create_date'"
   register: site_dns_selectel_exists
   failed_when: false
   changed_when: false
@@ -19,5 +19,5 @@
   when: site_dns_selectel_exists.stdout == '0'
 
 - name: Add domain to Selectel
-  local_action: "command selectel-dns addDomain name=={{ site_domain }} bind_zone==/tmp/site-bind-zone.hosts"
+  local_action: "command selectel-dns addDomain name=={{ site_dns_domain }} bind_zone==/tmp/site-bind-zone.hosts"
   when: site_dns_selectel_exists.stdout == '0'
