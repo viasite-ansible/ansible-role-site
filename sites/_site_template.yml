@@ -1,7 +1,7 @@
 ---
 site_domain:
 site_domains_secondary: []
-site_domains_redirect: []
+site_domains_redirected: []
 site_user:
 
 #site_setup_git: no
