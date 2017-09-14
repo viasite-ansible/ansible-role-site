@@ -1,0 +1,14 @@
+---
+- name: setup drupal
+  include_role:
+    name: drupal
+  vars:
+    drupal_domain: "{{ site_domain }}"
+    drupal_site_name: "{{ site_domain }}"
+    drupal_core_path: "{{ site_root }}"
+    drupal_core_owner: "{{ site_user }}"
+    drupal_db_user: "{{ site_mysql_user }}"
+    drupal_db_password: "{{ site_mysql_password }}"
+    drupal_db_name: "{{ site_mysql_db }}"
+    drupal_db_backend: mysqli
+    drupal_db_host: "{{ site_mysql_host }}"

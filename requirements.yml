@@ -3,6 +3,8 @@
   name: apache-vhosts
 - src: viasite-ansible.cron
   name: cron
+- src: viasite-ansible.drupal
+  name: drupal
 - src: viasite-ansible.git
   name: git
 - src: viasite-ansible.nginx-vhosts

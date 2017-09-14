@@ -14,6 +14,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - nginx -> apache -> PHP-FPM (with .htaccess support)
 - nginx -> PHP-FPM (without .htaccess support, experimental)
 - import site from remote host
+- install drupal with your settings (depends of viasite-ansible.drupal)
 - setup mysql with import from remote sql dump
 - setup cron tasks
 - optimized for Drupal sites

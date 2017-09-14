@@ -36,6 +36,10 @@
   tags: [ site, dns ]
   when: site_dns_selectel
 
+- include: drupal.yml
+  tags: [ site, engine, drupal ]
+  when: site_engine is defined and site_engine == 'drupal'
+
 - include: sync_files.yml
   when: site_sync_files
   tags: [ site, sync, sync_files ]
@@ -59,5 +63,16 @@
       - "{% if site_mysql_db is defined %} mysql db:   {{ site_mysql_db }}{% endif %}"
       - "{% if site_mysql_password is defined %} mysql pass: {{ site_mysql_password }}{% endif %}"
       - " site root:  {{ site_root }}"
+      - " server IP:  {{ site_dns_ip }}"
       - "************************************"
   tags: always, skip_ansible_lint
+
+- name: Drupal information
+  debug:
+    msg:
+      - "{{ site_domain }} - {{ drupal_account_name }}"
+      - "{{ drupal_account_pass }}"
+      - "{% if drupal_drs_add_users is defined and drupal_drs_add_users | changed %}{{ drupal_drs_add_users.stdout_lines }}{% endif %}"
+      - "{% if drupal_drs_add_users is defined and drupal_drs_add_users | changed %}{{ drupal_drs_add_users.stderr_lines }}{% endif %}"
+  when: drupal_site_installed is defined and ('Drupal bootstrap' not in drupal_site_installed.stdout)
+  tags: drupal, skip_ansible_lint
