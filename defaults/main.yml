@@ -39,6 +39,13 @@ site_cron_vars: []
 site_exim4_dkim_private:
 site_exim4_dkim_domain: "{{ site_domain | replace('www.', '') }}"
 
+site_solr: no
+site_solr_core_name: drupal
+site_solr_port: 8983
+site_solr_domain:
+site_solr_basic_auth: '' # generate with htpasswd -nb user password
+site_solr_config_archive:
+
 site_sync_files: no
 site_sync_files_force: no # sync when site_root exists
 site_sync_files_excluded: # rsync excluded patterns
