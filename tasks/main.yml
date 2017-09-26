@@ -53,7 +53,7 @@
   tags: [ site, sync, sync_mysql ]
 
 - include: site_config.yml
-  tags: [ site, sync_mysql, drupal, config ]
+  tags: [ site, sync, sync_mysql, drupal, config ]
 
 - name: Site information
   debug:
