@@ -69,6 +69,7 @@
       - " site root:  {{ site_root }}"
       - " server IP:  {{ site_dns_ip }}"
       - "************************************"
+  when: site_user is defined
   tags: always, skip_ansible_lint
 
 - name: Drupal information
