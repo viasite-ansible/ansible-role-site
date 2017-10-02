@@ -10,6 +10,28 @@
         serveralias: "{{ site_domains_redirected | join(' ') }} {{ site_domains_secondary | join(' ') }}"
         documentroot: "{{ site_root }}"
         extra_parameters: |
-          ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
+          # https://serverfault.com/a/672969/437918
+          # This is to forward all PHP to php-fpm.
+          <FilesMatch \.php$>
+            SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain }}/"
+          </FilesMatch>
+        
+          # Set some proxy properties (the string "yugmontag26.ru" should match
+          # the one set in the FilesMatch directive.
+          <Proxy fcgi://{{ site_domain }}>
+            ProxySet connectiontimeout=5 timeout=240
+          </Proxy>
+        
+          # If the php file doesn't exist, disable the proxy handler.
+          # This will allow .htaccess rewrite rules to work and 
+          # the client will see the default 404 page of Apache
+          RewriteCond %{REQUEST_FILENAME} \.php$
+          RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
+          RewriteRule (.*) - [H=text/html]
+
+          # old way
+          # ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
+          
+          # for HTTP auth in bitrix
           SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
     apache_vhosts_remove_sites: "{{ site_domains_remove }}"
