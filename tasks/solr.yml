@@ -5,7 +5,7 @@
     state: started
     enabled: yes
 
-- name: Install pip docker
+- name: Install pip docker-py
   pip:
     name: docker-py
     state: present

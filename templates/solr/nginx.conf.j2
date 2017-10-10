@@ -6,7 +6,7 @@ server{
   access_log off;
   location / {
     proxy_pass http://localhost:{{ site_solr_port }};
-    include proxy_params;
+    {{ site_nginx_proxy_params | default('') | indent(4) }}
     auth_basic "Solr";
     auth_basic_user_file {{ site_homedir }}/etc/solr/htpasswd;
   }
