@@ -5,6 +5,11 @@
     state: started
     enabled: yes
 
+- name: Install pip docker
+  pip:
+    name: docker-py
+    state: present
+
 - name: Ensure solr dir exists
   file:
     path: "{{ item }}"
