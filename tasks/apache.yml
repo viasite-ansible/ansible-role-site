@@ -16,7 +16,7 @@
             SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain }}/"
           </FilesMatch>
         
-          # Set some proxy properties (the string "yugmontag26.ru" should match
+          # Set some proxy properties (the string "{{ site_domain }}" should match
           # the one set in the FilesMatch directive.
           <Proxy fcgi://{{ site_domain }}>
             ProxySet connectiontimeout=5 timeout=240
