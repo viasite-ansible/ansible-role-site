@@ -44,7 +44,7 @@
   when: site_src_mysql_dump_file.host is defined and site_sync_mysql
 
 - name: Check ssh connection (rsync remote)
-  command: ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" exit
+  command: ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" -v exit
   changed_when: False
   when: site_src_mysql_dump_file.host is defined and site_sync_mysql
 
