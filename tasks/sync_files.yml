@@ -40,6 +40,7 @@
     name: "{{ site_src.host }}"
     key: "{{ site_src_host_key.stdout }}"
     state: present
+  changed_when: False
   when: site_src.host is defined and site_sync_files
 
 - name: Check ssh connection (rsync remote)
@@ -51,6 +52,7 @@
   template:
     src: sync/rsync-exclude.txt.j2
     dest: /tmp/ansible-role-site-rsync-exclude.txt
+  changed_when: False
   when: site_sync_files
 
 - name: "Sync files from {{ site_src.user }}@{{ site_src.host }}:{{ site_src.path }} with rsync (remote)"
