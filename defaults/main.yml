@@ -39,6 +39,12 @@ site_cron_vars: []
 site_exim4_dkim_private:
 site_exim4_dkim_domain: "{{ site_domain | replace('www.', '') }}"
 
+site_ssl: no
+site_ssl_certificate:
+site_ssl_certificate_key:
+site_ssl_hsts: yes
+site_ssl_redirect_main_domain: yes
+
 site_solr: no
 site_solr_core_name: drupal
 site_solr_port: 8983
@@ -78,7 +84,10 @@ site_php_fpm_defaults:
   pm.min_spare_servers: 1
   pm.max_spare_servers: 3
 
-site_nginx_template: default # places in templates/nginx/{{ site_nginx_template.conf.j2 }}
+site_nginx_template: # deprecated
+site_nginx_config: # http or https, depends on site_ssl
+site_nginx_engine: default
+site_nginx_engine_server: # avoid to direct define this variable
 site_nginx_backend: apache
 
 site_nginx_custom_http: "" # add after server in template

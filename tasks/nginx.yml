@@ -8,13 +8,11 @@
       # for pass Basic auth from nginx to php-fpm for bitrix
       proxy_set_header REMOTE_USER  $remote_user;
       proxy_set_header X-Forwarded-User $remote_user;
-      proxy_set_header Authorization $http_authorization;
-      {% endif %}
+      proxy_set_header Authorization $http_authorization;{% endif %}
 
       {% if site_nginx_backend == 'php-fpm' %}
-      include {% if site_nginx_template == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
-      fastcgi_pass unix:{{ site_php_socket }};
-      {% endif %}
+      include {% if site_nginx_engine == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
+      fastcgi_pass unix:{{ site_php_socket }};{% endif %}
 
 - name: Define site_nginx_location_php
   set_fact:
@@ -35,9 +33,30 @@
 
         {% if nginx_cloudflare_log is defined and nginx_cloudflare_log %}
         access_log /var/log/nginx/access.log combined_host;
-        access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;
-        {% endif -%}
+        access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;{% endif %}
       }
+      # end of @rewrite
+
+- name: Define site_nginx_engine_server
+  set_fact:
+    site_nginx_engine_server: "{{ lookup('template', 'nginx/engine/' + site_nginx_engine + '.j2') }}"
+  when: not site_nginx_engine_server
+
+- name: Define site_nginx_config
+  set_fact:
+    site_nginx_config: "{% if site_ssl %}https{% else %}http{% endif %}"
+  when: not site_nginx_config
+
+- name: Define site_nginx_template
+  set_fact:
+    site_nginx_template: "nginx/config/{{ site_nginx_config }}.j2"
+  when: not site_nginx_template
+
+- name: Define ssl_certificate variables
+  set_fact:
+    site_ssl_certificate: "/etc/letsencrypt/live/{{ site_domain }}/fullchain.pem"
+    site_ssl_certificate_key: "/etc/letsencrypt/live/{{ site_domain }}/privkey.pem"
+  when: not site_ssl_certificate and not site_ssl_certificate_key
 
 - name: Setup nginx vhost
   include_role:
@@ -45,11 +64,11 @@
   vars:
     nginx_sites:
       "{{ site_domain }}":
-        template: "nginx/{{ site_nginx_template }}.conf.j2"
+        template: "{{ site_nginx_template }}"
     nginx_remove_sites: "{{ site_domains_remove }}"
 
 - name: Ensure Diffie-Helmann parameters dhparam.pem exists when ssl site provisioned
   command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
   args:
     creates: /etc/ssl/certs/dhparam.pem
-  when: "'ssl' in site_nginx_template or 'https' in site_nginx_template"
+  when: site_ssl

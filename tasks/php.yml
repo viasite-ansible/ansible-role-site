@@ -3,7 +3,7 @@
 - name: Add pool.d configuration
   template:
     src: php/pool.conf.j2
-    dest : "{{ site_php_fpm_pool_d }}/{{ site_user }}.conf"
+    dest: "{{ site_php_fpm_pool_d }}/{{ site_user }}.conf"
   with_items:
     - name: "{{ site_user }}"
       user: "{{ site_php_user }}"

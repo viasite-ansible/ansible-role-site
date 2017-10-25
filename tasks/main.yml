@@ -6,6 +6,10 @@
 - include: user.yml
   tags: [ site, user ]
 
+- include: nginx_deprecations.yml
+  when: site_nginx_template and site_nginx_template in ['default', 'default_https', 'drupal', 'drupal_https', 'joomla']
+  tags: [ site, nginx, php ]
+
 - include: nginx.yml
   tags: [ site, nginx, nginx-vhosts ]
 
@@ -61,8 +65,8 @@
       - "************************************"
       - "          Site information          "
       - "************************************"
-      - " domain:     http://{{ site_domain }}"
-      - "{% if site_domains_secondary %} secondary:  http://{{ site_domains_secondary | join(', http://') }}{% endif %}"
+      - " domain:     http{% if site_ssl %}s{% endif %}://{{ site_domain }}"
+      - "{% if site_domains_secondary %} secondary:  http{% if site_ssl %}s{% endif %}://{{ site_domains_secondary | join(', http://') }}{% endif %}"
       - " sftp user:  {{ site_user }}"
       - "{% if site_mysql_db is defined %} mysql db:   {{ site_mysql_db }}{% endif %}"
       - "{% if site_mysql_password is defined %} mysql pass: {{ site_mysql_password }}{% endif %}"
@@ -70,6 +74,7 @@
       - " server IP:  {{ site_dns_ip }}"
       - "************************************"
   when: site_user is defined
+  changed_when: true
   tags: always, skip_ansible_lint
 
 - name: Drupal information

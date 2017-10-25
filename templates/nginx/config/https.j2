@@ -1,0 +1,43 @@
+# {{ ansible_managed }}
+
+server {
+  # Redirect to main domain
+  listen 80;
+  server_name {% if site_ssl_redirect_main_domain %}{{ site_domain }} {% endif %}{{ site_domains_redirected_compiled | join(' ') }} {{ site_domains_secondary | join(' ') }};
+  return 301 https://{{ site_domain }}$request_uri;
+}
+
+{% if not site_ssl_redirect_main_domain %}
+server {
+  listen 80;
+  server_name {{ site_domain }};
+  root {{ site_root }};
+  index index.php index.html;
+
+  # site_nginx_engine_server
+  {{ site_nginx_engine_server | indent(2) }}
+
+  # site_nginx_custom_server
+  {{ site_nginx_custom_server | default('') | indent(2) }}
+}
+{% endif %}
+
+server {
+  listen 443 ssl http2;
+  server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
+  root {{ site_root }};
+  index index.php index.html;
+
+  ssl_certificate {{ site_ssl_certificate }};
+  ssl_certificate_key {{ site_ssl_certificate_key }};
+  {% if site_ssl_hsts %}add_header Strict-Transport-Security "max-age=15768000"; # HSTS{% endif %}
+
+  # site_nginx_engine_server
+  {{ site_nginx_engine_server | indent(2) }}
+
+  # site_nginx_custom_server
+  {{ site_nginx_custom_server | default('') | indent(2) }}
+}
+
+# site_nginx_custom_http
+{{ site_nginx_custom_http }}

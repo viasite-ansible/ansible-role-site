@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+
+server {
+  # Redirect to main domain
+  listen 80;
+  server_name {{ site_domains_redirected_compiled | join(' ') }};
+  return 301 http://{{ site_domain }}$request_uri;
+}
+
+server {
+  listen 80;
+  server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
+  root {{ site_root }};
+  index index.php index.html;
+
+  # site_nginx_engine_server
+  {{ site_nginx_engine_server | indent(2) }}
+
+  # site_nginx_custom_server
+  {{ site_nginx_custom_server | default('') | indent(2) }}
+}
+
+# site_nginx_custom_http
+{{ site_nginx_custom_http }}
