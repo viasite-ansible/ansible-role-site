@@ -1,6 +1,6 @@
 ---
 # TODO: должен быть выбор версии php
-- name: setup apache vhost
+- name: "{{ site_domain}} : setup apache vhost"
   include_role:
     name: apache-vhosts
   vars:

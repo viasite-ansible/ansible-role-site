@@ -1,5 +1,5 @@
 ---
-- name: Configuring cron tasks
+- name: "{{ site_domain}} : Configuring cron tasks"
   cron:
     cron_file: "{{ item.cron_file | default(omit) }}"
     day: "{{ item.day | default(omit) }}"
@@ -15,7 +15,7 @@
   with_items: "{{ site_cron_tasks }}"
   tags: [ cron ]
 
-- name: Configuring cron variables
+- name: "{{ site_domain}} : Configuring cron variables"
   cronvar:
     name: "{{ item.name | default(omit) }}"
     value: "{{ item.value | default(omit) }}"

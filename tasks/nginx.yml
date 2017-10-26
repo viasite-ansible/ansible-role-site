@@ -1,5 +1,5 @@
 ---
-- name: Define site_nginx_proxy_to_backend
+- name: "{{ site_domain}} : Define site_nginx_proxy_to_backend"
   set_fact:
     site_nginx_proxy_to_backend: |
       {% if site_nginx_backend == 'apache' %}
@@ -14,7 +14,7 @@
       include {% if site_nginx_engine == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
       fastcgi_pass unix:{{ site_php_socket }};{% endif %}
 
-- name: Define site_nginx_location_php
+- name: "{{ site_domain}} : Define site_nginx_location_php"
   set_fact:
     site_nginx_location_php: |
       # need for urls such /index.php
@@ -22,7 +22,7 @@
         {{ site_nginx_proxy_to_backend | indent(2) }}
       }
 
-- name: Define site_nginx_location_rewrite
+- name: "{{ site_domain}} : Define site_nginx_location_rewrite"
   set_fact:
     site_nginx_location_rewrite: |
       location @rewrite {
@@ -37,28 +37,28 @@
       }
       # end of @rewrite
 
-- name: Define site_nginx_engine_server
+- name: "{{ site_domain}} : Define site_nginx_engine_server"
   set_fact:
     site_nginx_engine_server: "{{ lookup('template', 'nginx/engine/' + site_nginx_engine + '.j2') }}"
   when: not site_nginx_engine_server
 
-- name: Define site_nginx_config
+- name: "{{ site_domain}} : Define site_nginx_config"
   set_fact:
     site_nginx_config: "{% if site_ssl %}https{% else %}http{% endif %}"
   when: not site_nginx_config
 
-- name: Define site_nginx_template
+- name: "{{ site_domain}} : Define site_nginx_template"
   set_fact:
     site_nginx_template: "nginx/config/{{ site_nginx_config }}.j2"
   when: not site_nginx_template
 
-- name: Define ssl_certificate variables
+- name: "{{ site_domain}} : Define ssl_certificate variables"
   set_fact:
     site_ssl_certificate: "/etc/letsencrypt/live/{{ site_domain }}/fullchain.pem"
     site_ssl_certificate_key: "/etc/letsencrypt/live/{{ site_domain }}/privkey.pem"
   when: not site_ssl_certificate and not site_ssl_certificate_key
 
-- name: Setup nginx vhost
+- name: "{{ site_domain}} : Setup nginx vhost"
   include_role:
     name: nginx-vhosts
   vars:
@@ -67,7 +67,7 @@
         template: "{{ site_nginx_template }}"
     nginx_remove_sites: "{{ site_domains_remove }}"
 
-- name: Ensure Diffie-Helmann parameters dhparam.pem exists when ssl site provisioned
+- name: "{{ site_domain}} : Ensure Diffie-Helmann parameters dhparam.pem exists when ssl site provisioned"
   command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
   args:
     creates: /etc/ssl/certs/dhparam.pem

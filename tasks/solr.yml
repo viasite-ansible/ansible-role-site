@@ -1,16 +1,16 @@
 ---
-- name: Ensure Docker service started
+- name: "{{ site_domain}} : Ensure Docker service started"
   service:
     name: docker
     state: started
     enabled: yes
 
-- name: Install pip docker-py
+- name: "{{ site_domain}} : Install pip docker-py"
   pip:
     name: docker-py
     state: present
 
-- name: Ensure solr dir exists
+- name: "{{ site_domain}} : Ensure solr dir exists"
   file:
     path: "{{ item }}"
     state: directory
@@ -19,7 +19,7 @@
     - "{{ site_homedir }}/etc/solr"
     - "{{ site_homedir }}/etc/solr/{{ site_solr_core_name }}"
 
-- name: Ensure auth_basic files created
+- name: "{{ site_domain}} : Ensure auth_basic files created"
   template:
     src: solr/auth_basic.j2
     dest: "{{ site_homedir }}/etc/solr/htpasswd"
@@ -28,17 +28,17 @@
     mode: 0644
   when: site_solr_basic_auth != ''
 
-- name: Copy solr config
+- name: "{{ site_domain}} : Copy solr config"
   unarchive:
     remote_src: yes
     src: "{{ site_solr_config_archive }}"
     dest: "{{ site_homedir }}/etc/solr/{{ site_solr_core_name }}"
-- name: Register solr_container_name
+- name: "{{ site_domain}} : Register solr_container_name"
   set_fact:
     solr_container_name: "site_solr_{{ site_solr_core_name }}"
   when: solr_container_name is not defined
 
-- name: Solr docker container
+- name: "{{ site_domain}} : Solr docker container"
   docker_container:
     name: "{{ solr_container_name }}"
     image: solr:5.4
@@ -50,7 +50,7 @@
     restart_policy: always
     command: "solr-create -c {{ site_solr_core_name }} -d /myconfig"
 
-- name: Setup nginx vhost for Solr
+- name: "{{ site_domain}} : Setup nginx vhost for Solr"
   include_role:
     name: nginx-vhosts
   vars:

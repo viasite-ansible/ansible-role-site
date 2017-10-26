@@ -1,12 +1,12 @@
 ---
-- name: User add
+- name: "{{ site_domain}} : User add"
   user:
     name: "{{ site_user }}"
     home: "{{ site_homedir }}"
     shell: /bin/zsh
   tags: user_create
 
-- name: User directory access
+- name: "{{ site_domain}} : User directory access"
   file:
     path: "{{ site_homedir }}"
     state: directory
@@ -15,7 +15,7 @@
     group: "{{ site_nginx_user }}"
   tags: [ user_create, permissions ]
 
-- name: User directories
+- name: "{{ site_domain}} : User directories"
   file:
     path: "{{ item }}"
     state: directory
@@ -28,13 +28,13 @@
     - "{{ site_root }}"
   tags: [ user_create, permissions ]
 
-- name: check ~/.zshrc exists
+- name: "{{ site_domain}} : check ~/.zshrc exists"
   stat: path="{{ site_homedir }}/.zshrc"
   changed_when: False
   register: site_register_zshrc
   tags: [ user_create, zsh ]
 
-- name: setup simple ~/.zshrc if empty
+- name: "{{ site_domain}} : setup simple ~/.zshrc if empty"
   template:
     src: user/zshrc.j2
     dest: "{{ site_homedir }}/.zshrc"
@@ -43,7 +43,7 @@
   when: not site_setup_zsh and (not site_register_zshrc.stat.exists or site_force_zshrc)
   tags: [ user_create, zsh ]
 
-- name: setup git
+- name: "{{ site_domain}} : setup git"
   include_role:
     name: git
   vars:
@@ -51,7 +51,7 @@
   tags: git
   when: site_setup_git
 
-- name: setup ssh-keys
+- name: "{{ site_domain}} : setup ssh-keys"
   include_role:
     name: ssh-keys
   vars:
@@ -59,7 +59,7 @@
   tags: ssh-keys
   when: site_setup_ssh_keys
 
-- name: setup vim
+- name: "{{ site_domain}} : setup vim"
   include_role:
     name: vim
   vars:
@@ -67,7 +67,7 @@
   tags: vim
   when: site_setup_vim
 
-- name: setup zsh
+- name: "{{ site_domain}} : setup zsh"
   include_role:
     name: zsh
   vars:

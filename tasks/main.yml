@@ -26,7 +26,7 @@
 - include: cron.yml
   tags: [ site, cron ]
 
-- name: Check if user Debian-exim exists
+- name: "{{ site_domain}} : Check if user Debian-exim exists"
   shell: getent passwd Debian-exim | wc -l
   register: site_register_exim4_exists
   changed_when: False
@@ -59,7 +59,7 @@
 - include: site_config.yml
   tags: [ site, sync, sync_mysql, drupal, config ]
 
-- name: Site information
+- name: "{{ site_domain}} : Site information"
   debug:
     msg:
       - "************************************"
@@ -77,7 +77,7 @@
   changed_when: true
   tags: always, skip_ansible_lint
 
-- name: Drupal information
+- name: "{{ site_domain}} : Drupal information"
   debug:
     msg:
       - "{{ site_domain }} - {{ drupal_account_name }}"
@@ -87,7 +87,7 @@
   when: drupal_site_installed is defined and ('Drupal bootstrap' not in drupal_site_installed.stdout)
   tags: drupal, skip_ansible_lint
 
-- name: Solr information
+- name: "{{ site_domain}} : Solr information"
   debug:
     msg:
       - " Solr web:  http://{{ site_solr_domain }}"

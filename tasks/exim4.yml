@@ -1,6 +1,6 @@
 ---
 
-- name: "Ensure {{ site_exim4_dkim_keys_path }} exists"
+- name: "{{ site_domain}} : Ensure {{ site_exim4_dkim_keys_path }} exists"
   file:
     path: "{{ site_exim4_dkim_keys_path }}"
     state: directory
@@ -8,7 +8,7 @@
     group: Debian-exim
     mode: 0700
 
-- name: Add DKIM private key
+- name: "{{ site_domain}} : Add DKIM private key"
   template:
     src: exim4/dkim_private_key.j2
     dest: "{{ site_exim4_dkim_keys_path }}/{{ site_exim4_dkim_domain }}.key"

@@ -1,5 +1,5 @@
 ---
-- name: Add mysql user
+- name: "{{ site_domain}} : Add mysql user"
   mysql_user:
     name: "{{ site_mysql_user }}"
     password: "{{ site_mysql_password }}"
@@ -10,7 +10,7 @@
     # update_password=on_create # will work from ansible 2.0
   tags: [ mysql_user ]
 
-- name: Copy user-my.cnf file with password credentials.
+- name: "{{ site_domain}} : Copy user-my.cnf file with password credentials."
   template:
     src: mysql/user-my.cnf.j2
     dest: "{{ site_homedir }}/.my.cnf"
@@ -18,7 +18,7 @@
     mode: 0600
   tags: [ mysql_user ]
 
-- name: Ensure database exists
+- name: "{{ site_domain}} : Ensure database exists"
   mysql_db:
     name: "{{ site_mysql_db }}"
     state: present

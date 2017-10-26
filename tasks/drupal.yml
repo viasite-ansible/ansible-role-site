@@ -1,5 +1,5 @@
 ---
-- name: setup drupal
+- name: "{{ site_domain}} : setup drupal"
   include_role:
     name: drupal
   vars:

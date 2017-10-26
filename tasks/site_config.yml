@@ -8,21 +8,21 @@
 #  }
 #}
 
-- name: Check if site is Drupal
+- name: "{{ site_domain}} : Check if site is Drupal"
   stat: "path={{ site_root }}/sites/default/settings.php"
   register: site_register_settings_php
   ignore_errors: true
 
-- name: Define site_is_drupal
+- name: "{{ site_domain}} : Define site_is_drupal"
   set_fact:
     site_is_drupal: "{{ site_register_settings_php.stat.exists|default(false) }}"
 
-#- name: Check settings.local.php in settings.php
+#- name: "{{ site_domain}} : Check settings.local.php in settings.php"
 #  command: "grep -c settings.local.php {{ site_root }}/sites/default/settings.php"
 #  register: site_settings_local_php_count
 #  when: site_is_drupal
 
-- name: Add settings.local.php include to settings.php
+- name: "{{ site_domain}} : Add settings.local.php include to settings.php"
   blockinfile:
     dest: "{{ site_root }}/sites/default/settings.php"
     marker: "# {mark} include settings.local.php"
@@ -35,7 +35,7 @@
       }
   when: site_is_drupal
 
-- name: Override database settings.local.php for Drupal
+- name: "{{ site_domain}} : Override database settings.local.php for Drupal"
   template:
     src: drupal_settings.local.php.j2
     dest: "{{ site_root }}/sites/default/settings.local.php"

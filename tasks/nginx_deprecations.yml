@@ -1,10 +1,10 @@
 ---
-- name: Check for old site_nginx_template
+- name: "{{ site_domain}} : Check for old site_nginx_template"
   debug: msg="site_nginx_template must be replaced to site_nginx_engine"
   failed_when: true
   ignore_errors: yes
 
-- name: Define legacy site_nginx_template mapping
+- name: "{{ site_domain}} : Define legacy site_nginx_template mapping"
   set_fact:
     site_nginx_engine_mapping:
       default:
@@ -23,7 +23,7 @@
         engine: joomla
         ssl: no
 
-- name: Define site_nginx_engine
+- name: "{{ site_domain}} : Define site_nginx_engine"
   set_fact:
     site_nginx_engine: "{{ site_nginx_engine_mapping[site_nginx_template]['engine'] }}"
     site_ssl: "{{ site_nginx_engine_mapping[site_nginx_template]['ssl'] }}"
