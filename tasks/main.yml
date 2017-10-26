@@ -42,7 +42,7 @@
 
 - include: drupal.yml
   tags: [ site, engine, drupal ]
-  when: site_engine is defined and site_engine == 'drupal'
+  when: site_install_engine is defined and site_install_engine == 'drupal'
 
 - include: solr.yml
   tags: [ site, solr ]
