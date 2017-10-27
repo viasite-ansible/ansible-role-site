@@ -6,9 +6,11 @@
       proxy_pass http://apache;
       {{ site_nginx_proxy_params }}
       # for pass Basic auth from nginx to php-fpm for bitrix
-      proxy_set_header REMOTE_USER  $remote_user;
+      proxy_set_header REMOTE_USER $remote_user;
       proxy_set_header X-Forwarded-User $remote_user;
-      proxy_set_header Authorization $http_authorization;{% endif %}
+      proxy_set_header Authorization $http_authorization;
+      proxy_set_header HTTPS $nginx_https;
+      {% endif %}
 
       {% if site_nginx_backend == 'php-fpm' %}
       include {% if site_nginx_engine == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
