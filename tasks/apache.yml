@@ -34,5 +34,5 @@
           
           # for HTTP auth in bitrix
           SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
-          SetEnvIf HTTPS "(.*)" HTTPS=$1
+          SetEnvIf X-Forwarded-Proto https HTTPS=on 
     apache_vhosts_remove_sites: "{{ site_domains_remove }}"

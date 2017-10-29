@@ -27,7 +27,6 @@ server {
   server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
   root {{ site_root }};
   index index.php index.html;
-  set $nginx_https 'on'; # for proxy_params
 
   ssl_certificate {{ site_ssl_certificate }};
   ssl_certificate_key {{ site_ssl_certificate_key }};
