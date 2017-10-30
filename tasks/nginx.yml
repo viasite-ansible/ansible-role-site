@@ -9,7 +9,6 @@
       proxy_set_header REMOTE_USER $remote_user;
       proxy_set_header X-Forwarded-User $remote_user;
       proxy_set_header Authorization $http_authorization;
-      proxy_set_header HTTPS $nginx_https;
       {% endif %}
 
       {% if site_nginx_backend == 'php-fpm' %}
