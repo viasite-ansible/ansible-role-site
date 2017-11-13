@@ -47,7 +47,7 @@ location / {
 
     location ~* /sites/default/files/advagg_css/css[_[:alnum:]]+\.css$ {
       access_log off;
-      try_files $uri @drupal;
+      try_files $uri @rewrite;
     }
   }
 
@@ -60,7 +60,7 @@ location / {
 
     location ~* /sites/default/files/advagg_js/js[_[:alnum:]]+\.js$ {
       access_log off;
-      try_files $uri @drupal;
+      try_files $uri @rewrite;
     }
   }
 
