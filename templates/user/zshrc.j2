@@ -25,3 +25,7 @@ bindkey '\e[4~' end-of-line # end
 
 autoload compinit
 compinit
+
+cd "$HOME/www"
+sites="$(find ~/www -mindepth 1 -maxdepth 1 -type d)"
+if [ "$(echo "$sites" | wc -l)" = 1 ]; then cd "$sites"; fi
