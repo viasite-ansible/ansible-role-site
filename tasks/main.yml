@@ -3,27 +3,27 @@
   include_vars: "{{ site_vars_file }}"
   tags: [ site, always ]
 
-- include: user.yml
+- include_tasks: user.yml
   tags: [ site, user ]
 
-- include: nginx_deprecations.yml
+- include_tasks: nginx_deprecations.yml
   when: site_nginx_template and site_nginx_template in ['default', 'default_https', 'drupal', 'drupal_https', 'joomla']
   tags: [ site, nginx, php ]
 
-- include: nginx.yml
+- include_tasks: nginx.yml
   tags: [ site, nginx, nginx-vhosts ]
 
-- include: php.yml
+- include_tasks: php.yml
   tags: [ site, php ]
 
-- include: apache.yml
+- include_tasks: apache.yml
   tags: [ site, apache, apache_vhosts ]
 
-- include: mysql.yml
+- include_tasks: mysql.yml
   when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
   tags: [ site, mysql ]
 
-- include: cron.yml
+- include_tasks: cron.yml
   tags: [ site, cron ]
 
 - name: "{{ site_domain}} : Check if user Debian-exim exists"
@@ -32,31 +32,31 @@
   changed_when: False
   tags: [ site, exim4 ]
 
-- include: exim4.yml
+- include_tasks: exim4.yml
   when: site_register_exim4_exists.stdout == '1' and site_exim4_dkim_private
   tags: [ site, exim4 ]
 
-- include: dns.yml
+- include_tasks: dns.yml
   tags: [ site, dns ]
   when: site_dns_selectel
 
-- include: drupal.yml
+- include_tasks: drupal.yml
   tags: [ site, engine, drupal ]
   when: site_install_engine is defined and site_install_engine == 'drupal'
 
-- include: solr.yml
+- include_tasks: solr.yml
   tags: [ site, solr ]
   when: site_solr
 
-- include: sync_files.yml
+- include_tasks: sync_files.yml
   when: site_sync_files
   tags: [ site, sync, sync_files ]
 
-- include: sync_mysql.yml
+- include_tasks: sync_mysql.yml
   when: site_sync_mysql
   tags: [ site, sync, sync_mysql ]
 
-- include: site_config.yml
+- include_tasks: site_config.yml
   tags: [ site, sync, sync_mysql, drupal, config ]
 
 - name: "{{ site_domain}} : Site information"
