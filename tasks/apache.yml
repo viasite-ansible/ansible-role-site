@@ -15,15 +15,15 @@
           <FilesMatch \.php$>
             SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain }}/"
           </FilesMatch>
-        
+
           # Set some proxy properties (the string "{{ site_domain }}" should match
           # the one set in the FilesMatch directive.
           <Proxy fcgi://{{ site_domain }}>
             ProxySet connectiontimeout=5 timeout=240
           </Proxy>
-        
+
           # If the php file doesn't exist, disable the proxy handler.
-          # This will allow .htaccess rewrite rules to work and 
+          # This will allow .htaccess rewrite rules to work and
           # the client will see the default 404 page of Apache
           RewriteCond %{REQUEST_FILENAME} \.php$
           RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
@@ -31,8 +31,8 @@
 
           # old way
           # ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
-          
+
           # for HTTP auth in bitrix
           SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
-          SetEnvIf X-Forwarded-Proto https HTTPS=on 
+          SetEnvIf X-Forwarded-Proto https HTTPS=on
     apache_vhosts_remove_sites: "{{ site_domains_remove }}"
