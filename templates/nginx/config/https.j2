@@ -3,7 +3,10 @@
 server {
   # Redirect to main domain
   listen 80;
+  listen 443 ssl http2;
   server_name {% if site_ssl_redirect_main_domain %}{{ site_domain }} {% endif %}{{ site_domains_redirected_compiled | join(' ') }} {{ site_domains_secondary | join(' ') }};
+  ssl_certificate {{ site_ssl_certificate }};
+  ssl_certificate_key {{ site_ssl_certificate_key }};
   return 301 https://{{ site_domain }}$request_uri;
 }
 
