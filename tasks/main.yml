@@ -79,8 +79,7 @@
       - " server IP:  {{ site_dns_ip }}"
       - "************************************"
   when: site_user is defined
-  changed_when: true
-  tags: always, skip_ansible_lint
+  tags: always, skip_ansible_lint, print_action
 
 - name: "{{ site_domain}} : Drupal information"
   debug:
@@ -90,7 +89,7 @@
       - "{% if drupal_drs_add_users is defined and drupal_drs_add_users | changed and drupal_drs_add_users.stdout_lines is defined %}{{ drupal_drs_add_users.stdout_lines }}{% endif %}"
       - "{% if drupal_drs_add_users is defined and drupal_drs_add_users | changed and drupal_drs_add_users.stderr_lines is defined %}{{ drupal_drs_add_users.stderr_lines }}{% endif %}"
   when: drupal_site_installed is defined and ('Drupal bootstrap' not in drupal_site_installed.stdout)
-  tags: drupal, skip_ansible_lint
+  tags: drupal, skip_ansible_lint, print_action
 
 - name: "{{ site_domain}} : Solr information"
   debug:
@@ -101,4 +100,4 @@
       - " Solr path: /solr/{{ site_solr_core_name }}"
       - "{% if site_solr_basic_auth %} Solr using basic auth, login and password in site yml config, site_solr_basic_auth{% endif %}"
   when: site_solr
-  tags: solr, skip_ansible_lint
+  tags: solr, skip_ansible_lint, print_action
