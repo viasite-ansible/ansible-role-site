@@ -6,11 +6,22 @@ site_domains_redirected: []
 site_domains_remove: []
 #site_user: example
 
-site_dns_selectel: no
-site_dns_admin: support.selectel.ru
 site_dns_ip: "{{ ansible_default_ipv4.address }}"
-site_dns_yandex_mail: yes
 site_dns_ttl: 10800
+site_dns_default_records:
+  - record: ''
+    type: MX
+    value: mx.yandex.ru
+    priority: 10
+  - record: ''
+    type: TXT
+    value: "v=spf1 a include:_spf.yandex.net ~all"
+  - record: ''
+    type: A
+    value: "{{ site_dns_ip }}"
+  - record: 'www'
+    type: A
+    value: "{{ site_dns_ip }}"
 
 site_setup_git: no
 site_setup_ssh_keys: yes

@@ -34,7 +34,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - viasite-ansible.ssh-keys
 - viasite-ansible.vim
 - viasite-ansible.zsh
-- viasite/selectel-dns-cli for Selectel DNS
+- viasite-ansible/ansible-molule-selectel-dns for Selectel DNS
 - docker on target machine (for Solr)
 
 
@@ -175,20 +175,35 @@ site_src:
 ```
 
 
-### Add domain to Selectel DNS
-You must install viasite/selectel-dns-cli for use this feature.
-
-Enable selectel_dns:
-```
-site_selectel_dns: yes
-```
+### Manage Selectel DNS
+You must install viasite-ansible/ansible-module-selectel-dns for use this feature.
 
 Check default variables `site_dns_*` in `defaults/main.yml`.
 Common variable: `site_dns_domain` - domain for adding. Default: `site_domain`
 In common case, you can only define `site_selectel_dns`.
 
-If domain exists in Selectel, it will not modified, only creation supported.
+By default, DNS tasks don't executing, you should using `--tags dns`.
 
+Example:
+
+``` yaml
+site_dns_domains:
+  example.com:
+    - record: ''
+      type: A
+      value: 1.2.3.4
+    - record: '*'
+      type: A
+      value: 1.2.3.4
+      ttl: 300
+    - record: 'www'
+      type: A
+      value: 1.2.3.4
+    - record: 'old'
+      type: A
+      value: 1.2.3.4
+      state: absent
+```
 
 
 ### Import MySQL database

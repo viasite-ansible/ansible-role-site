@@ -1,0 +1,34 @@
+---
+- name: "{{ domain.key }} : Ensure domain exists in Selectel"
+  selectel_dns:
+    domain: "{{ domain.key }}"
+    state: present
+  delegate_to: localhost
+  register: domain_register
+
+- name: "{{ domain.key }} : Add default DNS records to new domain"
+  selectel_dns:
+    domain: "{{ domain.key }}"
+    record: "{{ item.record }}"
+    type: "{{ item.type }}"
+    value: "{{ item.value }}"
+    ttl: "{{ item.ttl | default(site_dns_ttl) }}"
+    priority: "{{ item.priority | default(omit) }}"
+    solo: "{{ item.solo | default(true) }}"
+    state: "{{ item.state | default('present') }}"
+  delegate_to: localhost
+  with_items: "{{ site_dns_default_records }}"
+  when: domain_register | changed
+
+- name: "{{ domain.key }} : Ensure records exists in domains"
+  selectel_dns:
+    domain: "{{ domain.key }}"
+    record: "{{ item.record }}"
+    type: "{{ item.type }}"
+    value: "{{ item.value }}"
+    ttl: "{{ item.ttl | default(site_dns_ttl) }}"
+    priority: "{{ item.priority | default(omit) }}"
+    solo: "{{ item.solo | default(true) }}"
+    state: "{{ item.state | default('present') }}"
+  delegate_to: localhost
+  with_items: "{{ domain.value }}"
