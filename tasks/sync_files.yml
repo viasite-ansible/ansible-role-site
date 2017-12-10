@@ -21,7 +21,7 @@
 
 - name: "{{ site_domain}} : Redefine site_sync_files"
   set_fact:
-    site_sync_files: not site_root_exists or site_root_empty or site_sync_files_force | default(false)
+    site_sync_files: "{{ not site_root_exists or site_root_empty or site_sync_files_force | default(false) }}"
 
 - name: "{{ site_domain}} : Ensure ~/.ssh exists (rsync remote)"
   file:

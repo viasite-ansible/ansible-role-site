@@ -16,7 +16,7 @@
 
 - name: "{{ site_domain}} : Redefine site_sync_mysql"
   set_fact:
-    site_sync_mysql: site_mysql_database_empty or site_sync_mysql_force | default(false)
+    site_sync_mysql: "{{ site_mysql_database_empty or site_sync_mysql_force | default(false) }}"
 
 - name: "{{ site_domain}} : Define site_mysql_dump_temp_path"
   set_fact:
