@@ -19,8 +19,15 @@ server {
 
 {% else %}
 server {
+  # Redirect to main domain
   listen 80;
-  server_name {{ site_domain }};
+  server_name {{ site_domains_redirected_compiled | join(' ') }};
+  return 301 https://{{ site_domain }}$request_uri;
+}
+
+server {
+  listen 80;
+  server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
   root {{ site_root }};
   index index.php index.html;
 
