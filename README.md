@@ -43,7 +43,6 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - letsencrypt
 - add site to hosts_sites
 - disable and delete site
-- apache: PHP select
 
 
 
@@ -80,6 +79,12 @@ server example.com {
 
 {{ site_nginx_custom_http }}
 ```
+
+
+
+## PHP version select
+You can use viasite-ansible.php-versions role for install several PHP versions from `ondrej/php`,
+then you can define `site_php_version` in site config.
 
 
 

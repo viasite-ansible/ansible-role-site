@@ -94,6 +94,10 @@ site_php_fpm_defaults:
   pm.start_servers: 1
   pm.min_spare_servers: 1
   pm.max_spare_servers: 3
+site_php_version: 7.0 # as in viasite-ansible.php-versions
+site_php_socket: "/var/run/php/{{ site_user }}-php{{ site_php_version }}.sock"
+site_php_fpm_pool_d: /etc/php/{{ site_php_version }}/fpm/pool.d
+site_php_fpm_service_name: php{{ site_php_version }}-fpm
 
 site_nginx_template: # deprecated
 site_nginx_config: # http or https, depends on site_ssl

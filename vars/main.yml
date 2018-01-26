@@ -10,9 +10,6 @@ site_nginx_user: www-data
 site_exim4_dkim_keys_path: "{{ exim4_dkim_keys_path | default('/etc/exim4/dkim') }}"
 site_php_user: "{{ site_user }}"
 site_php_group: "{{ site_user }}"
-site_php_socket: "/var/run/php/{{ site_user }}-php7.0.sock"
-site_php_fpm_pool_d: /etc/php/7.0/fpm/pool.d
-site_php_fpm_service_name: php7.0-fpm
 
 site_nginx_proxy_params: |
   proxy_set_header Host $host;
