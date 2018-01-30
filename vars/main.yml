@@ -2,6 +2,7 @@
 site_homedir: "/home/{{ site_user }}"
 site_wwwdir: "{{ site_homedir }}/www"
 site_root: "{{ site_wwwdir }}/{{ site_domain }}"
+site_domain_main: "{{ site_domain | replace('www.', '') }}"
 site_domain_redirected: "{% if 'www.' in site_domain %}{{ site_domain | replace('www.', '') }}{% else %}www.{{ site_domain }}{% endif %}"
 site_domains_redirected_compiled: "{{ site_domains_redirected + [ site_domain_redirected ] }}"
 site_apache_user: www-data
