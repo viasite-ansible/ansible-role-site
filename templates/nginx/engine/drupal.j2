@@ -47,6 +47,12 @@ location / {
     try_files   $uri @rewrite;
   }
 
+  # drupal 8 features download
+  location ^~ /admin/config/development/features/download/ {
+    access_log off;
+    try_files $uri @rewrite;
+  }
+
   # site_nginx_location_static_files
   {{ site_nginx_location_static_files | indent(2) }}
 
