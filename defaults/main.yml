@@ -86,6 +86,8 @@ site_sync_files_excluded: # rsync excluded patterns
 #site_ssh_key: ~/.ssh/id_rsa
 site_sync_mysql: no
 site_sync_mysql_force: no
+# dump database before sync
+site_sync_mysqldump: yes
 
 site_php_fpm_defaults:
   pm: ondemand

@@ -129,6 +129,9 @@ then variable from site1.yml will affect site2! Be careful, run each site separa
 
 ## Syncronization
 
+### Sync mysql
+By default, `site_sync_mysqldump: yes` and ansible dump remote database before sync.
+
 ### Import files
 Role support import site files from local path or remote sftp server using `rsync`.
 You must have access to remote server with ssh key.
