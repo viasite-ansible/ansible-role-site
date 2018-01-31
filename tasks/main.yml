@@ -10,6 +10,12 @@
   when: site_nginx_template and site_nginx_template in ['default', 'default_https', 'drupal', 'drupal_https', 'joomla']
   tags: [ site, nginx, php ]
 
+#- name: Register www domains remove
+#  set_fact:
+#    site_domains_remove: [ "{{ site_domain}}" ]
+#  when: "'www' in site_domain"
+#  tags: [ site, apache, nginx ]
+
 - include_tasks: nginx.yml
   tags: [ site, nginx, nginx-vhosts ]
 

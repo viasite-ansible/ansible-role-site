@@ -1,11 +1,10 @@
 ---
-# TODO: должен быть выбор версии php
 - name: "{{ site_domain}} : setup apache vhost"
   include_role:
     name: apache-vhosts
   vars:
     apache_vhosts_sites:
-      "{{ site_domain }}":
+      "{{ site_domain_main }}":
         servername: "{{ site_domain }}"
         serveralias: "{{ site_domains_redirected | join(' ') }} {{ site_domains_secondary | join(' ') }}"
         documentroot: "{{ site_root }}"
@@ -13,12 +12,12 @@
           # https://serverfault.com/a/672969/437918
           # This is to forward all PHP to php-fpm.
           <FilesMatch \.php$>
-            SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain }}/"
+            SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain_main }}/"
           </FilesMatch>
 
-          # Set some proxy properties (the string "{{ site_domain }}" should match
+          # Set some proxy properties (the string "{{ site_domain_main }}" should match
           # the one set in the FilesMatch directive.
-          <Proxy fcgi://{{ site_domain }}>
+          <Proxy fcgi://{{ site_domain_main }}>
             ProxySet connectiontimeout=5 timeout=240
           </Proxy>
 

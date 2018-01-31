@@ -55,8 +55,8 @@
 
 - name: "{{ site_domain}} : Define ssl_certificate variables"
   set_fact:
-    site_ssl_certificate: "/etc/letsencrypt/live/{{ site_domain }}/fullchain.pem"
-    site_ssl_certificate_key: "/etc/letsencrypt/live/{{ site_domain }}/privkey.pem"
+    site_ssl_certificate: "/etc/letsencrypt/live/{{ site_domain_main }}/fullchain.pem"
+    site_ssl_certificate_key: "/etc/letsencrypt/live/{{ site_domain_main }}/privkey.pem"
   when: not site_ssl_certificate and not site_ssl_certificate_key
 
 - name: "{{ site_domain}} : Setup nginx vhost"
@@ -64,7 +64,7 @@
     name: nginx-vhosts
   vars:
     nginx_sites:
-      "{{ site_domain }}":
+      "{{ site_domain_main }}":
         template: "{{ site_nginx_template }}"
     nginx_remove_sites: "{{ site_domains_remove }}"
 
