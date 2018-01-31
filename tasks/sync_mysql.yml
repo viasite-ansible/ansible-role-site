@@ -53,8 +53,11 @@
     ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" \
     'install -m 600 /dev/null "/tmp/mysqldump_{{ site_mysql_db }}.sql.gz" && \
     mysqldump -u"{{ site_mysql_user }}" -p"{{ site_mysql_password }}" "{{ site_mysql_db }}" \
-    | gzip > "/tmp/mysqldump_{{ site_mysql_db }}.sql.gz"'
+    | gzip > "/tmp/mysqldump_{{ site_mysql_db }}.sql.gz" \
+    && echo "size:$(stat --printf="%s" "/tmp/mysqldump_zavodpozhservis2.sql.gz")"'
+  register: site_register_mysqldump
   when: site_sync_mysql and site_sync_mysqldump
+  failed_when: "'size:20' in site_register_mysqldump.stdout"
 
 - name: "{{ site_domain }} : Register new site_src_mysql_dump_file"
   set_fact:
