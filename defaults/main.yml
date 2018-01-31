@@ -113,6 +113,20 @@ site_nginx_custom_root_location: "" # add to location / in template
 #apache_mpm_itk_max_clients_per_host: 30
 
 site_nginx_location_default: |
+  location = /clientstat {
+    return 200;
+    access_log /var/log/nginx/clientstat.access.log combined_host;
+  }
+
+  ## see more settings for mp3, ogg, mp4, flv at https://github.com/perusio/drupal-with-nginx
+
+  ## Replicate the Apache <FilesMatch> directive of Drupal standard
+  ## .htaccess. Disable access to any code files. Return a 404 to curtail
+  ## information disclosure. Hide also the text files.
+  location ~* ^(?:.+\.(?:htaccess|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
+    return 404;
+  }
+
   location /\.git {
     deny all;
   }
@@ -196,18 +210,4 @@ site_nginx_location_static_files: |
     ## No need to bleed constant updates. Send the all shebang in one
     ## fell swoop.
     tcp_nodelay off;
-  }
-
-  location = /clientstat {
-    return 200;
-    access_log /var/log/nginx/clientstat.access.log combined_host;
-  }
-
-  ## see more settings for mp3, ogg, mp4, flv at https://github.com/perusio/drupal-with-nginx
-
-  ## Replicate the Apache <FilesMatch> directive of Drupal standard
-  ## .htaccess. Disable access to any code files. Return a 404 to curtail
-  ## information disclosure. Hide also the text files.
-  location ~* ^(?:.+\.(?:htaccess|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
-    return 404;
   }
