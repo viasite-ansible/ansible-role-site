@@ -1,0 +1,11 @@
+---
+- name: "{{ site_domain}} : define letsencrypt_acmesh_certs"
+  set_fact:
+    letsencrypt_acmesh_certs:
+      - domains: "{{ site_letsencrypt_acmesh_domains }}"
+        deploy_path: "{{ site_letsencrypt_acmesh_deploy_path }}"
+        args: "{{ site_letsencrypt_acmesh_args }}"
+
+- name: "{{ site_domain}} : setup letsencrypt certificates"
+  include_role:
+    name: letsencrypt-acmesh

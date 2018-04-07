@@ -40,7 +40,6 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 
 
 ## TODO:
-- letsencrypt
 - add site to hosts_sites
 - disable and delete site
 
@@ -212,6 +211,14 @@ site_dns_domains:
       value: 1.2.3.4
       state: absent
 ```
+
+
+### Issue letsencrypt certificate
+Define variables:
+
+- `site_letsencrypt_acmesh_args` - args for acme.sh --issue command (optional)
+- `site_letsencrypt_acmesh_deploy_path` - deploy path (optional)
+- `site_letsencrypt_acmesh_domains` - list of domains
 
 
 ### Import MySQL database
