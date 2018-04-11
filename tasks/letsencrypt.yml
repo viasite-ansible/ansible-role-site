@@ -1,6 +1,7 @@
 ---
 - name: "{{ site_domain}} : define letsencrypt_acmesh_certs"
   set_fact:
+    letsencrypt_acmesh_env: "{{ site_letsencrypt_acmesh_env }}"
     letsencrypt_acmesh_certs:
       - domains: "{{ site_letsencrypt_acmesh_domains }}"
         deploy_path: "{{ site_letsencrypt_acmesh_deploy_path }}"

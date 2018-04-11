@@ -55,6 +55,7 @@ site_exim4_dkim_private:
 site_exim4_dkim_domain: "{{ site_domain | replace('www.', '') }}"
 
 site_letsencrypt_acmesh_args: ""
+site_letsencrypt_acmesh_env: "{{ letsencrypt_acmesh_env | default('') }}"
 site_letsencrypt_acmesh_deploy_path: ""
 site_letsencrypt_acmesh_domains: []
 
