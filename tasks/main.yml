@@ -3,10 +3,10 @@
   include_vars: "{{ site_vars_file }}"
   tags: [ site, always ]
 
-- include_tasks: user.yml
+- import_tasks: user.yml
   tags: [ site, user ]
 
-- include_tasks: nginx_deprecations.yml
+- import_tasks: nginx_deprecations.yml
   when: site_nginx_template and site_nginx_template in ['default', 'default_https', 'drupal', 'drupal_https', 'joomla']
   tags: [ site, nginx, php ]
 
@@ -16,20 +16,20 @@
 #  when: "'www' in site_domain"
 #  tags: [ site, apache, nginx ]
 
-- include_tasks: nginx.yml
+- import_tasks: nginx.yml
   tags: [ site, nginx, nginx-vhosts ]
 
-- include_tasks: php.yml
+- import_tasks: php.yml
   tags: [ site, php ]
 
-- include_tasks: apache.yml
+- import_tasks: apache.yml
   tags: [ site, apache, apache_vhosts ]
 
-- include_tasks: mysql.yml
+- import_tasks: mysql.yml
   when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
   tags: [ site, mysql ]
 
-- include_tasks: cron.yml
+- import_tasks: cron.yml
   tags: [ site, cron ]
 
 - name: "{{ site_domain}} : Check if user Debian-exim exists"
@@ -38,40 +38,41 @@
   changed_when: False
   tags: [ site, exim4 ]
 
-- include_tasks: exim4.yml
+- import_tasks: exim4.yml
   when: site_register_exim4_exists.stdout == '1' and site_exim4_dkim_private
   tags: [ site, exim4 ]
 
 - name: Check that running all tasks
   command: /bin/true
   changed_when: False
+  tags: [ dns_trigger ] # выполнится без указания тегов
   register: site_register_running_all
 
-- include_tasks: dns.yml
-  tags: [ site, dns ]
+- import_tasks: dns.yml
+  tags: [ site, dns ] # never тег не катит, т.к. ломает --list-tags
   when: site_dns_domains is defined and site_register_running_all is not defined
 
-- include_tasks: letsencrypt.yml
+- import_tasks: letsencrypt.yml
   tags: [ site, letsencrypt ]
   when: site_letsencrypt_acmesh_domains
 
-- include_tasks: drupal.yml
+- import_tasks: drupal.yml
   tags: [ site, engine, drupal ]
   when: site_install_engine is defined and site_install_engine == 'drupal'
 
-- include_tasks: solr.yml
+- import_tasks: solr.yml
   tags: [ site, solr ]
   when: site_solr
 
-- include_tasks: sync_files.yml
+- import_tasks: sync_files.yml
   when: site_sync_files
   tags: [ site, sync, sync_files ]
 
-- include_tasks: sync_mysql.yml
+- import_tasks: sync_mysql.yml
   when: site_sync_mysql
   tags: [ site, sync, sync_mysql ]
 
-- include_tasks: site_config.yml
+- import_tasks: site_config.yml
   tags: [ site, sync, sync_mysql, drupal, config ]
 
 - name: "{{ site_domain}} : Site information"

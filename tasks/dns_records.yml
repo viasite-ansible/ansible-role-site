@@ -18,7 +18,7 @@
     state: "{{ item.state | default('present') }}"
   delegate_to: localhost
   with_items: "{{ site_dns_default_records }}"
-  when: domain_register | changed
+  when: domain_register is changed
 
 - name: "{{ domain.key }} : Ensure records exists in domains"
   selectel_dns:
