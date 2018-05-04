@@ -3,6 +3,8 @@ autoload -U colors
 colors
 setopt prompt_subst
 
+unset MC_SKIN # for prevent error when su to user from root
+
 HISTSIZE=1000
 SAVEHIST=100000
 
