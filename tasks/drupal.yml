@@ -5,7 +5,8 @@
   vars:
     drupal_domain: "{{ site_domain }}"
     drupal_site_name: "{{ site_domain }}"
-    drupal_core_path: "{{ site_root }}"
+    drupal_deploy_dir: "{{ site_root }}" # drupal 8
+    drupal_core_path: "{{ site_root_public }}" # для drupal 8 тут надо {{ site_root }}/web
     drupal_core_owner: "{{ site_user }}"
     drupal_db_user: "{{ site_mysql_user }}"
     drupal_db_password: "{{ site_mysql_password }}"

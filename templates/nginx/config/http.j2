@@ -10,7 +10,7 @@ server {
 server {
   listen 80;
   server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
-  root {{ site_root }};
+  root {{ site_root_public }};
   index index.php index.html;
 
   # site_nginx_engine_server

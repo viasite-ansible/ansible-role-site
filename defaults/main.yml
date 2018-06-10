@@ -26,6 +26,7 @@ site_dns_default_records:
 site_homedir: "/home/{{ site_user }}"
 site_wwwdir: "{{ site_homedir }}/www"
 site_root: "{{ site_wwwdir }}/{{ site_domain_main }}"
+site_root_public: "{{ site_root }}"
 
 site_setup_git: no
 site_setup_ssh_keys: yes

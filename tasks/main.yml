@@ -87,6 +87,7 @@
       - "{% if site_mysql_db is defined %} mysql db:   {{ site_mysql_db }}{% endif %}"
       - "{% if site_mysql_password is defined %} mysql pass: {{ site_mysql_password }}{% endif %}"
       - " site root:  {{ site_root }}"
+      - " site root public:  {{ site_root_public }}"
       - " server IP:  {{ site_dns_ip }}"
       - "************************************"
   when: site_user is defined

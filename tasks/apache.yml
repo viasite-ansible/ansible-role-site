@@ -7,7 +7,7 @@
       "{{ site_domain_main }}":
         servername: "{{ site_domain }}"
         serveralias: "{{ site_domains_redirected | join(' ') }} {{ site_domains_secondary | join(' ') }}"
-        documentroot: "{{ site_root }}"
+        documentroot: "{{ site_root_public }}"
         extra_parameters: |
           # https://serverfault.com/a/672969/437918
           # This is to forward all PHP to php-fpm.
