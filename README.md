@@ -45,12 +45,11 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 
 
 
-## Nginx templates:
+## Nginx engines (`site_nginx_engine`):
 - `default`
-- `default_https`
 - `drupal` - based on https://github.com/perusio/drupal-with-nginx
-- `drupal_https`
 - `joomla`
+- `service` - required `site_nginx_service_port
 
 If you want to enable nginx -> PHP-FPM without apache, set `site_nginx_backend: php-fpm`. It tested lightly only with drupal 7,
 /index.php don't work. 

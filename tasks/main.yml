@@ -4,6 +4,7 @@
   tags: [ site, always ]
 
 - import_tasks: user.yml
+  when: site_user != ''
   tags: [ site, user ]
 
 - import_tasks: nginx_deprecations.yml
@@ -20,9 +21,11 @@
   tags: [ site, nginx, nginx-vhosts ]
 
 - import_tasks: php.yml
+  when: site_nginx_backend != 'service'
   tags: [ site, php ]
 
 - import_tasks: apache.yml
+  when: site_nginx_backend != 'service'
   tags: [ site, apache, apache_vhosts ]
 
 - import_tasks: mysql.yml

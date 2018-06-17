@@ -15,6 +15,11 @@
       include {% if site_nginx_engine == 'drupal' %}snippets/fastcgi_drupal.conf{% else %}fastcgi.conf{% endif %};
       fastcgi_pass unix:{{ site_php_socket }};{% endif %}
 
+      {% if site_nginx_backend == 'service' %}
+      proxy_pass http://localhost:{{ site_nginx_service_port }};
+      {{ site_nginx_proxy_params }}
+      {% endif %}
+
 - name: "{{ site_domain}} : Define site_nginx_location_php"
   set_fact:
     site_nginx_location_php: |
