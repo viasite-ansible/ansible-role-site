@@ -57,7 +57,7 @@
 
 - import_tasks: letsencrypt.yml
   tags: [ site, letsencrypt ]
-  when: site_letsencrypt_acmesh_domains
+  when: site_letsencrypt_acmesh_domains and site_ssl
 
 - import_tasks: drupal.yml
   tags: [ site, engine, drupal ]
