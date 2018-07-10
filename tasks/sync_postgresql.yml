@@ -1,0 +1,105 @@
+---
+# almost always exists, it create in postgresql.yml
+- name: "{{ site_domain}} : Ensure database {{ site_postgresql_db }} exists"
+  postgresql_db:
+    name: "{{ site_postgresql_db }}"
+    state: present
+  become: yes
+  become_user: postgres
+
+- name: "{{ site_domain}} : Check if database empty"
+  #shell: "postgresql {{ site_postgresql_db }} -Brse 'SHOW TABLES' | wc -l"
+  shell: "echo 1" # todo: check empty
+  changed_when: False
+  register: site_postgresql_database_tables
+
+- name: "{{ site_domain}} : Define site_postgresql_database_empty"
+  set_fact:
+    site_postgresql_database_empty: "{{ site_postgresql_database_tables.stdout == '0' }}"
+
+- name: "{{ site_domain}} : Redefine site_sync_postgresql"
+  set_fact:
+    site_sync_postgresql: "{{ site_postgresql_database_empty or site_sync_postgresql_force | default(false) }}"
+
+- name: "{{ site_domain}} : Define site_postgresql_dump_temp_path"
+  set_fact:
+    site_postgresql_dump_temp_path: "{{ site_homedir }}/dump_{{ site_src_postgresql_dump_file.path | basename }}"
+  when: site_sync_postgresql and site_src_postgresql_dump_file.path is defined
+
+- name: "{{ site_domain}} : Ensure ~/.ssh exists (rsync remote)"
+  file:
+    name: "~{{ ansible_user_id }}/.ssh"
+    state: directory
+  when: site_src_postgresql_dump_file.host is defined
+
+- name: "{{ site_domain}} : Get public key of remote server {{ site_src_postgresql_dump_file.host }} (rsync remote)"
+  command: ssh-keyscan -H "{{ site_src_postgresql_dump_file.host }}"
+  register: site_src_postgresql_host_key
+  when: site_sync_postgresql and (site_src_postgresql_dump_file.host is defined or site_sync_postgresqldump)
+  changed_when: False
+
+- name: "{{ site_domain}} : Ensure host {{ site_src_postgresql_dump_file.host }} known (rsync remote)"
+  known_hosts:
+    name: "{{ site_src_postgresql_dump_file.host }}"
+    key: "{{ site_src_postgresql_host_key.stdout }}"
+    state: present
+  changed_when: False
+  when: site_sync_postgresql and (site_src_postgresql_dump_file.host is defined or site_sync_postgresqldump)
+
+- name: "{{ site_domain }} : Check ssh connection (rsync remote)"
+  command: ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" -v exit
+  changed_when: False
+  when: site_sync_postgresql and (site_src_postgresql_dump_file.host is defined or site_sync_postgresqldump)
+
+# todo: site_sync_postgresqldump
+#- name: "{{ site_domain }} : Make sql dump at {{ site_src.host }} postgresqldump -u {{ site_postgresql_user }} -p {{ site_postgresql_password }} {{ site_postgresql_db }}"
+#  command: |
+#    ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" \
+#    'install -m 600 /dev/null "/tmp/postgresqldump_{{ site_postgresql_db }}.sql.gz" && \
+#    postgresqldump -u"{{ site_postgresql_user }}" -p"{{ site_postgresql_password }}" "{{ site_postgresql_db }}" \
+#    | gzip > "/tmp/postgresqldump_{{ site_postgresql_db }}.sql.gz" \
+#    && echo "size:$(stat --printf="%s" "/tmp/postgresqldump_zavodpozhservis2.sql.gz")"'
+#  register: site_register_postgresqldump
+#  when: site_sync_postgresql and site_sync_postgresqldump
+#  failed_when: "'size:20' in site_register_postgresqldump.stdout"
+#
+#- name: "{{ site_domain }} : Register new site_src_postgresql_dump_file"
+#  set_fact:
+#    site_src_postgresql_dump_file:
+#      host: "{{ site_src_postgresql_dump_file.host }}"
+#      user: root
+#      path: "/tmp/postgresqldump_{{ site_postgresql_db }}.sql.gz"
+#  when: site_sync_postgresql and site_sync_postgresqldump
+
+- name: "{{ site_domain }} : Sync sql dump from {{ site_src_postgresql_dump_file.user }}@{{ site_src_postgresql_dump_file.host }}:{{ site_src_postgresql_dump_file.path }} (rsync remote)"
+  command: |
+    rsync -L \
+    "{{ site_src_postgresql_dump_file.user }}@{{ site_src_postgresql_dump_file.host }}:{{ site_src_postgresql_dump_file.path }}" \
+    "{{ site_postgresql_dump_temp_path }}"
+  when: site_src_postgresql_dump_file.host is defined and site_sync_postgresql
+  tags: skip_ansible_lint
+
+- name: "{{ site_domain }} : Sync postgresql files with rsync (local)"
+  command: rsync -L "{{ site_src_postgresql_dump_file.path }}" "{{ site_postgresql_dump_temp_path }}"
+  when: site_src_postgresql_dump_file.path is defined and site_src_postgresql_dump_file.host is not defined and site_sync_postgresql
+  tags: skip_ansible_lint
+
+- name: "{{ site_domain }} : Import sql dump"
+  postgresql_db:
+    name: "{{ site_postgresql_db }}"
+    state: restore
+    target: "{{ site_postgresql_dump_temp_path }}"
+    login_user: "{{ site_postgresql_user }}"
+  become: yes
+  become_user: "{{ site_postgresql_user }}"
+  when: site_sync_postgresql
+
+- name: "{{ site_domain }} : Remove sql dump"
+  file:
+    path: "{{ site_postgresql_dump_temp_path }}"
+    state: absent
+  when: site_sync_postgresql
+
+- name: "{{ site_domain }} : Remove sql dump at {{ site_src.host }}"
+  command: ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" rm "/tmp/postgresqldump_{{ site_postgresql_db }}.sql.gz"
+  when: site_sync_postgresql and site_sync_postgresqldump

@@ -1,0 +1,28 @@
+---
+- name: "{{ site_domain}} : Add postgresql user"
+  postgresql_user:
+    db: "{{ site_postgresql_db }}"
+    name: "{{ site_postgresql_user }}"
+    state: "present"
+    priv: "ALL"
+  become: yes
+  become_user: postgres
+  tags: [ postgresql_user ]
+
+#- name: "{{ site_domain}} : Copy .pgpass file with password credentials."
+#  template:
+#    src: postgresql/pgpass.j2
+#    dest: "{{ site_homedir }}/.pgpass"
+#    owner: "{{ site_user }}"
+#    mode: 0600
+#  when: site_user != ''
+#  tags: [ postgresql_user ]
+
+- name: "{{ site_domain}} : Ensure database exists"
+  postgresql_db:
+    name: "{{ site_postgresql_db }}"
+    state: present
+  become: yes
+  become_user: postgres
+  when: site_postgresql_db is defined
+  tags: [ postgresql_db ]

@@ -32,6 +32,10 @@
   when: site_mysql_host is defined and site_mysql_user is defined and site_mysql_password is defined
   tags: [ site, mysql ]
 
+- import_tasks: postgresql.yml
+  when: site_postgresql_host is defined and site_postgresql_user is defined and site_postgresql_password is defined
+  tags: [ site, postgresql ]
+
 - import_tasks: cron.yml
   tags: [ site, cron ]
 
@@ -74,6 +78,10 @@
 - import_tasks: sync_mysql.yml
   when: site_sync_mysql
   tags: [ site, sync, sync_mysql ]
+
+- import_tasks: sync_postgresql.yml
+  when: site_sync_postgresql
+  tags: [ site, sync, sync_postgresql ]
 
 - import_tasks: site_config.yml
   tags: [ site, sync, sync_mysql, drupal, config ]

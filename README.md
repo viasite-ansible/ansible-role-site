@@ -16,6 +16,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - import site from remote host
 - install drupal with your settings (depends of viasite-ansible.drupal)
 - setup mysql with import from remote sql dump
+- setup posrgresql with import from remote sql dump
 - setup cron tasks
 - optimized for Drupal sites
 - setup DKIM keys for domain email (depends of viasite-ansible.exim4)
@@ -31,6 +32,7 @@ Role has many dependencies to other viasite-ansible roles, so I don't think that
 - viasite-ansible.git
 - viasite-ansible.mysql
 - viasite-ansible.nginx-vhosts (that depends to viasite-ansible.nginx)
+- viasite-ansible.postgresql
 - viasite-ansible.ssh-keys
 - viasite-ansible.vim
 - viasite-ansible.zsh

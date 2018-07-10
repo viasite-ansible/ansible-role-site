@@ -41,6 +41,11 @@ site_mysql_host: localhost
 #site_mysql_user: "{{ user }}"
 #site_mysql_password: ASLDklkvhlfkdgjm
 
+site_postgresql_host: localhost
+#site_postgresql_db: "{{ user }}"
+#site_postgresql_user: "{{ user }}"
+#site_postgresql_password: ASLDklkvhlfkdgjm
+
 #dns_ns1: ns1.example.com
 #dns_ns2: ns2.example.com
 #dns_whois_email: admin.example.com
@@ -96,10 +101,16 @@ site_sync_files_excluded: # rsync excluded patterns
   - upload/resize_cache/*
 
 #site_ssh_key: ~/.ssh/id_rsa
+
 site_sync_mysql: no
 site_sync_mysql_force: no
 # dump database before sync
 site_sync_mysqldump: yes
+
+site_sync_postgresql: no
+site_sync_postgresql_force: no
+# dump database before sync
+site_sync_postgresqldump: yes
 
 site_php_fpm_defaults:
   pm: ondemand
