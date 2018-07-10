@@ -34,6 +34,8 @@ site_setup_vim: no
 site_setup_zsh: no
 site_force_zshrc: no # force write ~/.zshrc when not zsh role provisioned
 
+site_user_zsh_template: user/zshrc.j2
+
 site_mysql_host: localhost
 #site_mysql_db: "{{ user }}"
 #site_mysql_user: "{{ user }}"

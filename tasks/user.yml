@@ -36,7 +36,7 @@
 
 - name: "{{ site_domain}} : setup simple ~/.zshrc if empty"
   template:
-    src: user/zshrc.j2
+    src: "{{ site_user_zsh_template }}"
     dest: "{{ site_homedir }}/.zshrc"
     owner: "{{ site_user }}"
     group: "{{ site_user }}"

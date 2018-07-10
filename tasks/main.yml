@@ -93,7 +93,7 @@
       - " site root public:  {{ site_root_public }}"
       - " server IP:  {{ site_dns_ip }}"
       - "************************************"
-  when: site_user is defined
+  when: site_user != ''
   tags: always, skip_ansible_lint, print_action
 
 - name: "{{ site_domain}} : Drupal information"

@@ -16,6 +16,7 @@
     dest: "{{ site_homedir }}/.my.cnf"
     owner: "{{ site_user }}"
     mode: 0600
+  when: site_user != ''
   tags: [ mysql_user ]
 
 - name: "{{ site_domain}} : Ensure database exists"

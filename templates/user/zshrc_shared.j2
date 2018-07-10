@@ -1,0 +1,8 @@
+source /usr/share/zsh-config/.zshrc
+
+unset MC_SKIN # for prevent error when su to user from root
+
+# cd site directory
+cd "$HOME/www"
+sites="$(find ~/www -mindepth 1 -maxdepth 1 -type d)"
+if [ "$(echo "$sites" | wc -l)" = 1 ]; then cd "$sites"; fi
