@@ -146,7 +146,7 @@ site_nginx_location_default: |
   ## Replicate the Apache <FilesMatch> directive of Drupal standard
   ## .htaccess. Disable access to any code files. Return a 404 to curtail
   ## information disclosure. Hide also the text files.
-  location ~* ^(?:.+\.(?:htaccess|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
+  location ~* ^(?:.+\.(?:htaccess|gitignore|make|txt|md|engine|inc|info|install|module|profile|po|sh|.*sql|theme|tpl(?:\.php)?|xtmpl)|code-style\.pl|/Entries.*|/Repository|/Root|/Tag|/Template)$ {
     return 404;
   }
 
@@ -213,7 +213,7 @@ site_nginx_location_static_files: |
   # Static files location
   location ~* ^.+\.(?:jpg|jpeg|gif|png|ico|css|less|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|ppt|ppts|pptsx|exe|txt|tar|mid|midi|wav|bmp|rtf|js|swf|flv|woff|woff2|eot|ttf|cur|svg)$
   {
-    access_log off;
+    access_log /var/log/nginx/sent.log sent;
     log_not_found off;
     expires 30d;
     ## No need to bleed constant updates. Send the all shebang in one
