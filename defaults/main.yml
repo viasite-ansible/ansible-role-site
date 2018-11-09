@@ -129,6 +129,7 @@ site_nginx_config: # http or https, depends on site_ssl
 site_nginx_engine: default
 site_nginx_engine_server: # avoid to direct define this variable
 site_nginx_backend: "{% if site_nginx_engine == 'service' %}service{% else %}apache{% endif %}"
+site_nginx_http2: yes # use http2 for https sites
 
 site_nginx_custom_http: "" # add after server in template
 site_nginx_custom_server: "" # add to server in template
