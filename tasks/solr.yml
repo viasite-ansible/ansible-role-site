@@ -5,9 +5,9 @@
     state: started
     enabled: yes
 
-- name: "{{ site_domain}} : Install pip docker-py"
+- name: "{{ site_domain}} : Install pip docker"
   pip:
-    name: docker-py
+    name: docker
     state: present
 
 - name: "{{ site_domain}} : Ensure solr dir exists"
