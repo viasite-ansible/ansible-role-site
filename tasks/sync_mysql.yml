@@ -46,7 +46,7 @@
 - name: "{{ site_domain }} : Check ssh connection (rsync remote)"
   command: ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" -v exit
   changed_when: False
-  when: site_sync_mysql and (site_src_mysql_dump_file.host is defined or site_sync_mysqldump)
+  when: site_sync_mysql and site_sync_mysqldump
 
 - name: "{{ site_domain }} : Make sql dump at {{ site_src.host }} mysqldump -u {{ site_mysql_user }} -p {{ site_mysql_password }} {{ site_mysql_db }}"
   command: |
