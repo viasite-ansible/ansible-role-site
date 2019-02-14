@@ -131,6 +131,8 @@ site_nginx_engine_server: # avoid to direct define this variable
 site_nginx_backend: "{% if site_nginx_engine == 'service' %}service{% else %}apache{% endif %}"
 site_nginx_http2: yes # use http2 for https sites
 
+site_nginx_service_host: localhost
+
 site_nginx_custom_http: "" # add after server in template
 site_nginx_custom_server: "" # add to server in template
 site_nginx_custom_root_location: "" # add to location / in template
