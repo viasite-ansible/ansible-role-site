@@ -44,13 +44,13 @@
   when: site_sync_mysql and (site_src_mysql_dump_file.host is defined or site_sync_mysqldump)
 
 - name: "{{ site_domain }} : Check ssh connection (rsync remote)"
-  command: ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" -v exit
+  command: ssh -o BatchMode=yes "{{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}" -v exit
   changed_when: False
-  when: site_sync_mysql and site_sync_mysqldump
+  when: site_sync_mysql and (site_src_mysql_dump_file.host is defined or site_sync_mysqldump)
 
-- name: "{{ site_domain }} : Make sql dump at {{ site_src.host }} mysqldump -u {{ site_mysql_user }} -p {{ site_mysql_password }} {{ site_mysql_db }}"
+- name: "{{ site_domain }} : Make sql dump at {{ site_src_mysql_dump_file.host }} mysqldump -u {{ site_mysql_user }} -p {{ site_mysql_password }} {{ site_mysql_db }}"
   command: |
-    ssh -o BatchMode=yes "{{ site_src.user }}@{{ site_src.host }}" \
+    ssh -o BatchMode=yes "{{ site_src_mysql_dump_file.user }}@{{ site_src_mysql_dump_file.host }}" \
     'install -m 600 /dev/null "/tmp/mysqldump_{{ site_mysql_db }}.sql.gz" && \
     mysqldump -u"{{ site_mysql_user }}" -p"{{ site_mysql_password }}" "{{ site_mysql_db }}" \
     | gzip > "/tmp/mysqldump_{{ site_mysql_db }}.sql.gz" \
