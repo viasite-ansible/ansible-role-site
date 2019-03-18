@@ -1,0 +1,34 @@
+---
+- name: "{{ site_domain}} : Check if site is Bitrix"
+  stat: "path={{ site_root }}/bitrix/.settings.php"
+  register: site_register_settings_php
+  ignore_errors: true
+
+- name: "{{ site_domain}} : Define site_is_bitrix"
+  set_fact:
+    site_is_bitrix: "{{ site_register_settings_php.stat.exists|default(false) }}"
+
+- name: "{{ site_domain}} : Replace variables in .settings.local.php for Bitrix"
+  lineinfile:
+    path: "{{ site_root }}/bitrix/.settings.php"
+    regexp: "{{ item.0 }}"
+    line: "{{ item.1 }}"
+  with_list:
+    - [ "'host'", "'host' => '{{ site_mysql_host }}'," ]
+    - [ "'database'", "'database' => '{{ site_mysql_db }}'," ]
+    - [ "'login'", "'login' => '{{ site_mysql_user }}'," ]
+    - [ "'password'", "'password' => '{{ site_mysql_password }}'," ]
+  when: site_is_bitrix
+
+- name: "{{ site_domain}} : Replace variables in dbconn.php for Bitrix"
+  lineinfile:
+    path: "{{ site_root }}/bitrix/php_interface/dbconn.php"
+    regexp: "{{ item.0 }}"
+    line: "{{ item.1 }}"
+    create: no
+  with_list:
+    - [ '\$DBHost', "$DBHost = '{{ site_mysql_host }}';" ]
+    - [ '\$DBName', "$DBName = '{{ site_mysql_db }}';" ]
+    - [ '\$DBLogin', "$DBLogin = '{{ site_mysql_user }}';" ]
+    - [ '\$DBPassword', "$DBPassword = '{{ site_mysql_password }}';" ]
+  when: site_is_bitrix

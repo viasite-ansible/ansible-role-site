@@ -83,7 +83,10 @@
   when: site_sync_postgresql
   tags: [ site, sync, sync_postgresql ]
 
-- import_tasks: site_config.yml
+- import_tasks: site_config_bitrix.yml
+  tags: [ site, sync, sync_mysql, bitrix, config ]
+
+- import_tasks: site_config_drupal.yml
   tags: [ site, sync, sync_mysql, drupal, config ]
 
 - name: "{{ site_domain}} : Site information"
