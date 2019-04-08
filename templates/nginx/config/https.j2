@@ -41,7 +41,7 @@ server {
 
 server {
   listen 443 ssl{% if site_nginx_http2 %} http2{% endif %};
-  server_name {{ site_domain }} {{ site_domains_secondary | join(' ') }};
+  server_name {{ site_domain }}{% if not site_ssl_redirect_main_domain %} {{ site_domains_secondary | join(' ') }}{% endif %};
   root {{ site_root_public }};
   index index.php index.html;
 
