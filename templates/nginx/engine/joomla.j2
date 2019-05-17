@@ -2,6 +2,9 @@ location / {
   # site_nginx_location_static_files
   {{ site_nginx_location_static_files | indent(2) }}
 
+  # site_nginx_location_default
+  {{ site_nginx_location_default }}
+
   # site_nginx_location_php
   {{ site_nginx_location_php | indent(2) }}
 
@@ -29,5 +32,3 @@ location ~* /getimg/ {
   try_files $uri @rewrite;
 }
 
-# site_nginx_location_default
-{{ site_nginx_location_default }}

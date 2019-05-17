@@ -56,15 +56,18 @@ location / {
   # site_nginx_location_static_files
   {{ site_nginx_location_static_files | indent(2) }}
 
+  # site_nginx_location_default
+  {{ site_nginx_location_default }}
+
+  # site_nginx_location_php
+  {{ site_nginx_location_php }}
+
   # root_location_extra_parameters
   {{ site_nginx_custom_root_location | default('') | indent(2) }}
 
   # файлы перенаправляются через @boost location
   try_files $uri @boost;
 }
-
-# site_nginx_location_php
-{{ site_nginx_location_php }}
 
 # правила для Boost, https://github.com/perusio/drupal-with-nginx/blame/D7/apps/drupal/drupal_boost.conf
 location @boost {
@@ -104,9 +107,6 @@ location @boost {
   #try_files /cache/normal/$host${uri}_${args}.html /cache/perm/$host${uri}_.css /cache/perm/$host${uri}_.js /cache/$host/0$uri.html /cache/$host/0${uri}/index.html @rewrite;
   try_files /cache/normal/$host/$scheme${uri}_${args}.html /cache/normal/$host${uri}_${args}.html @rewrite;
 }
-
-# site_nginx_location_default
-{{ site_nginx_location_default }}
 
 # site_nginx_location_rewrite
 {{ site_nginx_location_rewrite }}
