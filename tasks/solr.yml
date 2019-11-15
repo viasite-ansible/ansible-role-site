@@ -50,10 +50,14 @@
     restart_policy: always
     command: "solr-create -c {{ site_solr_core_name }} -d /myconfig"
 
+- name: "{{ site_domain}} : Generate variables"
+  set_fact:
+    nginx_sites_empty: {}
+
 - name: "{{ site_domain}} : Setup nginx vhost for Solr"
   include_role:
     name: nginx-vhosts
   vars:
-    nginx_sites:
-      "{{ site_solr_domain }}":
-        template: solr/nginx.conf.j2
+    nginx_sites: "{{ nginx_sites_empty | combine({
+                    site_solr_domain: { 'template': 'solr/nginx.conf.j2' }
+                  }) }}"

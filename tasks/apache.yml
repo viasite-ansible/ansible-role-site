@@ -1,37 +1,44 @@
 ---
-- name: "{{ site_domain}} : setup apache vhost"
+- name: "{{ site_domain}} : Generate variables"
+  set_fact:
+    apache_vhosts_sites_json: {}
+    apache_vhosts_sites_data:
+      servername: "{{ site_domain }}"
+      serveralias: "{{ site_domains_redirected | join(' ') }} {{ site_domains_secondary | join(' ') }}"
+      documentroot: "{{ site_root_public }}"
+      extra_parameters: |
+        # https://serverfault.com/a/672969/437918
+        # This is to forward all PHP to php-fpm.
+        <FilesMatch \.php$>
+          SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain_main }}/"
+        </FilesMatch>
+
+        # Set some proxy properties (the string "{{ site_domain_main }}" should match
+        # the one set in the FilesMatch directive.
+        <Proxy fcgi://{{ site_domain_main }}>
+          ProxySet connectiontimeout=5 timeout=240
+        </Proxy>
+
+        # If the php file doesn't exist, disable the proxy handler.
+        # This will allow .htaccess rewrite rules to work and
+        # the client will see the default 404 page of Apache
+        RewriteCond %{REQUEST_FILENAME} \.php$
+        RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
+        RewriteRule (.*) - [H=text/html]
+
+        # old way
+        # ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
+
+        # for HTTP auth in bitrix
+        SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+        SetEnvIf X-Forwarded-Proto https HTTPS=on
+
+- name: "{{ site_domain}} : Setup apache vhost"
   include_role:
     name: apache-vhosts
   vars:
-    apache_vhosts_sites:
-      "{{ site_domain_main }}":
-        servername: "{{ site_domain }}"
-        serveralias: "{{ site_domains_redirected | join(' ') }} {{ site_domains_secondary | join(' ') }}"
-        documentroot: "{{ site_root_public }}"
-        extra_parameters: |
-          # https://serverfault.com/a/672969/437918
-          # This is to forward all PHP to php-fpm.
-          <FilesMatch \.php$>
-            SetHandler "proxy:unix:{{ site_php_socket }}|fcgi://{{ site_domain_main }}/"
-          </FilesMatch>
-
-          # Set some proxy properties (the string "{{ site_domain_main }}" should match
-          # the one set in the FilesMatch directive.
-          <Proxy fcgi://{{ site_domain_main }}>
-            ProxySet connectiontimeout=5 timeout=240
-          </Proxy>
-
-          # If the php file doesn't exist, disable the proxy handler.
-          # This will allow .htaccess rewrite rules to work and
-          # the client will see the default 404 page of Apache
-          RewriteCond %{REQUEST_FILENAME} \.php$
-          RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
-          RewriteRule (.*) - [H=text/html]
-
-          # old way
-          # ProxyPassMatch "^/(.*\.php(/.*)?)$" "unix:{{ site_php_socket }}|fcgi://localhost:9000{{ site_root }}"
-
-          # for HTTP auth in bitrix
-          SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
-          SetEnvIf X-Forwarded-Proto https HTTPS=on
+    apache_vhosts_sites: "{{ apache_vhosts_sites_json | combine({
+        site_domain_main: apache_vhosts_sites_data
+      }) }}"
+      #"{{ site_domain_main }}": "{{ apache_vhosts_sites_data }}"
     apache_vhosts_remove_sites: "{{ site_domains_remove }}"

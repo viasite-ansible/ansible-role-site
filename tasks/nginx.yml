@@ -64,13 +64,18 @@
     site_ssl_certificate_key: "/etc/letsencrypt/live/{{ site_domain_main }}/privkey.pem"
   when: not site_ssl_certificate and not site_ssl_certificate_key
 
+
+- name: "{{ site_domain}} : Generate variables"
+  set_fact:
+    nginx_sites_empty: {}
+
 - name: "{{ site_domain}} : Setup nginx vhost"
   include_role:
     name: nginx-vhosts
   vars:
-    nginx_sites:
-      "{{ site_domain_main }}":
-        template: "{{ site_nginx_template }}"
+    nginx_sites: "{{ nginx_sites_empty | combine({
+      site_domain_main: { 'template': site_nginx_template }
+    }) }}"
     nginx_remove_sites: "{{ site_domains_remove }}"
 
 - name: "{{ site_domain}} : Ensure Diffie-Helmann parameters dhparam.pem exists when ssl site provisioned"
