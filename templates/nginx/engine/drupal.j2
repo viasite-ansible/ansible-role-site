@@ -7,7 +7,7 @@ location / {
     ## Note that the 404 is the intended behavior.
     log_not_found off;
     access_log off;
-    expires 30d;
+    expires 365d;
     try_files $uri @rewrite;
   }
 
@@ -33,7 +33,7 @@ location / {
 
   location ~* /files/styles/ {
     access_log off;
-    expires 30d;
+    expires 365d;
     try_files $uri @rewrite;
   }
 

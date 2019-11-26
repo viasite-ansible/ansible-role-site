@@ -28,7 +28,7 @@ location ~ /images/(.+)\.php$ {
 
 location ~* /getimg/ {
   access_log off;
-  expires 30d;
+  expires 365d;
   try_files $uri @rewrite;
 }
 
