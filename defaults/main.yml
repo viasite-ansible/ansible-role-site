@@ -217,6 +217,7 @@ site_nginx_location_static_files: |
   location ~* ^.+\.(?:jpg|jpeg|gif|png|ico|css|less|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|ppt|ppts|pptsx|exe|txt|tar|mid|midi|wav|bmp|rtf|js|swf|flv|woff|woff2|eot|ttf|cur|svg)$
   {
     # access_log /var/log/nginx/sent.log sent;
+    access_log off;
     log_not_found off;
     expires 365d;
     ## No need to bleed constant updates. Send the all shebang in one
