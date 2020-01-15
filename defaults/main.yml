@@ -214,7 +214,7 @@ site_nginx_location_default: |
 # for insert in location /
 site_nginx_location_static_files: |
   # Static files location
-  location ~* ^.+\.(?:jpg|jpeg|gif|png|ico|css|less|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|ppt|ppts|pptsx|exe|txt|tar|mid|midi|wav|bmp|rtf|js|swf|flv|woff|woff2|eot|ttf|cur|svg)$
+  location ~* ^.+\.(?:jpg|jpeg|gif|png|ico|css|less|zip|tgz|gz|rar|bz2|doc|docx|xls|xlsx|ppt|ppts|pptsx|exe|txt|tar|mid|midi|wav|bmp|rtf|js|swf|flv|woff|woff2|eot|ttf|cur|svg|webp)$
   {
     # access_log /var/log/nginx/sent.log sent;
     access_log off;
