@@ -32,6 +32,7 @@
         # for HTTP auth in bitrix
         SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
         SetEnvIf X-Forwarded-Proto https HTTPS=on
+        SetEnvIf X-HTTPS 1 HTTPS=on
 
 - name: "{{ site_domain}} : Setup apache vhost"
   include_role:
