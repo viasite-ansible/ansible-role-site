@@ -3,7 +3,7 @@ location / {
   {{ site_nginx_location_static_files | indent(2) }}
 
   # site_nginx_location_default
-  {{ site_nginx_location_default }}
+  {{ site_nginx_location_default | indent(2) }}
 
   # site_nginx_location_php
   {{ site_nginx_location_php | indent(2) }}
