@@ -31,6 +31,9 @@ server {
   root {{ site_root_public }};
   index index.php index.html;
 
+  # site_nginx_custom_server_before
+  {{ site_nginx_custom_server_before | default('') | indent(2) }}
+
   # site_nginx_engine_server
   {{ site_nginx_engine_server | indent(2) }}
 

@@ -134,7 +134,8 @@ site_nginx_http2: yes # use http2 for https sites
 site_nginx_service_host: localhost
 
 site_nginx_custom_http: "" # add after server in template
-site_nginx_custom_server: "" # add to server in template
+site_nginx_custom_server_before: "" # add to server in template begin
+site_nginx_custom_server: "" # add to server in template end
 site_nginx_custom_root_location: "" # add to location / in template
 #apache_mpm_itk_max_clients_per_host: 30
 
