@@ -52,6 +52,9 @@ server {
   ssl_certificate_key {{ site_ssl_certificate_key }};
   {% if site_ssl_hsts %}add_header Strict-Transport-Security "max-age=15768000"; # HSTS{% endif %}
 
+  # site_nginx_custom_server_before
+  {{ site_nginx_custom_server_before | default('') | indent(2) }}
+
   # site_nginx_engine_server
   {{ site_nginx_engine_server | indent(2) }}
 
