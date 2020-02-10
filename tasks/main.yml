@@ -17,6 +17,10 @@
 #  when: "'www' in site_domain"
 #  tags: [ site, apache, nginx ]
 
+- import_tasks: letsencrypt.yml
+  tags: [ site, letsencrypt ]
+  when: site_letsencrypt_acmesh_domains and site_ssl
+
 - import_tasks: nginx.yml
   tags: [ site, nginx, nginx-vhosts ]
 
@@ -58,10 +62,6 @@
 - import_tasks: dns.yml
   tags: [ site, dns ] # never тег не катит, т.к. ломает --list-tags
   when: site_dns_domains is defined and site_register_running_all is not defined
-
-- import_tasks: letsencrypt.yml
-  tags: [ site, letsencrypt ]
-  when: site_letsencrypt_acmesh_domains and site_ssl
 
 - import_tasks: drupal.yml
   tags: [ site, engine, drupal ]
