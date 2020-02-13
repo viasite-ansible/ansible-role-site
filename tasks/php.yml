@@ -1,16 +1,25 @@
 ---
-# from https://github.com/NBZ4live/ansible-php-fpm
-- name: "{{ site_domain}} : Add pool.d configuration"
-  template:
-    src: php/pool.conf.j2
-    dest: "{{ site_php_fpm_pool_d }}/{{ site_user }}.conf"
-  with_items:
-    - name: "{{ site_user }}"
+- name: define _site_php_fpm_overrided
+  set_fact:
+    _site_php_fpm_overrided:
+      name: "{{ site_user }}"
       user: "{{ site_php_user }}"
       group: "{{ site_php_group }}"
       listen: "{{ site_php_socket }}"
       listen.owner: "{{ site_apache_user }}"
       listen.group: "{{ site_apache_user }}"
       chdir: /
+
+- name: define _site_php_fpm
+  set_fact:
+    _site_php_fpm: "{{ (site_php_fpm_defaults|default(dict())) | combine(_site_php_fpm_overrided) | combine(site_php_fpm_extras|default(dict())) }}"
+
+# from https://github.com/NBZ4live/ansible-php-fpm
+- name: "{{ site_domain}} : Add pool.d configuration"
+  template:
+    src: php/pool.conf.j2
+    dest: "{{ site_php_fpm_pool_d }}/{{ site_user }}.conf"
+  with_items:
+    - "{{ _site_php_fpm }}"
   notify:
    - reload php-fpm

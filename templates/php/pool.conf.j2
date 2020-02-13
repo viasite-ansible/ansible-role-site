@@ -2,9 +2,9 @@
 
 [{{ item.name }}]
 
-{% for directive, value in ((site_php_fpm_defaults|default(dict())).items() + item.items() + (site_php_fpm_extras|default(dict())).items()) if directive != "name" %}
+{% for directive, value in item.items() if directive != "name" %}
 {% if value is mapping -%}
-{% for key, value2 in value.iteritems() %}
+{% for key, value2 in value.items() %}
 {{ directive }}[{{ key }}] = {{ value2 }}
 {% endfor %}
 {% else %}
