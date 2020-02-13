@@ -9,6 +9,7 @@
   pip:
     name: docker
     state: present
+    executable: /usr/bin/pip3
 
 - name: "{{ site_domain}} : Ensure solr dir exists"
   file:
