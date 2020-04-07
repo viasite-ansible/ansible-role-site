@@ -191,9 +191,10 @@ site_nginx_location_default: |
   }
 
   ## XML Sitemap support.
-  location = /sitemap.xml {
-    try_files $uri @rewrite;
-  }
+  # disabled for aspro php sitemaps - https://tagilcity.planfix.ru/task/608042
+  #location = /sitemap.xml {
+  #  try_files $uri @rewrite;
+  #}
 
   ## xmlrpc support.
   location = /xmlrpc.php {
