@@ -16,7 +16,7 @@
       fastcgi_pass unix:{{ site_php_socket }};{% endif %}
 
       {% if site_nginx_backend == 'service' %}
-      proxy_pass http://{{ site_nginx_service_host }}:{{ site_nginx_service_port }};
+      proxy_pass http://{{ site_nginx_service_host }}{% if site_nginx_service_port is defined %}:{{ site_nginx_service_port }}{% endif %};
       {{ site_nginx_proxy_params }}
       {% endif %}
 
