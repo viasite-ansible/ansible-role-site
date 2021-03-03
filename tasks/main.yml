@@ -112,8 +112,8 @@
     msg:
       - "{{ site_domain }} - {{ drupal_account_name }}"
       - "{{ drupal_account_pass }}"
-      - "{% if drupal_drs_add_users is defined and drupal_drs_add_users | changed and drupal_drs_add_users.stdout_lines is defined %}{{ drupal_drs_add_users.stdout_lines }}{% endif %}"
-      - "{% if drupal_drs_add_users is defined and drupal_drs_add_users | changed and drupal_drs_add_users.stderr_lines is defined %}{{ drupal_drs_add_users.stderr_lines }}{% endif %}"
+      - "{% if drupal_drs_add_users is defined and drupal_drs_add_users is changed and drupal_drs_add_users.stdout_lines is defined %}{{ drupal_drs_add_users.stdout_lines }}{% endif %}"
+      - "{% if drupal_drs_add_users is defined and drupal_drs_add_users is changed and drupal_drs_add_users.stderr_lines is defined %}{{ drupal_drs_add_users.stderr_lines }}{% endif %}"
   when: drupal_site_installed is defined and ('Drupal bootstrap' not in drupal_site_installed.stdout)
   tags: drupal, skip_ansible_lint, print_action
 
