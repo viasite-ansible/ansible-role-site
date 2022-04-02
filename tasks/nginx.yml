@@ -33,7 +33,7 @@
     site_nginx_location_rewrite: |
       location @rewrite {
         access_log /var/log/nginx/access.log combined_host;
-        access_log /var/log/nginx/drupal_cache_hit.log drupal_cache_hit;
+        access_log /var/log/nginx/access_time.log combined_host_time;
 
         {{ site_nginx_proxy_to_backend | indent(2) }}
 
@@ -42,6 +42,7 @@
         access_log /var/log/nginx/access_cloudflare.log combined_host_cloudflare;{% endif %}
       }
       # end of @rewrite
+  when: site_nginx_location_rewrite is not defined
 
 - name: "{{ site_domain}} : Define site_nginx_engine_server"
   set_fact:
