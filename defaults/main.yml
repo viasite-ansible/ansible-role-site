@@ -72,6 +72,7 @@ site_ssl_certificate:
 site_ssl_certificate_key:
 site_ssl_hsts: yes
 site_ssl_redirect_main_domain: yes
+site_ssl_redirect_code: 301
 
 site_solr: no
 site_solr_core_name: drupal
