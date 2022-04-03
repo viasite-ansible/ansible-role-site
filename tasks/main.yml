@@ -19,7 +19,7 @@
 
 - import_tasks: letsencrypt.yml
   tags: [ site, letsencrypt ]
-  when: site_letsencrypt_acmesh_domains and site_ssl
+  when: site_letsencrypt_acmesh_enabled and site_letsencrypt_acmesh_domains and site_ssl
 
 - import_tasks: nginx.yml
   tags: [ site, nginx, nginx-vhosts ]
