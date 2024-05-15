@@ -22,6 +22,7 @@ site_dns_default_records:
   - record: 'www'
     type: A
     value: "{{ site_dns_ip }}"
+site_dns_selectel_token:
 
 site_homedir: "/home/{{ site_user }}"
 site_wwwdir: "{{ site_homedir }}/www"

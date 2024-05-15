@@ -3,6 +3,7 @@
   selectel_dns:
     domain: "{{ domain.key }}"
     state: present
+    api_token: "{{ site_dns_selectel_token | default(omit) }}"
   delegate_to: localhost
   register: domain_register
 
@@ -16,6 +17,7 @@
     priority: "{{ item.priority | default(omit) }}"
     solo: "{{ item.solo | default(true) }}"
     state: "{{ item.state | default('present') }}"
+    api_token: "{{ site_dns_selectel_token | default(omit) }}"
   delegate_to: localhost
   with_items: "{{ site_dns_default_records }}"
   when: domain_register is changed
@@ -30,5 +32,6 @@
     priority: "{{ item.priority | default(omit) }}"
     solo: "{{ item.solo | default(true) }}"
     state: "{{ item.state | default('present') }}"
+    api_token: "{{ site_dns_selectel_token | default(omit) }}"
   delegate_to: localhost
   with_items: "{{ domain.value }}"
